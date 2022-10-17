@@ -1,0 +1,24 @@
+{
+  "name": "02task",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "repository": "git@github.com:Alexsandr3/02task.git",
+  "author": "Alexsandr3 <fam_86@mail.ru>",
+  "license": "MIT",
+  "scripts": {
+    "watch": "tsc -w",
+    "dev": "nodemon --inspect dist/index.js",
+    "build": "tsc",
+    "start": "node dist/inedx.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.14",
+    "@types/node": "^18.11.0",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4"
+  }
+}
