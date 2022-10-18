@@ -5,7 +5,7 @@ import {postsRoute} from "./routes/post-router"
 
 
 const app = express()
-const port = process.env.PORT || 3002
+const port = process.env.PORT || 5002
 const jsonBodyMiddleware = bodyParser.json()
 
 app.use(jsonBodyMiddleware)
