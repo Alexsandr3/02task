@@ -1,6 +1,6 @@
 import {Request, Response, Router} from "express";
 import {blogs, blogsRepositories} from "../repositories/blogs-repositories";
-import {body, CustomValidator, validationResult} from "express-validator";
+import {body} from "express-validator";
 import {inputValidetionsMiddleware} from "../middlewares/Input-validetions-middleware";
 import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middleware";
 import {postsRepositories} from "../repositories/posts-repositories";
@@ -36,12 +36,6 @@ postsRoute.get('/:postId', (req: Request, res: Response) => {
     const post = postsRepositories.searchByIdPost(req.params.postId)
     if (!post) return res.sendStatus(404)
     return res.send(post)
-    // if (!post) {
-    //     res.sendStatus(404)
-    //     return;
-    // }
-    // res.send(post)
-    // return;
 })
 postsRoute.put('/:postId',checkAutoritionMiddleware, titleValidation, shortDescriptionValidation, contentValidation, blogIdIsExit, inputValidetionsMiddleware, (req: Request, res: Response) => {
     const postId = req.params.postId

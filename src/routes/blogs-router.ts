@@ -1,6 +1,6 @@
 import {Request, Response, Router} from "express";
 import {blogs, blogsRepositories} from "../repositories/blogs-repositories";
-import {body, validationResult} from "express-validator";
+import {body} from "express-validator";
 import {inputValidetionsMiddleware} from "../middlewares/Input-validetions-middleware";
 import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middleware";
 
@@ -17,7 +17,7 @@ blogsRoute.post('/',checkAutoritionMiddleware,nameValidation,youtubeUrlValidatio
     const name = req.body.name
     const youtubeUrl = req.body.youtubeUrl
     const newBlog =blogsRepositories.createBlog(name, youtubeUrl)
-    res.status(201).send(newBlog)
+    return res.status(201).send(newBlog)
 })
 blogsRoute.get('/:blogId', (req: Request, res: Response) => {
     const blog =blogsRepositories.searchById(req.params.blogId)
@@ -25,7 +25,7 @@ blogsRoute.get('/:blogId', (req: Request, res: Response) => {
         res.sendStatus(404)
         return;
     }
-    res.send(blog)
+    return res.send(blog)
 })
 blogsRoute.put('/:blogId',checkAutoritionMiddleware,nameValidation,youtubeUrlValidation,inputValidetionsMiddleware, (req: Request, res: Response) => {
     const id = req.params.blogId
@@ -36,7 +36,7 @@ blogsRoute.put('/:blogId',checkAutoritionMiddleware,nameValidation,youtubeUrlVal
         res.sendStatus(404)
         return;
     }
-    res.sendStatus(204)
+    return res.sendStatus(204)
 })
 blogsRoute.delete('/:blogId',checkAutoritionMiddleware, (req: Request, res: Response) => {
     const id = req.params.blogId
