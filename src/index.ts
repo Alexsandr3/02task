@@ -17,7 +17,7 @@ app.get('/', (req: Request, res: Response) => {
         message: "Hi need "
     })
 })
-
+//ff
 /*app.delete('/testing/all-data', (req: Request, res: Response) => {
     blogs = []
     res.send(204)
