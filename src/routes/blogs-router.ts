@@ -13,7 +13,7 @@ const youtubeUrlValidation = body('youtubeUrl').isURL().isLength({min: 1, max: 1
 blogsRoute.get('/', (req: Request, res: Response) => {
     res.send(blogs)
 })
-blogsRoute.post('/',/*checkAutoritionMiddleware,*/nameValidation,youtubeUrlValidation,inputValidetionsMiddleware,(req: Request, res: Response) => {
+blogsRoute.post('/',checkAutoritionMiddleware,nameValidation,youtubeUrlValidation,inputValidetionsMiddleware,(req: Request, res: Response) => {
     const name = req.body.name
     const youtubeUrl = req.body.youtubeUrl
     const newBlog =blogsRepositories.createBlog(name, youtubeUrl)
@@ -27,7 +27,7 @@ blogsRoute.get('/:blogId', (req: Request, res: Response) => {
     }
     return res.send(blog)
 })
-blogsRoute.put('/:blogId',/*checkAutoritionMiddleware,*/nameValidation,youtubeUrlValidation,inputValidetionsMiddleware, (req: Request, res: Response) => {
+blogsRoute.put('/:blogId',checkAutoritionMiddleware,nameValidation,youtubeUrlValidation,inputValidetionsMiddleware, (req: Request, res: Response) => {
     const id = req.params.blogId
     let name = req.body.name
     let youtubeUrl = req.body.youtubeUrl
@@ -38,7 +38,7 @@ blogsRoute.put('/:blogId',/*checkAutoritionMiddleware,*/nameValidation,youtubeUr
     }
     return res.sendStatus(204)
 })
-blogsRoute.delete('/:blogId',/*checkAutoritionMiddleware,*/ (req: Request, res: Response) => {
+blogsRoute.delete('/:blogId',checkAutoritionMiddleware, (req: Request, res: Response) => {
     const id = req.params.blogId
     const isDelete = blogsRepositories.deleteBlogById(id)
     if (!isDelete){

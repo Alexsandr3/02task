@@ -4,8 +4,8 @@ import {atob} from "buffer"
 
 export const checkAutoritionMiddleware = (req: Request, res:Response,next:NextFunction) => {
     const authorization = req.header('Authorization')
-    if (!authorization?.startsWith("Basic")){
-        return res.sendStatus(401)
+    if (!authorization?.startsWith("Basic") /*|| authorization?.indexof(":") > -1*/){
+        return res.sendStatus(401);
     }
     try{
         const [login,passwords] = atob(authorization?.split(" ")[1]).split(":")  // decode the string
