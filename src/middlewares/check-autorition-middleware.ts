@@ -4,7 +4,7 @@ import {atob} from "buffer"
 
 export const checkAutoritionMiddleware = (req: Request, res:Response,next:NextFunction) => {
     const authorization = req.header('Authorization')
-    if (!authorization?.startsWith("Basic") /*|| authorization?.indexof(":") > -1*/){
+    if (!authorization?.startsWith("Basic")  /*|| authorization?.indexof(":") > -1*/){
         return res.sendStatus(401);
     }
     try{

@@ -3,7 +3,6 @@ import bodyParser from 'body-parser'
 import {blogsRoute} from "./routes/blogs-router"
 import {postsRoute} from "./routes/post-router"
 
-
 const app = express()
 const port = process.env.PORT || 5002
 const jsonBodyMiddleware = bodyParser.json()
@@ -17,7 +16,6 @@ app.get('/', (req: Request, res: Response) => {
         message: "Hi need "
     })
 })
-
 app.delete('/testing/all-data', (req: Request, res: Response) => {
     res.status(204).send([])
 })

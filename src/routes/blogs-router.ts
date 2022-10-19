@@ -9,7 +9,6 @@ export const blogsRoute = Router({})
 const nameValidation =  body('name').isString().notEmpty().trim().isLength({min:1, max:15})
 const youtubeUrlValidation = body('youtubeUrl').isURL().isLength({min: 1, max: 100})
 
-
 blogsRoute.get('/', (req: Request, res: Response) => {
     res.send(blogs)
 })

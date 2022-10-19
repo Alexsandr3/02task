@@ -29,8 +29,7 @@ export const postsRepositories ={
         return newPost
     },
     searchByIdPost (postId: string){
-        const post = posts.find(p => p.id === postId)
-        return post
+        return posts.find(p => p.id === postId)
     },
     updatePostById (postId: string, title: string, shortDescription: string, content: string, blogId: string){
         const post = posts.find(p => p.id === postId)

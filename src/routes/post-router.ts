@@ -16,6 +16,7 @@ const blogIdIsExit = body('blogId').isString().notEmpty().trim().custom(value =>
     return true
 })
 
+
 postsRoute.get('/', (req: Request, res: Response) => {
     res.send(blogs)
 })

@@ -5,7 +5,6 @@ export type blogsType = {
 }
 
 export let blogs: blogsType[] = []
-
 export const blogsRepositories = {
     createBlog (name: string, youtubeUrl: string){
         const newBlog = {
