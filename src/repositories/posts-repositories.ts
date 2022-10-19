@@ -1,4 +1,4 @@
-import {blogs, blogsRepositories} from "./blogs-repositories";
+import {blogs} from "./blogs-repositories";
 
 export  type postsType = {
     id: string,

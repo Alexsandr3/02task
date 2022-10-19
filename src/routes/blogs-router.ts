@@ -20,7 +20,7 @@ blogsRoute.post('/',checkAutoritionMiddleware,nameValidation,youtubeUrlValidatio
     return res.status(201).send(newBlog)
 })
 blogsRoute.get('/:blogId', (req: Request, res: Response) => {
-    const blog =blogsRepositories.searchById(req.params.blogId)
+    const blog =blogsRepositories.searchBlogById(req.params.blogId)
     if (!blog){
         res.sendStatus(404)
         return;

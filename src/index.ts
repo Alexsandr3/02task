@@ -16,11 +16,11 @@ app.get('/', (req: Request, res: Response) => {
         message: "Hi need "
     })
 })
-//ff
+
 /*app.delete('/testing/all-data', (req: Request, res: Response) => {
     blogs = []
-    res.send(204)
-})*/
+    res.send(204)*/
+
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })

@@ -1,22 +1,17 @@
 import {Request, Response, Router} from "express";
 import {blogs, blogsRepositories} from "../repositories/blogs-repositories";
+import {postsRepositories} from "../repositories/posts-repositories";
 import {body} from "express-validator";
 import {inputValidetionsMiddleware} from "../middlewares/Input-validetions-middleware";
 import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middleware";
-import {postsRepositories} from "../repositories/posts-repositories";
 
 export const postsRoute = Router({})
 
 const titleValidation = body('title').isString().notEmpty().trim().isLength({min: 1, max: 30})
 const shortDescriptionValidation = body('shortDescription').isString().notEmpty().trim().isLength({min: 1, max: 100})
 const contentValidation = body('content').isString().notEmpty().trim().isLength({min: 1, max: 1000})
-// const blogIdIsExit: CustomValidator = value => {
-//     const searchById = blogsRepositories.searchById(value)
-//     if (!searchById) throw new Error()
-//     return true;
-// }
 const blogIdIsExit = body('blogId').isString().notEmpty().trim().custom(value => {
-    const searchById = blogsRepositories.searchById(value)
+    const searchById = blogsRepositories.searchBlogById(value)
     if (!searchById) throw new Error()
     return true
 })

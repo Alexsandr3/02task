@@ -16,9 +16,8 @@ export const blogsRepositories = {
         blogs.push(newBlog)
         return newBlog
     },
-    searchById (id: string){
-        const blog = blogs.find(v => v.id === id)
-        return blog
+    searchBlogById (id: string){
+        return blogs.find(v => v.id === id)
     },
     updateBlogById (id: string, name:string, youtubeUrl: string){
         const blog = blogs.find(v => v.id === id)

@@ -1,9 +1,10 @@
 import {NextFunction, Request, Response} from "express";
 import {atob} from "buffer"
 
+
 export const checkAutoritionMiddleware = (req: Request, res:Response,next:NextFunction) => {
     const authorization = req.header('Authorization')
-    if (!authorization?.startsWith("Basic64")){
+    if (!authorization?.startsWith("Basic")){
         return res.sendStatus(401)
     }
     try{
