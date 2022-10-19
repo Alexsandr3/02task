@@ -36,21 +36,11 @@ export const postsRepositories ={
         if (!post) {
             return null
         }
-        const blog = blogs.find(b => b.id === blogId)
-        if (!blog) {
-            return null
-        }
-       const newPost = {
-            id: postId,
-            title: title,
-            shortDescription: shortDescription,
-            content: content,
-            blogId:blogId,
-            blogName: blog.name
-        }
-        posts.filter(p => p.id !== postId)
-        posts.push(newPost)
-        return newPost;
+        post.title = title
+        post.shortDescription = shortDescription
+        post.content = content
+        post.blogId = blogId
+        return post;
     },
     deletePostById (postId: string){
         const postForDelete = posts.find(p => p.id === postId)
