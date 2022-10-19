@@ -1,9 +1,9 @@
 import {Request, Response, Router} from "express";
-import {blogs, blogsRepositories} from "../repositories/blogs-repositories";
 import {postsRepositories} from "../repositories/posts-repositories";
 import {body} from "express-validator";
 import {inputValidetionsMiddleware} from "../middlewares/Input-validetions-middleware";
 import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middleware";
+import {blogsRepositories} from "../repositories/blogs-repositories";
 
 export const postsRoute = Router({})
 
@@ -18,10 +18,11 @@ const blogIdIsExit = body('blogId').isString().notEmpty().trim().custom(value =>
 
 
 postsRoute.get('/', (req: Request, res: Response) => {
-    res.send(blogs)
+    const posts = postsRepositories.findPosts();
+    res.send(posts)
 })
 postsRoute.post('/', checkAutoritionMiddleware, titleValidation, shortDescriptionValidation, contentValidation, blogIdIsExit, inputValidetionsMiddleware, (req: Request, res: Response) => {
-    const title = req.body.name
+    const title = req.body.title
     const shortDescription = req.body.shortDescription
     const content = req.body.content
     const blogId = req.body.blogId
@@ -31,6 +32,7 @@ postsRoute.post('/', checkAutoritionMiddleware, titleValidation, shortDescriptio
 postsRoute.get('/:postId', (req: Request, res: Response) => {
     const post = postsRepositories.searchByIdPost(req.params.postId)
     if (!post) return res.sendStatus(404)
+    console.log(post)
     return res.send(post)
 })
 postsRoute.put('/:postId',checkAutoritionMiddleware, titleValidation, shortDescriptionValidation, contentValidation, blogIdIsExit, inputValidetionsMiddleware, (req: Request, res: Response) => {

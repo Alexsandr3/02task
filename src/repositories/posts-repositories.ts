@@ -50,7 +50,7 @@ export const postsRepositories ={
         }
         posts.filter(p => p.id !== postId)
         posts.push(newPost)
-        return post;
+        return newPost;
     },
     deletePostById (postId: string){
         const postForDelete = posts.find(p => p.id === postId)
@@ -59,5 +59,8 @@ export const postsRepositories ={
         }
         posts = posts.filter(p => p.id !== postId)
         return true
+    },
+    findPosts() {
+       return  posts
     }
 }
