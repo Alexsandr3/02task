@@ -40,7 +40,9 @@ export const postsRepositories ={
         post.shortDescription = shortDescription
         post.content = content
         post.blogId = blogId
-        return post;
+        console.log(post)
+        return post
+
     },
     deletePostById (postId: string){
         const postForDelete = posts.find(p => p.id === postId)
