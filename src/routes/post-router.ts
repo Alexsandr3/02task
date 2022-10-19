@@ -19,7 +19,7 @@ const blogIdIsExit = body('blogId').isString().notEmpty().trim().custom(value =>
 postsRoute.get('/', (req: Request, res: Response) => {
     res.send(blogs)
 })
-postsRoute.post('/', checkAutoritionMiddleware, titleValidation, shortDescriptionValidation, contentValidation, blogIdIsExit, inputValidetionsMiddleware, (req: Request, res: Response) => {
+postsRoute.post('/', /*checkAutoritionMiddleware,*/ titleValidation, shortDescriptionValidation, contentValidation, blogIdIsExit, inputValidetionsMiddleware, (req: Request, res: Response) => {
     const title = req.body.name
     const shortDescription = req.body.shortDescription
     const content = req.body.content
@@ -32,7 +32,7 @@ postsRoute.get('/:postId', (req: Request, res: Response) => {
     if (!post) return res.sendStatus(404)
     return res.send(post)
 })
-postsRoute.put('/:postId',checkAutoritionMiddleware, titleValidation, shortDescriptionValidation, contentValidation, blogIdIsExit, inputValidetionsMiddleware, (req: Request, res: Response) => {
+postsRoute.put('/:postId',/*checkAutoritionMiddleware,*/ titleValidation, shortDescriptionValidation, contentValidation, blogIdIsExit, inputValidetionsMiddleware, (req: Request, res: Response) => {
     const postId = req.params.postId
     const title = req.body.title
     const shortDescription = req.body.shortDescription
@@ -45,7 +45,7 @@ postsRoute.put('/:postId',checkAutoritionMiddleware, titleValidation, shortDescr
     }
     return res.sendStatus(204)
 })
-postsRoute.delete('/:postId', checkAutoritionMiddleware, (req: Request, res: Response) => {
+postsRoute.delete('/:postId', /*checkAutoritionMiddleware,*/ (req: Request, res: Response) => {
     //const postId = req.params.postId
     const isDelete = postsRepositories.deletePostById(req.params.postId)
     if (!isDelete) {

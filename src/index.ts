@@ -3,6 +3,7 @@ import bodyParser from 'body-parser'
 import {blogsRoute} from "./routes/blogs-router"
 import {postsRoute} from "./routes/post-router"
 
+
 const app = express()
 const port = process.env.PORT || 5002
 const jsonBodyMiddleware = bodyParser.json()
@@ -17,10 +18,9 @@ app.get('/', (req: Request, res: Response) => {
     })
 })
 
-/*app.delete('/testing/all-data', (req: Request, res: Response) => {
-    blogs = []
-    res.send(204)*/
-
+app.delete('/testing/all-data', (req: Request, res: Response) => {
+    res.status(204).send([])
+})
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
