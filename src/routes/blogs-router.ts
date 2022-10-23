@@ -9,10 +9,12 @@ export const blogsRoute = Router({})
 const nameValidation =  body('name').isString().notEmpty().trim().isLength({min:1, max:15})
 const youtubeUrlValidation = body('youtubeUrl').isURL().isLength({min: 1, max: 100})
 
+const preBlogsValidatotion = [checkAutoritionMiddleware,nameValidation,youtubeUrlValidation,inputValidetionsMiddleware]
+
 blogsRoute.get('/', (req: Request, res: Response) => {
     res.send(blogs)
 })
-blogsRoute.post('/',checkAutoritionMiddleware,nameValidation,youtubeUrlValidation,inputValidetionsMiddleware,(req: Request, res: Response) => {
+blogsRoute.post('/',preBlogsValidatotion,(req: Request, res: Response) => {
     const name = req.body.name
     const youtubeUrl = req.body.youtubeUrl
     const newBlog =blogsRepositories.createBlog(name, youtubeUrl)
@@ -26,7 +28,7 @@ blogsRoute.get('/:blogId', (req: Request, res: Response) => {
     }
     return res.send(blog)
 })
-blogsRoute.put('/:blogId',checkAutoritionMiddleware,nameValidation,youtubeUrlValidation,inputValidetionsMiddleware, (req: Request, res: Response) => {
+blogsRoute.put('/:blogId',preBlogsValidatotion, (req: Request, res: Response) => {
     const id = req.params.blogId
     let name = req.body.name
     let youtubeUrl = req.body.youtubeUrl

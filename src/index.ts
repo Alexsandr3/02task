@@ -19,6 +19,6 @@ app.get('/', (req: Request, res: Response) => {
 app.delete('/testing/all-data', (req: Request, res: Response) => {
     res.status(204).send([])
 })
-app.listen(port, () => {
+app.listen(port,  () => {
     console.log(`Example app listening on port ${port}`)
 })

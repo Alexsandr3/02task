@@ -2,15 +2,17 @@ export type blogsType = {
     id: string
     name: string
     youtubeUrl: string
+    createdAt: string
 }
 
 export let blogs: blogsType[] = []
 export const blogsRepositories = {
     createBlog (name: string, youtubeUrl: string){
         const newBlog = {
-            id:(new Date()).toString(),
+            id: (+new Date()).toString(),
             name: name,
-            youtubeUrl: youtubeUrl
+            youtubeUrl: youtubeUrl,
+            createdAt: new Date().toISOString()
         }
         blogs.push(newBlog)
         return newBlog

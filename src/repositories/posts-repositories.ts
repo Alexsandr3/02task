@@ -6,7 +6,8 @@ export  type postsType = {
     shortDescription: string,
     content: string,
     blogId: string,
-    blogName: string
+    blogName: string,
+    createdAt: string
 }
 
 let posts: postsType[] = []
@@ -18,12 +19,13 @@ export const postsRepositories ={
             return null
         }
         const newPost = {
-            id: (new Date()).toString(),
+            id: (+new Date()).toString(),
             title: title,
             shortDescription: shortDescription,
             content: content,
             blogId:blogId,
-            blogName: blog.name
+            blogName: blog.name,
+            createdAt: new Date().toISOString()
         }
         posts.push(newPost)
         return newPost
@@ -40,7 +42,6 @@ export const postsRepositories ={
         post.shortDescription = shortDescription
         post.content = content
         post.blogId = blogId
-        console.log(post)
         return post
 
     },

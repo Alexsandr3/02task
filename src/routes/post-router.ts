@@ -16,12 +16,19 @@ const blogIdIsExit = body('blogId').isString().notEmpty().trim().custom(value =>
     return true
 })
 
+const prePostsValidatotion = [
+    checkAutoritionMiddleware,
+    titleValidation,
+    shortDescriptionValidation,
+    contentValidation,
+    blogIdIsExit,
+    inputValidetionsMiddleware]
 
 postsRoute.get('/', (req: Request, res: Response) => {
     const posts = postsRepositories.findPosts();
     res.send(posts)
 })
-postsRoute.post('/', checkAutoritionMiddleware, titleValidation, shortDescriptionValidation, contentValidation, blogIdIsExit, inputValidetionsMiddleware, (req: Request, res: Response) => {
+postsRoute.post('/', prePostsValidatotion, (req: Request, res: Response) => {
     const title = req.body.title
     const shortDescription = req.body.shortDescription
     const content = req.body.content
@@ -35,7 +42,7 @@ postsRoute.get('/:postId', (req: Request, res: Response) => {
     console.log(post)
     return res.send(post)
 })
-postsRoute.put('/:postId',checkAutoritionMiddleware, titleValidation, shortDescriptionValidation, contentValidation, blogIdIsExit, inputValidetionsMiddleware, (req: Request, res: Response) => {
+postsRoute.put('/:postId',prePostsValidatotion, (req: Request, res: Response) => {
     const postId = req.params.postId
     const title = req.body.title
     const shortDescription = req.body.shortDescription
