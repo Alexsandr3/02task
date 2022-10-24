@@ -10,9 +10,10 @@ export const postsRoute = Router({})
 const titleValidation = body('title').isString().notEmpty().trim().isLength({min: 1, max: 30})
 const shortDescriptionValidation = body('shortDescription').isString().notEmpty().trim().isLength({min: 1, max: 100})
 const contentValidation = body('content').isString().notEmpty().trim().isLength({min: 1, max: 1000})
-const blogIdIsExit = body('blogId').isString().notEmpty().trim().custom(value => {
-    const searchById = blogsRepositories.findBlogById(value)
-    if (!searchById) throw new Error()
+const blogIdIsExit = body('blogId').isString().notEmpty().trim().custom(async value => {
+    const searchById = await blogsRepositories.findBlogById(value)
+    console.log('searchById', searchById)
+    if (!searchById) throw new Error('Incorect blogId')
     return true
 })
 

@@ -24,7 +24,7 @@ export const blogsRepositories = {
         return newBlog
     },
     async findBlogById (id: string): Promise<blogsType | null> {
-        return await blogsCollection.findOne({id},{projection: {_id: false}})
+        return blogsCollection.findOne({id},{projection: {_id: false}})
     },
     async updateBlogById (id: string, name:string, youtubeUrl: string): Promise<boolean>{
         const result = await blogsCollection.updateOne({id:id},{$set: {name: name, youtubeUrl: youtubeUrl}})

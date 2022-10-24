@@ -34,16 +34,12 @@ export const postsRepositories ={
         return await postsCollection.findOne({id: postId},{projection: {_id: false}})
     },
     async updatePostById (postId: string, title: string, shortDescription: string, content: string, blogId: string): Promise<boolean>{
-        const post = await postsCollection.updateOne({id:postId},{$set: {title: title, shortDescription: shortDescription, content: content, blogId: blogId}})
-        return post.matchedCount === 1
+        const result = await postsCollection.updateOne({id:postId},{$set: {title: title, shortDescription: shortDescription, content: content, blogId: blogId}})
+        return result.matchedCount === 1
     },
     async deletePostById (postId: string): Promise<boolean> {
-        const post = await postsCollection.deleteOne({id: postId})
-        if (!post) {
-            return false
-        }
-        await postsCollection.find({id: {$not: {postId}}})
-        return true
+        const result = await postsCollection.deleteOne({id: postId})
+        return result.deletedCount !== 0
     },
     async findPosts(): Promise<postsType[]> {
         return postsCollection.find({}, {projection: {_id: false}}).toArray()
