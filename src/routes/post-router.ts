@@ -1,29 +1,11 @@
 import {Request, Response, Router} from "express";
 import {postsRepositories} from "../repositories/posts-db-repositories";
-import {body} from "express-validator";
-import {inputValidetionsMiddleware} from "../middlewares/Input-validetions-middleware";
 import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middleware";
-import {blogsRepositories} from "../repositories/blogs-db-repositories";
+import {prePostsValidatotion} from "../middlewares/posts-validation-middleware";
+
 
 export const postsRoute = Router({})
 
-const titleValidation = body('title').isString().notEmpty().trim().isLength({min: 1, max: 30})
-const shortDescriptionValidation = body('shortDescription').isString().notEmpty().trim().isLength({min: 1, max: 100})
-const contentValidation = body('content').isString().notEmpty().trim().isLength({min: 1, max: 1000})
-const blogIdIsExit = body('blogId').isString().notEmpty().trim().custom(async value => {
-    const searchById = await blogsRepositories.findBlogById(value)
-    console.log('searchById', searchById)
-    if (!searchById) throw new Error('Incorect blogId')
-    return true
-})
-
-const prePostsValidatotion = [
-    checkAutoritionMiddleware,
-    titleValidation,
-    shortDescriptionValidation,
-    contentValidation,
-    blogIdIsExit,
-    inputValidetionsMiddleware]
 
 postsRoute.get('/', async (req: Request, res: Response) => {
     const posts = await postsRepositories.findPosts();
@@ -57,7 +39,6 @@ postsRoute.put('/:postId',prePostsValidatotion, async (req: Request, res: Respon
     return res.sendStatus(204)
 })
 postsRoute.delete('/:postId', checkAutoritionMiddleware, async (req: Request, res: Response) => {
-    //const postId = req.params.postId
     const isDelete = await postsRepositories.deletePostById(req.params.postId)
     if (!isDelete) {
         res.sendStatus(404)

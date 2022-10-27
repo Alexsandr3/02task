@@ -1,13 +1,32 @@
-import {MongoClient} from "mongodb"
-import {blogsType} from "../repositories/blogs-db-repositories";
-import {postsType} from "../repositories/posts-db-repositories";
-const mongoUri =
-    process.env.mongoURI || "mongodb+srv://back07-project07:7424fernis@dbback07.1a5at0j.mongodb.net/?retryWrites=true&w=majority";
+import {MongoClient, ObjectId} from "mongodb"
+//import 'dotnev/config'
 
 
-const client = new MongoClient(mongoUri);
+const mongoUri = process.env.mongoURI || "mongodb://0.0.0.0:27017";
+
+export type blogsType = {
+    _id?: ObjectId
+    id?: string,
+    name: string,
+    youtubeUrl: string,
+    createdAt: string
+}
+export  type postsType = {
+    _id?: ObjectId
+    id?: string,
+    title: string,
+    shortDescription: string,
+    content: string,
+    blogId: string,
+    blogName: string,
+    createdAt: string
+}
+
+
+export const client = new MongoClient(mongoUri);
 const dbName = 'Homework'
 const DB = client.db(dbName)
+
 export const blogsCollection = DB.collection<blogsType>('blogs')
 export const postsCollection = DB.collection<postsType>('posts')
 

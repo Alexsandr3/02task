@@ -1,47 +1,57 @@
-import {blogsCollection, postsCollection} from "../routes/db";
+import {postsCollection, postsType} from "../routes/db";
+import {ObjectId} from "mongodb";
+import {blogsRepositories} from "./blogs-db-repositories";
 
-export  type postsType = {
-    id: string,
-    title: string,
-    shortDescription: string,
-    content: string,
-    blogId: string,
-    blogName: string,
-    createdAt: string
+const postWithNewId = (object: postsType): postsType => {
+    return {
+        id: object._id?.toString(),
+        title: object.title,
+        shortDescription: object.shortDescription,
+        content: object.content,
+        blogId: object.blogId,
+        blogName: object.blogName,
+        createdAt: object.createdAt
+    }
 }
-
-//let posts: postsType[] = []
 
 export const postsRepositories ={
     async createPost (title: string, shortDescription: string, content: string, blogId: string): Promise<postsType | null> {
-        const blog = await blogsCollection.findOne({id:blogId})
+        const blog = await blogsRepositories.findBlogById(blogId)
         if (!blog) {
             return null
         }
         const newPost = {
-            id: (+new Date()).toString(),
+            _id: new ObjectId(),
             title: title,
             shortDescription: shortDescription,
             content: content,
-            blogId:blogId,
+            blogId: blogId,
             blogName: blog.name,
             createdAt: new Date().toISOString()
         }
-        await postsCollection.insertOne({...newPost})
-        return newPost
+        await postsCollection.insertOne(newPost)
+        return postWithNewId(newPost)
     },
-    async findByIdPost (postId: string): Promise<postsType | null> {
-        return await postsCollection.findOne({id: postId},{projection: {_id: false}})
+    async findByIdPost (id: string): Promise<postsType | null> {
+        const result = await postsCollection.findOne({_id: new ObjectId(id)})
+        if (!result){
+            return null
+        } else {
+            return postWithNewId(result)
+        }
     },
-    async updatePostById (postId: string, title: string, shortDescription: string, content: string, blogId: string): Promise<boolean>{
-        const result = await postsCollection.updateOne({id:postId},{$set: {title: title, shortDescription: shortDescription, content: content, blogId: blogId}})
+    async updatePostById (id: string, title: string, shortDescription: string, content: string, blogId: string): Promise<boolean>{
+        const result = await postsCollection.updateOne({_id: new ObjectId(id)},{$set: {title: title, shortDescription: shortDescription, content: content, blogId: blogId}})
         return result.matchedCount === 1
     },
-    async deletePostById (postId: string): Promise<boolean> {
-        const result = await postsCollection.deleteOne({id: postId})
+    async deletePostById (id: string): Promise<boolean> {
+        const result = await postsCollection.deleteOne({_id: new ObjectId(id)})
         return result.deletedCount !== 0
     },
     async findPosts(): Promise<postsType[]> {
-        return postsCollection.find({}, {projection: {_id: false}}).toArray()
+        return (await postsCollection.find({}).toArray()).map(foundPost => postWithNewId(foundPost))
+    },
+    async deleteAll() {
+        await postsCollection.deleteMany({})
     }
 }

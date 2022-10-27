@@ -1,16 +1,11 @@
 import {Request, Response, Router} from "express";
 import {blogsRepositories} from "../repositories/blogs-db-repositories";
-import {body} from "express-validator";
-import {inputValidetionsMiddleware} from "../middlewares/Input-validetions-middleware";
 import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middleware";
+import {preBlogsValidatotion} from "../middlewares/blogs-validation-middleware";
 
 
 export const blogsRoute = Router({})
 
-const nameValidation =  body('name').isString().notEmpty().trim().isLength({min:1, max:15})
-const youtubeUrlValidation = body('youtubeUrl').isURL().isLength({min: 1, max: 100})
-
-const preBlogsValidatotion = [checkAutoritionMiddleware,nameValidation,youtubeUrlValidation,inputValidetionsMiddleware]
 
 blogsRoute.get('/', async (req: Request, res: Response) => {
     const blogs = await blogsRepositories.findBlogs()

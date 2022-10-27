@@ -1,3 +1,5 @@
 .idea
 dist
 node_modules
+hask03.postman_collection.json
+.env
