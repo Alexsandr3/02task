@@ -1,8 +1,8 @@
 import {MongoClient, ObjectId} from "mongodb"
-//import 'dotnev/config'
+import 'dotenv/config'
 
 
-const mongoUri = process.env.mongoURI || "mongodb://0.0.0.0:27017";
+const mongoUri = process.env.MONGO_URI || "mongodb://0.0.0.0:27017";
 
 export type blogsType = {
     _id?: ObjectId

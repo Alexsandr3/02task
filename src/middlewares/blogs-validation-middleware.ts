@@ -11,7 +11,7 @@ const youtubeUrlValidation =
         'should be valid URL, length from 1 to 100 symbol').
     isURL().isLength({min: 1, max: 100})
 
-export const preBlogsValidatotion = [
+export const preBlogsValidation = [
     checkAutoritionMiddleware,
     nameValidation,
     youtubeUrlValidation,
