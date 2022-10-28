@@ -1,8 +1,8 @@
 import {postsCollection, postsType} from "../routes/db";
 import {ObjectId} from "mongodb";
-import {blogsRepositories} from "./blogs-db-repositories";
+import {blogsRepositories, FindPostsByIdType} from "./blogs-db-repositories";
 
-const postWithNewId = (object: postsType): postsType => {
+export const postWithNewId = (object: postsType): postsType => {
     return {
         id: object._id?.toString(),
         title: object.title,
@@ -48,8 +48,13 @@ export const postsRepositories ={
         const result = await postsCollection.deleteOne({_id: new ObjectId(id)})
         return result.deletedCount !== 0
     },
-    async findPosts(): Promise<postsType[]> {
-        return (await postsCollection.find({}).toArray()).map(foundPost => postWithNewId(foundPost))
+    async findPosts(data:FindPostsByIdType): Promise<postsType[]> {
+        return (await postsCollection
+            .find({})
+            .skip( ( data.pageNumber - 1 ) * data.pageSize )
+            .limit(data.pageSize)
+            .sort({ [data.sortBy] : data.sortDirection })
+            .toArray()).map(foundPost => postWithNewId(foundPost))
     },
     async deleteAll() {
         await postsCollection.deleteMany({})

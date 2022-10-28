@@ -1,4 +1,4 @@
-import {body} from "express-validator";
+import {body, query} from "express-validator";
 import {checkAutoritionMiddleware} from "./check-autorition-middleware";
 import {inputValidetionsMiddleware} from "./Input-validetions-middleware";
 
@@ -10,10 +10,22 @@ const youtubeUrlValidation =
     body('youtubeUrl',
         'should be valid URL, length from 1 to 100 symbol').
     isURL().isLength({min: 1, max: 100})
+const pageNumberValidation =
+    query('pageNumber',
+        'pageNumber must be a number')
+        .toInt()
+const pageSizeValidation =
+    query('pageSize',
+        'pageSize must be a number')
+        .toInt()
 
 export const preBlogsValidation = [
     checkAutoritionMiddleware,
     nameValidation,
     youtubeUrlValidation,
     inputValidetionsMiddleware
+]
+export const preBlogsPageValidation = [
+    pageNumberValidation,
+    pageSizeValidation
 ]

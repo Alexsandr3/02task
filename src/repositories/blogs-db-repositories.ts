@@ -1,5 +1,6 @@
-import {blogsCollection, blogsType} from "../routes/db";
+import {blogsCollection, blogsType, postsCollection, postsType} from "../routes/db";
 import {ObjectId} from "mongodb";
+import {postWithNewId} from "./posts-db-repositories";
 
 const blogWithNewId = (object: blogsType): blogsType => {
     return {
@@ -10,9 +11,30 @@ const blogWithNewId = (object: blogsType): blogsType => {
     }
 }
 
+export type SortDirectionType = 'asc' | 'desc'
+export type FindBlogsType = {
+    searchNameTerm: string | null,
+    pageNumber: number,
+    pageSize: number,
+    sortBy: string,
+    sortDirection: SortDirectionType
+}
+export type FindPostsByIdType = {
+    pageNumber: number,
+    pageSize: number,
+    sortBy: string,
+    sortDirection: SortDirectionType
+}
+
 export const blogsRepositories = {
-    async findBlogs(): Promise<blogsType[]>  {
-        return (await blogsCollection.find({}).toArray()).map( foundBlog => blogWithNewId(foundBlog))
+    async findBlogs(data: FindBlogsType): Promise<blogsType[]>  {
+        return (await blogsCollection
+            .find( data.searchNameTerm ? {name: { $regex: data.searchNameTerm }} : {})
+            .skip( ( data.pageNumber - 1 ) * data.pageSize )
+            .limit(data.pageSize)
+            .sort({ [data.sortBy] : data.sortDirection })
+            .toArray())
+            .map( foundBlog => blogWithNewId(foundBlog))
     },
     async createBlog (name: string, youtubeUrl: string): Promise<blogsType>{
         const newBlog: blogsType = {
@@ -32,9 +54,41 @@ export const blogsRepositories = {
             return blogWithNewId(result)
         }
     },
+    async findPostsByIdBlog (blogId: string, data: FindPostsByIdType): Promise<Array<postsType> | null> {
+        const result = (await postsCollection
+            .find({blogId})
+            .skip( ( data.pageNumber - 1 ) * data.pageSize )
+            .limit(data.pageSize)
+            .sort({ [data.sortBy] : data.sortDirection }).toArray())
+            .map(postWithNewId)
+        console.log('result', result)
+        if (!result){
+            return null
+        } else {
+            return result
+        }
+    },
     async updateBlogById (id: string, name:string, youtubeUrl: string): Promise<boolean>{
         const result = await blogsCollection.updateOne({_id:new ObjectId(id)},{$set: {name: name, youtubeUrl: youtubeUrl}})
         return result.matchedCount === 1
+    },
+    async createPostsByIdBlog (blogId: string, title:string, shortDescription: string, content: string): Promise<postsType | null>{
+        const result = await blogsCollection.findOne({blogId})
+        if (!result) {
+            return null
+        }
+        const newPost = {
+            _id: new ObjectId(),
+            title: title,
+            shortDescription: shortDescription,
+            content: content,
+            blogId: blogId,
+            blogName: result.name,
+            createdAt: new Date().toISOString()
+        }
+        await postsCollection.insertOne(newPost)
+        return postWithNewId(newPost)
+
     },
     async deleteBlogById (id: string): Promise<boolean> {
         const result = await blogsCollection.deleteOne({_id:new ObjectId(id)})
