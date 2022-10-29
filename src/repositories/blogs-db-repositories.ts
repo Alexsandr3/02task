@@ -29,7 +29,7 @@ export type FindPostsByIdType = {
 export const blogsRepositories = {
     async findBlogs(data: FindBlogsType): Promise<blogsType[]>  {
         return (await blogsCollection
-            .find( data.searchNameTerm ? {name: { $regex: data.searchNameTerm }, $options: 'i'} : {})
+            .find( data.searchNameTerm ? {name: { $regex: data.searchNameTerm, $options: 'i' }} : {})
             .skip( ( data.pageNumber - 1 ) * data.pageSize )
             .limit(data.pageSize)
             .sort({ [data.sortBy] : data.sortDirection })
@@ -99,7 +99,7 @@ export const blogsRepositories = {
     },
 
     async blogsCount (data: FindBlogsType): Promise<number> {
-        const filter = data.searchNameTerm ? {name: { $regex: data.searchNameTerm }, $options: 'i'} : {}
+        const filter = data.searchNameTerm ? {name: { $regex: data.searchNameTerm, $options: 'i' }} : {}
         return blogsCollection.countDocuments(filter)
     }
 }
