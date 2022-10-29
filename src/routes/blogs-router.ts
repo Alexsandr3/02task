@@ -53,7 +53,7 @@ blogsRoute.get('/:blogId/posts', preBlogsPageValidation, async (req: Request, re
     }
     return res.send(blog)
 })
-blogsRoute.post('/:blogId/posts',prePostsValidatotionByBlogId,checkIdValidForMongodb, async (req: Request, res: Response) => {
+blogsRoute.post('/:blogId/posts',prePostsValidatotionByBlogId, async (req: Request, res: Response) => {
     const blogId = req.params.blogId
     const title = req.body.title
     const shortDescription = req.body.shortDescription
