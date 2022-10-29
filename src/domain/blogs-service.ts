@@ -4,6 +4,7 @@ import {
     FindPostsByIdType
 } from "../repositories/blogs-db-repositories";
 import {blogsType, postsType} from "../routes/db";
+import {postsRepositories} from "../repositories/posts-db-repositories";
 
 
 export type blogsTypeService = {
@@ -26,12 +27,13 @@ export type blogsTypeServicePost = {
 export const blogsService = {
     async findBlogs(data: FindBlogsType): Promise<blogsTypeService>  {
         const foundBlogs = await blogsRepositories.findBlogs(data)
-        const pagesCountRes = Math.ceil(foundBlogs.length/data.pageSize)
+        const totalCount = await blogsRepositories.blogsCount(data)
+        const pagesCountRes = Math.ceil(totalCount/data.pageSize)
         return {
             pagesCount: pagesCountRes,
             page: data.pageNumber,
             pageSize: data.pageSize,
-            totalCount: foundBlogs.length,
+            totalCount: totalCount,
             items: foundBlogs
 
         }
@@ -44,15 +46,17 @@ export const blogsService = {
     },
     async findPostsByIdBlog (blogId: string, data: FindPostsByIdType): Promise<blogsTypeServicePost | null> {
         const postsByIdBlog = await blogsRepositories.findPostsByIdBlog(blogId, data)
+
         if (!postsByIdBlog){
             return null
         }
-        const pagesCountRes = Math.ceil(postsByIdBlog.length/data.pageSize)
+        const totalCount = await postsRepositories.postsCount()
+        const pagesCountRes = Math.ceil(totalCount/data.pageSize)
         return {
             pagesCount: pagesCountRes,
             page: data.pageNumber,
             pageSize: data.pageSize,
-            totalCount: postsByIdBlog.length,
+            totalCount: totalCount,
             items: postsByIdBlog
         }
     },

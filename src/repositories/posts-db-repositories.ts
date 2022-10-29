@@ -1,6 +1,6 @@
-import {postsCollection, postsType} from "../routes/db";
+import {blogsCollection, postsCollection, postsType} from "../routes/db";
 import {ObjectId} from "mongodb";
-import {blogsRepositories, FindPostsByIdType} from "./blogs-db-repositories";
+import {blogsRepositories, FindBlogsType, FindPostsByIdType} from "./blogs-db-repositories";
 
 export const postWithNewId = (object: postsType): postsType => {
     return {
@@ -60,5 +60,8 @@ export const postsRepositories ={
     },
     async deleteAll() {
         await postsCollection.deleteMany({})
+    },
+    async postsCount (): Promise<number> {
+        return postsCollection.countDocuments({})
     }
 }

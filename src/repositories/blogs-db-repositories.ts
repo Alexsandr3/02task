@@ -1,5 +1,5 @@
 import {blogsCollection, blogsType, postsCollection, postsType} from "../routes/db";
-import {ObjectId} from "mongodb";
+import {Filter, ObjectId} from "mongodb";
 import {postWithNewId} from "./posts-db-repositories";
 
 const blogWithNewId = (object: blogsType): blogsType => {
@@ -96,5 +96,10 @@ export const blogsRepositories = {
     },
     async deleteAll() {
         await blogsCollection.deleteMany({})
+    },
+
+    async blogsCount (data: FindBlogsType): Promise<number> {
+        const filter = data.searchNameTerm ? {name: { $regex: data.searchNameTerm }} : {}
+        return blogsCollection.countDocuments(filter)
     }
 }
