@@ -55,18 +55,12 @@ export const blogsRepositories = {
         }
     },
     async findPostsByIdBlog (blogId: string, data: FindPostsByIdType): Promise<Array<postsType> | null> {
-        const result = (await postsCollection
+        return (await postsCollection
             .find({blogId})
             .skip( ( data.pageNumber - 1 ) * data.pageSize )
             .limit(data.pageSize)
             .sort({ [data.sortBy] : data.sortDirection }).toArray())
             .map(postWithNewId)
-
-        if (!result){
-            return null
-        } else {
-            return result
-        }
     },
     async updateBlogById (id: string, name:string, youtubeUrl: string): Promise<boolean>{
         const result = await blogsCollection.updateOne({_id:new ObjectId(id)},{$set: {name: name, youtubeUrl: youtubeUrl}})
