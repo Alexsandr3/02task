@@ -59,7 +59,6 @@ blogsRoute.post('/:blogId/posts', prePostsValidationByBlogId, async (req: Reques
     const shortDescription = req.body.shortDescription
     const content = req.body.content
     const isPostCreated = await blogsService.createPostsByIdBlog(blogId, title, shortDescription, content)
-
     if (!isPostCreated) {
         res.sendStatus(404)
         return;
