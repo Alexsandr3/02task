@@ -37,7 +37,7 @@ blogsRoute.get('/:id',async (req: Request, res: Response) => {
     }
     return res.send(blog)
 })
-blogsRoute.get('/:blogId/posts', checkIdValidForMongodb, preBlogsPageValidation, async (req: Request, res: Response) => {
+blogsRoute.get('/:blogId/posts', preBlogsPageValidation, async (req: Request, res: Response) => {
     let data = req.query
     let blogId = req.params.blogId
     let dataForRepo = {
@@ -47,21 +47,21 @@ blogsRoute.get('/:blogId/posts', checkIdValidForMongodb, preBlogsPageValidation,
         sortDirection: 'desc' as SortDirectionType,
         ...data,
     }
-    const blog = await blogsService.findPostsByIdBlog(blogId, dataForRepo)
-    if (!blog) {
+    const posts = await blogsService.findPostsByIdBlog(blogId, dataForRepo)
+    if (!posts) {
         res.sendStatus(404)
         return;
     }
-    return res.send(blog)
+    return res.send(posts)
 })
-blogsRoute.post('/:blogId/posts',checkIdValidForMongodb, prePostsValidationByBlogId, async (req: Request, res: Response) => {
+blogsRoute.post('/:blogId/posts', prePostsValidationByBlogId, async (req: Request, res: Response) => {
     const blogId = req.params.blogId
     const title = req.body.title
     const shortDescription = req.body.shortDescription
     const content = req.body.content
-    const isPostUpdated = await blogsService.createPostsByIdBlog(blogId, title, shortDescription, content)
+    const isPostCreated = await blogsService.createPostsByIdBlog(blogId, title, shortDescription, content)
 
-    if (!isPostUpdated) {
+    if (!isPostCreated) {
         res.sendStatus(404)
         return;
     }

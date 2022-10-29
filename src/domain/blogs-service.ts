@@ -45,8 +45,9 @@ export const blogsService = {
         return blogsRepositories.findBlogById(id)
     },
     async findPostsByIdBlog (blogId: string, data: FindPostsByIdType): Promise<blogsTypeServicePost | null> {
+        const blog = await blogsRepositories.findBlogById(blogId)
+        if (!blog) return null
         const postsByIdBlog = await blogsRepositories.findPostsByIdBlog(blogId, data)
-
         if (!postsByIdBlog){
             return null
         }
@@ -64,6 +65,8 @@ export const blogsService = {
         return await blogsRepositories.updateBlogById(id, name, youtubeUrl)
     },
     async createPostsByIdBlog (blogId: string, title:string, shortDescription: string, content: string): Promise<postsType | null>{
+        const blog = await blogsRepositories.findBlogById(blogId)
+        if (!blog) return null
         return await blogsRepositories.createPostsByIdBlog(blogId,title,shortDescription,content)
     },
     async deleteBlogById (id: string): Promise<boolean> {
