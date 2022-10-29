@@ -1,6 +1,6 @@
 import {blogsCollection, blogsType, postsCollection, postsType} from "../routes/db";
 import {ObjectId} from "mongodb";
-import {postWithNewId} from "./posts-db-repositories";
+
 
 const blogWithNewId = (object: blogsType): blogsType => {
     return {
@@ -55,18 +55,17 @@ export const blogsRepositories = {
         }
     },
     async findPostsByIdBlog (blogId: string, data: FindPostsByIdType): Promise<Array<postsType> | null> {
-        return (await postsCollection
+        return  await postsCollection
             .find({blogId})
             .skip((data.pageNumber - 1) * data.pageSize)
             .limit(data.pageSize)
-            .sort({[data.sortBy]: data.sortDirection}).toArray())
-            .map(postWithNewId)
+            .sort({[data.sortBy]: data.sortDirection}).toArray()
+
     },
     async updateBlogById (id: string, name:string, youtubeUrl: string): Promise<boolean>{
         const result = await blogsCollection.updateOne({_id:new ObjectId(id)},{$set: {name: name, youtubeUrl: youtubeUrl}})
         return result.matchedCount === 1
     },
-
     async deleteBlogById (id: string): Promise<boolean> {
         const result = await blogsCollection.deleteOne({_id:new ObjectId(id)})
         return result.deletedCount === 1
@@ -74,7 +73,6 @@ export const blogsRepositories = {
     async deleteAll() {
         await blogsCollection.deleteMany({})
     },
-
     async blogsCount (data: FindBlogsType): Promise<number> {
         const filter = data.searchNameTerm ? {name: { $regex: data.searchNameTerm, $options: 'i' }} : {}
         return blogsCollection.countDocuments(filter)

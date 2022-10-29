@@ -1,6 +1,6 @@
-import {blogsCollection, postsCollection, postsType} from "../routes/db";
+import { postsCollection, postsType} from "../routes/db";
 import {ObjectId} from "mongodb";
-import {blogsRepositories, FindBlogsType, FindPostsByIdType} from "./blogs-db-repositories";
+import {blogsRepositories, FindPostsByIdType} from "./blogs-db-repositories";
 
 export const postWithNewId = (object: postsType): postsType => {
     return {
@@ -34,8 +34,6 @@ export const postsRepositories ={
     },
     async findByIdPost (id: string): Promise<postsType | null> {
         const result = await postsCollection.findOne({_id:new ObjectId(id)})
-
-        console.log('result = == =posts ', result)
         if (!result){
             return null
         } else {
