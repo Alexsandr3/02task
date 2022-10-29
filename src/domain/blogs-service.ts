@@ -48,10 +48,9 @@ export const blogsService = {
         const blog = await blogsRepositories.findBlogById(blogId)
         if (!blog) return null
         const postsByIdBlog = await blogsRepositories.findPostsByIdBlog(blogId, data)
-        const totalCount = await postsRepositories.postsCount()
+        const totalCount = await postsRepositories.postsCount(blogId)
         const pagesCountRes = Math.ceil(totalCount/data.pageSize)
 
-        console.log('postsByIdBlog === service', postsByIdBlog)
         return {
             pagesCount: pagesCountRes,
             page: data.pageNumber,

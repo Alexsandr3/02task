@@ -47,8 +47,6 @@ blogsRoute.get('/:blogId/posts', preBlogsPageValidation, async (req: Request, re
         ...data,
     }
     const posts = await blogsService.findPostsByIdBlog(blogId, dataForRepo)
-
-    console.log('posts === router', posts)
     if (!posts) {
         res.sendStatus(404)
         return;
