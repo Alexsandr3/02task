@@ -1,5 +1,6 @@
 import {blogsCollection, blogsType, postsCollection, postsType} from "../routes/db";
 import {ObjectId} from "mongodb";
+import {postWithNewId} from "./posts-db-repositories";
 
 
 const blogWithNewId = (object: blogsType): blogsType => {
@@ -55,11 +56,12 @@ export const blogsRepositories = {
         }
     },
     async findPostsByIdBlog (blogId: string, data: FindPostsByIdType): Promise<Array<postsType> | null> {
-        return  await postsCollection
+        return  (await postsCollection
             .find({blogId})
             .skip((data.pageNumber - 1) * data.pageSize)
             .limit(data.pageSize)
-            .sort({[data.sortBy]: data.sortDirection}).toArray()
+            .sort({[data.sortBy]: data.sortDirection}).toArray())
+            .map(postWithNewId)
 
     },
     async updateBlogById (id: string, name:string, youtubeUrl: string): Promise<boolean>{
