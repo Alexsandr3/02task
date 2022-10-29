@@ -1,5 +1,5 @@
 import {blogsCollection, blogsType, postsCollection, postsType} from "../routes/db";
-import {Filter, ObjectId} from "mongodb";
+import {ObjectId} from "mongodb";
 import {postWithNewId} from "./posts-db-repositories";
 
 const blogWithNewId = (object: blogsType): blogsType => {
@@ -29,7 +29,7 @@ export type FindPostsByIdType = {
 export const blogsRepositories = {
     async findBlogs(data: FindBlogsType): Promise<blogsType[]>  {
         return (await blogsCollection
-            .find( data.searchNameTerm ? {name: { $regex: data.searchNameTerm }} : {})
+            .find( data.searchNameTerm ? {name: { $regex: data.searchNameTerm }, $options: 'i'} : {})
             .skip( ( data.pageNumber - 1 ) * data.pageSize )
             .limit(data.pageSize)
             .sort({ [data.sortBy] : data.sortDirection })
@@ -99,7 +99,7 @@ export const blogsRepositories = {
     },
 
     async blogsCount (data: FindBlogsType): Promise<number> {
-        const filter = data.searchNameTerm ? {name: { $regex: data.searchNameTerm }} : {}
+        const filter = data.searchNameTerm ? {name: { $regex: data.searchNameTerm }, $options: 'i'} : {}
         return blogsCollection.countDocuments(filter)
     }
 }

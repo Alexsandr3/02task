@@ -18,13 +18,14 @@ export const postsService = {
     },
     async findPosts(data:FindPostsByIdType): Promise<blogsTypeServicePost> {
         const foundPosts = await postsRepositories.findPosts(data)
-        const pagesCountRes = Math.ceil(foundPosts.length/data.pageSize)
+        const totalCount = await postsRepositories.postsCount()
+        const pagesCountRes = Math.ceil(totalCount/data.pageSize)
         console.log('foundPosts =', foundPosts)
         return {
             pagesCount: pagesCountRes,
             page: data.pageNumber,
             pageSize: data.pageSize,
-            totalCount: foundPosts.length,
+            totalCount: totalCount,
             items: foundPosts
         }
     }
