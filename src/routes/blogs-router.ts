@@ -36,7 +36,7 @@ blogsRoute.get('/:id',async (req: Request, res: Response) => {
     }
     return res.send(blog)
 })
-blogsRoute.get('/:blogId/posts', preBlogsPageValidation, async (req: Request, res: Response) => {
+blogsRoute.get('/:blogId/posts', preBlogsPageValidation,checkIdValidForMongodb, async (req: Request, res: Response) => {
     let data = req.query
     let blogId = req.params.blogId
     let dataForRepo = {
@@ -53,7 +53,7 @@ blogsRoute.get('/:blogId/posts', preBlogsPageValidation, async (req: Request, re
     }
     return res.send(blog)
 })
-blogsRoute.post('/:blogId/posts',prePostsValidationByBlogId, async (req: Request, res: Response) => {
+blogsRoute.post('/:blogId/posts',prePostsValidationByBlogId,checkIdValidForMongodb, async (req: Request, res: Response) => {
     const blogId = req.params.blogId
     const title = req.body.title
     const shortDescription = req.body.shortDescription
