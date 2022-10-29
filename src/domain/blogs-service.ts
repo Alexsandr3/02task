@@ -19,7 +19,7 @@ export type blogsTypeServicePost = {
     page: number
     pageSize: number
     totalCount: number
-    items: postsType[]
+    items: postsType[] | []
 }
 
 
@@ -48,9 +48,6 @@ export const blogsService = {
         const blog = await blogsRepositories.findBlogById(blogId)
         if (!blog) return null
         const postsByIdBlog = await blogsRepositories.findPostsByIdBlog(blogId, data)
-        if (!postsByIdBlog){
-            return null
-        }
         const totalCount = await postsRepositories.postsCount()
         const pagesCountRes = Math.ceil(totalCount/data.pageSize)
         return {
@@ -58,7 +55,7 @@ export const blogsService = {
             page: data.pageNumber,
             pageSize: data.pageSize,
             totalCount: totalCount,
-            items: postsByIdBlog
+            items: postsByIdBlog ? postsByIdBlog : []
         }
     },
     async updateBlogById (id : string, name:string, youtubeUrl: string): Promise<boolean>{

@@ -2,7 +2,6 @@ import {Request, Response, Router} from "express";
 import {blogsService} from "../domain/blogs-service";
 import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middleware";
 import {preBlogsPageValidation, preBlogsValidation} from "../middlewares/blogs-validation-middleware";
-import {checkIdValidForMongodb} from "../middlewares/check-valid-id-from-db";
 import {SortDirectionType} from "../repositories/blogs-db-repositories";
 import { prePostsValidationByBlogId} from "../middlewares/posts-validation-middleware";
 
