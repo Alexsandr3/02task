@@ -63,6 +63,6 @@ export const postsRepositories ={
         await postsCollection.deleteMany({})
     },
     async postsCount (blogId?: string): Promise<number> {
-        return postsCollection.countDocuments({blogId})
+        return postsCollection.countDocuments(blogId? {blogId} : {})
     }
 }
