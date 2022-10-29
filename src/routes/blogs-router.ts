@@ -4,7 +4,7 @@ import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middlew
 import {preBlogsPageValidation, preBlogsValidation} from "../middlewares/blogs-validation-middleware";
 import {checkIdValidForMongodb} from "../middlewares/check-valid-id-from-db";
 import {SortDirectionType} from "../repositories/blogs-db-repositories";
-import {prePostsValidatotion, prePostsValidatotionByBlogId} from "../middlewares/posts-validation-middleware";
+import { prePostsValidatotionByBlogId} from "../middlewares/posts-validation-middleware";
 
 
 
