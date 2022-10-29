@@ -30,6 +30,9 @@ export const postsRepositories ={
             createdAt: new Date().toISOString()
         }
         await postsCollection.insertOne(newPost)
+
+        console.log('newPost ==== repositories', newPost)
+
         return postWithNewId(newPost)
     },
     async findByIdPost (id: string): Promise<postsType | null> {

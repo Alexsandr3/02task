@@ -47,6 +47,8 @@ blogsRoute.get('/:blogId/posts', preBlogsPageValidation, async (req: Request, re
         ...data,
     }
     const posts = await blogsService.findPostsByIdBlog(blogId, dataForRepo)
+
+    console.log('posts === router', posts)
     if (!posts) {
         res.sendStatus(404)
         return;
@@ -58,12 +60,14 @@ blogsRoute.post('/:blogId/posts', prePostsValidationByBlogId, async (req: Reques
     const title = req.body.title
     const shortDescription = req.body.shortDescription
     const content = req.body.content
-    const isPostCreated = await blogsService.createPostsByIdBlog(blogId, title, shortDescription, content)
-    if (!isPostCreated) {
+    const PostCreated = await blogsService.createPostsByIdBlog(blogId, title, shortDescription, content)
+
+    console.log('isPostCreated === router', PostCreated)
+    if (!PostCreated) {
         res.sendStatus(404)
         return;
     }
-    return res.sendStatus(204)
+    return res.status(201).send(PostCreated)
 })
 blogsRoute.put('/:id',preBlogsValidation, async (req: Request, res: Response) => {
     const id = req.params.id
