@@ -4,7 +4,7 @@ import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middlew
 import {preBlogsPageValidation, preBlogsValidation} from "../middlewares/blogs-validation-middleware";
 import {checkIdValidForMongodb} from "../middlewares/check-valid-id-from-db";
 import {SortDirectionType} from "../repositories/blogs-db-repositories";
-import { prePostsValidatotionByBlogId} from "../middlewares/posts-validation-middleware";
+import { prePostsValidationByBlogId} from "../middlewares/posts-validation-middleware";
 
 
 
@@ -28,7 +28,7 @@ blogsRoute.post('/',preBlogsValidation,async (req: Request, res: Response) => {
     const newBlog = await blogsService.createBlog(req.body.name, req.body.youtubeUrl)
     return res.status(201).send(newBlog)
 })
-blogsRoute.get('/:id', checkIdValidForMongodb, async (req: Request, res: Response) => {
+blogsRoute.get('/:id',async (req: Request, res: Response) => {
     const blog = await blogsService.findBlogById(req.params.id)
     if (!blog) {
         res.sendStatus(404)
@@ -53,7 +53,7 @@ blogsRoute.get('/:blogId/posts', preBlogsPageValidation, async (req: Request, re
     }
     return res.send(blog)
 })
-blogsRoute.post('/:blogId/posts',prePostsValidatotionByBlogId, async (req: Request, res: Response) => {
+blogsRoute.post('/:blogId/posts',prePostsValidationByBlogId, async (req: Request, res: Response) => {
     const blogId = req.params.blogId
     const title = req.body.title
     const shortDescription = req.body.shortDescription
@@ -66,7 +66,7 @@ blogsRoute.post('/:blogId/posts',prePostsValidatotionByBlogId, async (req: Reque
     }
     return res.sendStatus(204)
 })
-blogsRoute.put('/:id',preBlogsValidation,checkIdValidForMongodb, async (req: Request, res: Response) => {
+blogsRoute.put('/:id',preBlogsValidation, async (req: Request, res: Response) => {
     const id = req.params.id
     let name = req.body.name
     let youtubeUrl = req.body.youtubeUrl
@@ -77,7 +77,7 @@ blogsRoute.put('/:id',preBlogsValidation,checkIdValidForMongodb, async (req: Req
     }
     return res.sendStatus(204)
 })
-blogsRoute.delete('/:id',checkAutoritionMiddleware,checkIdValidForMongodb, async (req: Request, res: Response) => {
+blogsRoute.delete('/:id',checkAutoritionMiddleware, async (req: Request, res: Response) => {
     const id = req.params.id
     const isDelete = await blogsService .deleteBlogById(id)
     if (!isDelete) {

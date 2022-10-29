@@ -26,16 +26,17 @@ const blogIdIsExit =
         return true
     })
 
-export const prePostsValidatotion = [
+export const prePostsValidation = [
     checkAutoritionMiddleware,
     titleValidation,
     shortDescriptionValidation,
     contentValidation,
     blogIdIsExit,
     inputValidetionsMiddleware]
-export const prePostsValidatotionByBlogId = [
+export const prePostsValidationByBlogId = [
     checkAutoritionMiddleware,
     titleValidation,
     shortDescriptionValidation,
     contentValidation,
+    checkIdValidForMongodb,
     inputValidetionsMiddleware]

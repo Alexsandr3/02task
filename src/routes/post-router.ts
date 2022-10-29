@@ -1,7 +1,6 @@
 import {Request, Response, Router} from "express";
 import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middleware";
-import {prePostsValidatotion} from "../middlewares/posts-validation-middleware";
-import {checkIdValidForMongodb} from "../middlewares/check-valid-id-from-db";
+import {prePostsValidation} from "../middlewares/posts-validation-middleware";
 import {SortDirectionType} from "../repositories/blogs-db-repositories";
 import {postsService} from "../domain/posts-service";
 import {preBlogsPageValidation} from "../middlewares/blogs-validation-middleware";
@@ -25,7 +24,7 @@ postsRoute.get('/', preBlogsPageValidation, async (req: Request, res: Response) 
     const posts = await postsService.findPosts(dataForRepos);
     res.send(posts)
 })
-postsRoute.post('/', prePostsValidatotion, async (req: Request, res: Response) => {
+postsRoute.post('/', prePostsValidation, async (req: Request, res: Response) => {
     const title = req.body.title
     const shortDescription = req.body.shortDescription
     const content = req.body.content
@@ -33,13 +32,13 @@ postsRoute.post('/', prePostsValidatotion, async (req: Request, res: Response) =
     const newPost = await postsService.createPost(title, shortDescription, content, blogId)
     return res.status(201).send(newPost)
 })
-postsRoute.get('/:id', checkIdValidForMongodb,async (req: Request, res: Response) => {
+postsRoute.get('/:id', async (req: Request, res: Response) => {
     const post = await postsService.findByIdPost(req.params.id)
     if (!post) return res.sendStatus(404)
     console.log(post)
     return res.send(post)
 })
-postsRoute.put('/:id',prePostsValidatotion,checkIdValidForMongodb, async (req: Request, res: Response) => {
+postsRoute.put('/:id',prePostsValidation, async (req: Request, res: Response) => {
     const postId = req.params.id
     const title = req.body.title
     const shortDescription = req.body.shortDescription
@@ -52,7 +51,7 @@ postsRoute.put('/:id',prePostsValidatotion,checkIdValidForMongodb, async (req: R
     }
     return res.sendStatus(204)
 })
-postsRoute.delete('/:id', checkAutoritionMiddleware,checkIdValidForMongodb, async (req: Request, res: Response) => {
+postsRoute.delete('/:id', checkAutoritionMiddleware, async (req: Request, res: Response) => {
     const isDelete = await postsService.deletePostById(req.params.id)
     if (!isDelete) {
         res.sendStatus(404)
