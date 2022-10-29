@@ -36,7 +36,7 @@ blogsRoute.get('/:id', checkIdValidForMongodb, async (req: Request, res: Respons
     }
     return res.send(blog)
 })
-blogsRoute.get('/:blogId/posts', checkIdValidForMongodb, preBlogsPageValidation, async (req: Request, res: Response) => {
+blogsRoute.get('/:blogId/posts', preBlogsPageValidation, async (req: Request, res: Response) => {
     let data = req.query
     let blogId = req.params.blogId
     let dataForRepo = {
