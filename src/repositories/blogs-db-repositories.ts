@@ -66,24 +66,7 @@ export const blogsRepositories = {
         const result = await blogsCollection.updateOne({_id:new ObjectId(id)},{$set: {name: name, youtubeUrl: youtubeUrl}})
         return result.matchedCount === 1
     },
-    async createPostsByIdBlog (blogId: string, title:string, shortDescription: string, content: string): Promise<postsType | null>{
-        const result = await postsCollection.findOne({blogId})
-        if (!result) {
-            return null
-        }
-        const newPost = {
-            _id: new ObjectId(),
-            title: title,
-            shortDescription: shortDescription,
-            content: content,
-            blogId: blogId,
-            blogName: result.blogName,
-            createdAt: new Date().toISOString()
-        }
-        await postsCollection.insertOne(newPost)
-        return postWithNewId(newPost)
 
-    },
     async deleteBlogById (id: string): Promise<boolean> {
         const result = await blogsCollection.deleteOne({_id:new ObjectId(id)})
         return result.deletedCount === 1

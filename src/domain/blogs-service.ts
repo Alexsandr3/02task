@@ -62,9 +62,7 @@ export const blogsService = {
         return await blogsRepositories.updateBlogById(id, name, youtubeUrl)
     },
     async createPostsByIdBlog (blogId: string, title:string, shortDescription: string, content: string): Promise<postsType | null>{
-        const blog = await blogsRepositories.findBlogById(blogId)
-        if (!blog) return null
-        return await blogsRepositories.createPostsByIdBlog(blogId,title,shortDescription,content)
+        return await postsRepositories.createPost(title, shortDescription, content, blogId)
     },
     async deleteBlogById (id: string): Promise<boolean> {
         return blogsRepositories.deleteBlogById(id)
