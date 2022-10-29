@@ -27,5 +27,6 @@ export const preBlogsValidation = [
 ]
 export const preBlogsPageValidation = [
     pageNumberValidation,
-    pageSizeValidation
+    pageSizeValidation,
+    inputValidetionsMiddleware
 ]

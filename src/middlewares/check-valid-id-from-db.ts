@@ -3,7 +3,7 @@ import {ObjectId} from "mongodb";
 
 export const checkIdValidForMongodb = (req: Request, res: Response, next: NextFunction) => {
     if (!ObjectId.isValid(req.params.id)) {
-        res.sendStatus(404)
+        res.status(404).send("Incorrect BlogId,  please enter a valid one")
     } else {
         next()
     }

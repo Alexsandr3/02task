@@ -2,6 +2,7 @@ import {body} from "express-validator";
 import {blogsRepositories} from "../repositories/blogs-db-repositories";
 import {checkAutoritionMiddleware} from "./check-autorition-middleware";
 import {inputValidetionsMiddleware} from "./Input-validetions-middleware";
+import {checkIdValidForMongodb} from "./check-valid-id-from-db";
 
 const titleValidation =
     body('title',
@@ -31,4 +32,10 @@ export const prePostsValidatotion = [
     shortDescriptionValidation,
     contentValidation,
     blogIdIsExit,
+    inputValidetionsMiddleware]
+export const prePostsValidatotionByBlogId = [
+    checkAutoritionMiddleware,
+    titleValidation,
+    shortDescriptionValidation,
+    contentValidation,
     inputValidetionsMiddleware]

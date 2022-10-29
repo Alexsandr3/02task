@@ -4,6 +4,7 @@ import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middlew
 import {preBlogsPageValidation, preBlogsValidation} from "../middlewares/blogs-validation-middleware";
 import {checkIdValidForMongodb} from "../middlewares/check-valid-id-from-db";
 import {SortDirectionType} from "../repositories/blogs-db-repositories";
+import {prePostsValidatotion, prePostsValidatotionByBlogId} from "../middlewares/posts-validation-middleware";
 
 
 
@@ -35,7 +36,7 @@ blogsRoute.get('/:id', checkIdValidForMongodb, async (req: Request, res: Respons
     }
     return res.send(blog)
 })
-blogsRoute.get('/:id/posts', preBlogsPageValidation, async (req: Request, res: Response) => {
+blogsRoute.get('/:id/posts', checkIdValidForMongodb, preBlogsPageValidation, async (req: Request, res: Response) => {
     let data = req.query
     let blogId = req.params.id
     let dataForRepo = {
@@ -52,7 +53,7 @@ blogsRoute.get('/:id/posts', preBlogsPageValidation, async (req: Request, res: R
     }
     return res.send(blog)
 })
-blogsRoute.post('/:id/posts',checkIdValidForMongodb, async (req: Request, res: Response) => {
+blogsRoute.post('/:id/posts',prePostsValidatotionByBlogId,checkIdValidForMongodb, async (req: Request, res: Response) => {
     const blogId = req.params.id
     const title = req.body.title
     const shortDescription = req.body.shortDescription

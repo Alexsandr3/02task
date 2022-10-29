@@ -73,7 +73,7 @@ export const blogsRepositories = {
         return result.matchedCount === 1
     },
     async createPostsByIdBlog (blogId: string, title:string, shortDescription: string, content: string): Promise<postsType | null>{
-        const result = await blogsCollection.findOne({blogId})
+        const result = await postsCollection.findOne({blogId})
         if (!result) {
             return null
         }
@@ -83,7 +83,7 @@ export const blogsRepositories = {
             shortDescription: shortDescription,
             content: content,
             blogId: blogId,
-            blogName: result.name,
+            blogName: result.blogName,
             createdAt: new Date().toISOString()
         }
         await postsCollection.insertOne(newPost)

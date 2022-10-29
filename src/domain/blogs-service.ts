@@ -33,6 +33,7 @@ export const blogsService = {
             pageSize: data.pageSize,
             totalCount: foundBlogs.length,
             items: foundBlogs
+
         }
     },
     async createBlog (name: string, youtubeUrl: string): Promise<blogsType>{
