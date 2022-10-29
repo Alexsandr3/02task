@@ -33,7 +33,9 @@ export const postsRepositories ={
         return postWithNewId(newPost)
     },
     async findByIdPost (id: string): Promise<postsType | null> {
-        const result = await postsCollection.findOne({_id: new ObjectId(id)})
+        const result = await postsCollection.findOne({_id:new ObjectId(id)})
+
+        console.log('result = == =posts ', result)
         if (!result){
             return null
         } else {

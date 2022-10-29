@@ -61,7 +61,7 @@ export const blogsRepositories = {
             .limit(data.pageSize)
             .sort({ [data.sortBy] : data.sortDirection }).toArray())
             .map(postWithNewId)
-        console.log('result', result)
+
         if (!result){
             return null
         } else {

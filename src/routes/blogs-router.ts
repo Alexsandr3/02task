@@ -21,6 +21,7 @@ blogsRoute.get('/', preBlogsPageValidation, async (req: Request, res: Response) 
         sortDirection: 'desc' as SortDirectionType,
         ...data,
     }
+    console.log('dataForRepo ===', dataForRepo)
     const blogs = await blogsService.findBlogs(dataForRepo)
     res.send(blogs)
 })

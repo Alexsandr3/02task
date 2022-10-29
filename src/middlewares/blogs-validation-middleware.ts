@@ -14,11 +14,11 @@ const youtubeUrlValidation =
 const pageNumberValidation =
     query('pageNumber',
         'pageNumber must be a number')
-        .toInt()
+        .toInt().default(1)
 const pageSizeValidation =
     query('pageSize',
         'pageSize must be a number')
-        .toInt()
+        .toInt().default(10)
 
 export const preBlogsValidation = [
     checkAutoritionMiddleware,
