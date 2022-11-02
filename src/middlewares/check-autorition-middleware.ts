@@ -1,7 +1,23 @@
 import {NextFunction, Request, Response} from "express";
-import {atob} from "buffer"
 
+const credentials = {
+    login: 'admin',
+    password: 'qwerty'
+}
+export const checkAutoritionMiddleware = (req:Request, res:Response, next: NextFunction) => {
+    const authHeander = req.headers.authorization
+    const encoderAut = Buffer.from(`${credentials.login}:${credentials.password}`).toString('base64')
 
+    const validHeander = `Basic ${encoderAut}`
+
+    if (validHeander === authHeander){
+        next()
+        return
+    }
+    res.sendStatus(401)
+}
+
+/*
 export const checkAutoritionMiddleware = (req: Request, res:Response,next:NextFunction) => {
     const authorization = req.header('Authorization')
     if (!authorization?.startsWith("Basic") ){
@@ -19,23 +35,5 @@ export const checkAutoritionMiddleware = (req: Request, res:Response,next:NextFu
         // инструкции для обработки ошибок
         return res.sendStatus(401)
     }
-}
-
-/*
-const credentials = {
-    login: 'admin',
-    password: 'qwerty'
-}
-export const basicAutoritionMiddlewar = (req:Request, res:Response, next: NextFunction) => {
-    const authHeander = req.headers['Authorization']
-    const encoderAut = Buffer.from('${credentials.login}:${credentials.password}').toString('base64')
-
-    const validHeander = 'Basic ${encoderAut}'
-
-    if (validHeander === authHeander){
-        next()
-        return
-    }
-    res.sendStatus(401)
 }
 */

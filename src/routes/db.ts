@@ -4,14 +4,14 @@ import 'dotenv/config'
 
 const mongoUri = process.env.MONGO_URI || "mongodb://0.0.0.0:27017";
 
-export type blogsType = {
+export type BlogsType = {
     _id?: ObjectId
     id?: string,
     name: string,
     youtubeUrl: string,
     createdAt: string
 }
-export  type postsType = {
+export  type PostsType = {
     _id?: ObjectId
     id?: string,
     title: string,
@@ -27,8 +27,8 @@ export const client = new MongoClient(mongoUri);
 const dbName = 'Homework'
 const DB = client.db(dbName)
 
-export const blogsCollection = DB.collection<blogsType>('blogs')
-export const postsCollection = DB.collection<postsType>('posts')
+export const blogsCollection = DB.collection<BlogsType>('blogs')
+export const postsCollection = DB.collection<PostsType>('posts')
 
 
 export async function runDb() {
@@ -37,7 +37,7 @@ export async function runDb() {
         await client.connect();
         //Establish and verify connection
         await DB.command({ping:1});
-        console.log("Connected successfully to mongo server");
+        console.log("Connected successfully to MONGO server");
     } catch {
         console.log("Can't connect to db");
         //Ensures that client will close when you finish/error

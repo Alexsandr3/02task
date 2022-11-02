@@ -1,8 +1,8 @@
-import { postsCollection, postsType} from "../routes/db";
+import { postsCollection, PostsType} from "../routes/db";
 import {ObjectId} from "mongodb";
 import {blogsRepositories, FindPostsByIdType} from "./blogs-db-repositories";
 
-export const postWithNewId = (object: postsType): postsType => {
+export const postWithNewId = (object: PostsType): PostsType => {
     return {
         id: object._id?.toString(),
         title: object.title,
@@ -15,7 +15,7 @@ export const postWithNewId = (object: postsType): postsType => {
 }
 
 export const postsRepositories ={
-    async createPost (title: string, shortDescription: string, content: string, blogId: string): Promise<postsType | null> {
+    async createPost (title: string, shortDescription: string, content: string, blogId: string): Promise<PostsType | null> {
         const blog = await blogsRepositories.findBlogById(blogId)
         if (!blog) {
             return null
@@ -30,12 +30,9 @@ export const postsRepositories ={
             createdAt: new Date().toISOString()
         }
         await postsCollection.insertOne(newPost)
-
-        console.log('newPost ==== repositories', newPost)
-
         return postWithNewId(newPost)
     },
-    async findByIdPost (id: string): Promise<postsType | null> {
+    async findByIdPost (id: string): Promise<PostsType | null> {
         const result = await postsCollection.findOne({_id:new ObjectId(id)})
         if (!result){
             return null
@@ -51,7 +48,7 @@ export const postsRepositories ={
         const result = await postsCollection.deleteOne({_id: new ObjectId(id)})
         return result.deletedCount !== 0
     },
-    async findPosts(data:FindPostsByIdType): Promise<postsType[]> {
+    async findPosts(data:FindPostsByIdType): Promise<PostsType[]> {
         return (await postsCollection
             .find({})
             .skip( ( data.pageNumber - 1 ) * data.pageSize )
@@ -63,6 +60,6 @@ export const postsRepositories ={
         await postsCollection.deleteMany({})
     },
     async postsCount (blogId?: string): Promise<number> {
-        return postsCollection.countDocuments(blogId? {blogId} : {})
+        return postsCollection.countDocuments(blogId ? {blogId} : {})
     }
 }

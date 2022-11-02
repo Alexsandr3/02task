@@ -1,9 +1,9 @@
-import {blogsCollection, blogsType, postsCollection, postsType} from "../routes/db";
+import {blogsCollection, BlogsType, postsCollection, PostsType} from "../routes/db";
 import {ObjectId} from "mongodb";
 import {postWithNewId} from "./posts-db-repositories";
 
 
-const blogWithNewId = (object: blogsType): blogsType => {
+const blogWithNewId = (object: BlogsType): BlogsType => {
     return {
         id: object._id?.toString(),
         name: object.name,
@@ -28,7 +28,7 @@ export type FindPostsByIdType = {
 }
 
 export const blogsRepositories = {
-    async findBlogs(data: FindBlogsType): Promise<blogsType[]>  {
+    async findBlogs(data: FindBlogsType): Promise<BlogsType[]>  {
         return (await blogsCollection
             .find( data.searchNameTerm ? {name: { $regex: data.searchNameTerm, $options: 'i' }} : {})
             .skip( ( data.pageNumber - 1 ) * data.pageSize )
@@ -37,8 +37,8 @@ export const blogsRepositories = {
             .toArray())
             .map( foundBlog => blogWithNewId(foundBlog))
     },
-    async createBlog (name: string, youtubeUrl: string): Promise<blogsType>{
-        const newBlog: blogsType = {
+    async createBlog (name: string, youtubeUrl: string): Promise<BlogsType>{
+        const newBlog: BlogsType = {
             _id: new ObjectId(),
             name,
             youtubeUrl,
@@ -47,7 +47,7 @@ export const blogsRepositories = {
         await blogsCollection.insertOne(newBlog)
         return blogWithNewId(newBlog)
     },
-    async findBlogById (id: string): Promise<blogsType | null> {
+    async findBlogById (id: string): Promise<BlogsType | null> {
         const result = await blogsCollection.findOne({_id:new ObjectId(id)})
         if (!result){
             return null
@@ -55,7 +55,7 @@ export const blogsRepositories = {
             return blogWithNewId(result)
         }
     },
-    async findPostsByIdBlog (blogId: string, data: FindPostsByIdType): Promise<Array<postsType> | null> {
+    async findPostsByIdBlog (blogId: string, data: FindPostsByIdType): Promise<Array<PostsType> | null> {
         return  (await postsCollection
             .find({blogId})
             .skip((data.pageNumber - 1) * data.pageSize)

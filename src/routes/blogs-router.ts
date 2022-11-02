@@ -1,18 +1,20 @@
 import {Request, Response, Router} from "express";
 import {blogsService} from "../domain/blogs-service";
 import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middleware";
-import {preBlogsPageValidation, preBlogsValidation} from "../middlewares/blogs-validation-middleware";
+import {pageValidations, blogsValidations} from "../middlewares/blogs-validation-middleware";
 import {SortDirectionType} from "../repositories/blogs-db-repositories";
-import { prePostsValidationByBlogId} from "../middlewares/posts-validation-middleware";
+import {prePostsValidationByBlogId} from "../middlewares/posts-validation-middleware";
+import {checkIdValidForMongodb} from "../middlewares/check-valid-id-from-db";
+
 
 
 
 export const blogsRoute = Router({})
 
 
-blogsRoute.get('/', preBlogsPageValidation, async (req: Request, res: Response) => {
+blogsRoute.get('/', pageValidations, async (req: Request, res: Response) => {
     let data = req.query
-    let dataForRepo = {
+    let dataForReposit = {
         searchNameTerm: null,
         pageNumber: 1,
         pageSize: 10,
@@ -20,15 +22,14 @@ blogsRoute.get('/', preBlogsPageValidation, async (req: Request, res: Response) 
         sortDirection: 'desc' as SortDirectionType,
         ...data,
     }
-    console.log('dataForRepo ===', dataForRepo)
-    const blogs = await blogsService.findBlogs(dataForRepo)
+    const blogs = await blogsService.findBlogs(dataForReposit)
     res.send(blogs)
 })
-blogsRoute.post('/',preBlogsValidation,async (req: Request, res: Response) => {
+blogsRoute.post('/',blogsValidations,async (req: Request, res: Response) => {
     const newBlog = await blogsService.createBlog(req.body.name, req.body.youtubeUrl)
     return res.status(201).send(newBlog)
 })
-blogsRoute.get('/:id',async (req: Request, res: Response) => {
+blogsRoute.get('/:id',checkIdValidForMongodb, async (req: Request, res: Response) => {
     const blog = await blogsService.findBlogById(req.params.id)
     if (!blog) {
         res.sendStatus(404)
@@ -36,17 +37,17 @@ blogsRoute.get('/:id',async (req: Request, res: Response) => {
     }
     return res.send(blog)
 })
-blogsRoute.get('/:blogId/posts', preBlogsPageValidation, async (req: Request, res: Response) => {
+blogsRoute.get('/:blogId/posts', pageValidations, async (req: Request, res: Response) => {
     let data = req.query
     let blogId = req.params.blogId
-    let dataForRepo = {
+    let dataForReposit = {
         pageNumber: 1,
         pageSize: 10,
         sortBy: 'createdAt',
         sortDirection: 'desc' as SortDirectionType,
         ...data,
     }
-    const posts = await blogsService.findPostsByIdBlog(blogId, dataForRepo)
+    const posts = await blogsService.findPostsByIdBlog(blogId, dataForReposit)
     if (!posts) {
         res.sendStatus(404)
         return;
@@ -59,15 +60,13 @@ blogsRoute.post('/:blogId/posts', prePostsValidationByBlogId, async (req: Reques
     const shortDescription = req.body.shortDescription
     const content = req.body.content
     const PostCreated = await blogsService.createPostsByIdBlog(blogId, title, shortDescription, content)
-
-    console.log('isPostCreated === router', PostCreated)
     if (!PostCreated) {
         res.sendStatus(404)
         return;
     }
     return res.status(201).send(PostCreated)
 })
-blogsRoute.put('/:id',preBlogsValidation, async (req: Request, res: Response) => {
+blogsRoute.put('/:id',blogsValidations, async (req: Request, res: Response) => {
     const id = req.params.id
     let name = req.body.name
     let youtubeUrl = req.body.youtubeUrl

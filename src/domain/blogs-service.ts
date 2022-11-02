@@ -3,29 +3,28 @@ import {
     FindBlogsType,
     FindPostsByIdType
 } from "../repositories/blogs-db-repositories";
-import {blogsType, postsType} from "../routes/db";
+import {BlogsType, PostsType} from "../routes/db";
 import {postsRepositories} from "../repositories/posts-db-repositories";
 
 
-export type blogsTypeService = {
+export type BlogsTypeForService = {
     pagesCount: number
     page: number
     pageSize: number
     totalCount: number
-    items: blogsType[]
+    items: BlogsType[]
 }
-export type blogsTypeServicePost = {
+export type BlogsTypeForServicePost = {
     pagesCount: number
     page: number
     pageSize: number
     totalCount: number
-    items: postsType[] | []
+    items: PostsType[] | []
 }
-
 
 
 export const blogsService = {
-    async findBlogs(data: FindBlogsType): Promise<blogsTypeService>  {
+    async findBlogs(data: FindBlogsType): Promise<BlogsTypeForService>  {
         const foundBlogs = await blogsRepositories.findBlogs(data)
         const totalCount = await blogsRepositories.blogsCount(data)
         const pagesCountRes = Math.ceil(totalCount/data.pageSize)
@@ -38,13 +37,13 @@ export const blogsService = {
 
         }
     },
-    async createBlog (name: string, youtubeUrl: string): Promise<blogsType>{
+    async createBlog (name: string, youtubeUrl: string): Promise<BlogsType>{
         return await blogsRepositories.createBlog(name,youtubeUrl)
     },
-    async findBlogById (id: string): Promise<blogsType | null> {
+    async findBlogById (id: string): Promise<BlogsType | null> {
         return blogsRepositories.findBlogById(id)
     },
-    async findPostsByIdBlog (blogId: string, data: FindPostsByIdType): Promise<blogsTypeServicePost | null> {
+    async findPostsByIdBlog (blogId: string, data: FindPostsByIdType): Promise<BlogsTypeForServicePost | null> {
         const blog = await blogsRepositories.findBlogById(blogId)
         if (!blog) return null
         const postsByIdBlog = await blogsRepositories.findPostsByIdBlog(blogId, data)
@@ -62,7 +61,7 @@ export const blogsService = {
     async updateBlogById (id : string, name:string, youtubeUrl: string): Promise<boolean>{
         return await blogsRepositories.updateBlogById(id, name, youtubeUrl)
     },
-    async createPostsByIdBlog (blogId: string, title:string, shortDescription: string, content: string): Promise<postsType | null>{
+    async createPostsByIdBlog (blogId: string, title:string, shortDescription: string, content: string): Promise<PostsType | null>{
         return await postsRepositories.createPost(title, shortDescription, content, blogId)
     },
     async deleteBlogById (id: string): Promise<boolean> {

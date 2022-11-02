@@ -3,13 +3,14 @@ import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middlew
 import {prePostsValidation} from "../middlewares/posts-validation-middleware";
 import {SortDirectionType} from "../repositories/blogs-db-repositories";
 import {postsService} from "../domain/posts-service";
-import {preBlogsPageValidation} from "../middlewares/blogs-validation-middleware";
+import {pageValidations} from "../middlewares/blogs-validation-middleware";
+import {checkIdValidForMongodb} from "../middlewares/check-valid-id-from-db";
 
 
 export const postsRoute = Router({})
 
 
-postsRoute.get('/', preBlogsPageValidation, async (req: Request, res: Response) => {
+postsRoute.get('/', pageValidations, async (req: Request, res: Response) => {
     let data = req.query
     let dataForRepos = {
         pageNumber: 1,
@@ -18,9 +19,6 @@ postsRoute.get('/', preBlogsPageValidation, async (req: Request, res: Response) 
         sortDirection: 'desc' as SortDirectionType,
         ...data,
     }
-
-    console.log('data   = ', data)
-    console.log('dataForRepo   = ', dataForRepos)
     const posts = await postsService.findPosts(dataForRepos);
     res.send(posts)
 })
@@ -32,10 +30,9 @@ postsRoute.post('/', prePostsValidation, async (req: Request, res: Response) => 
     const newPost = await postsService.createPost(title, shortDescription, content, blogId)
     return res.status(201).send(newPost)
 })
-postsRoute.get('/:id', async (req: Request, res: Response) => {
+postsRoute.get('/:id', checkIdValidForMongodb, async (req: Request, res: Response) => {
     const post = await postsService.findByIdPost(req.params.id)
     if (!post) return res.sendStatus(404)
-    console.log(post)
     return res.send(post)
 })
 postsRoute.put('/:id',prePostsValidation, async (req: Request, res: Response) => {
