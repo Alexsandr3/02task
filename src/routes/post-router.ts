@@ -35,7 +35,7 @@ postsRoute.get('/:id', checkIdValidForMongodb, async (req: Request, res: Respons
     if (!post) return res.sendStatus(404)
     return res.send(post)
 })
-postsRoute.put('/:id',prePostsValidation, async (req: Request, res: Response) => {
+postsRoute.put('/:id', checkIdValidForMongodb, prePostsValidation, async (req: Request, res: Response) => {
     const postId = req.params.id
     const title = req.body.title
     const shortDescription = req.body.shortDescription
@@ -48,7 +48,7 @@ postsRoute.put('/:id',prePostsValidation, async (req: Request, res: Response) =>
     }
     return res.sendStatus(204)
 })
-postsRoute.delete('/:id', checkAutoritionMiddleware, async (req: Request, res: Response) => {
+postsRoute.delete('/:id', checkIdValidForMongodb, checkAutoritionMiddleware, async (req: Request, res: Response) => {
     const isDelete = await postsService.deletePostById(req.params.id)
     if (!isDelete) {
         res.sendStatus(404)

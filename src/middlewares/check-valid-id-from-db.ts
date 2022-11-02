@@ -8,3 +8,10 @@ export const checkIdValidForMongodb = (req: Request, res: Response, next: NextFu
         next()
     }
 }
+export const checkBlogIdValidForMongodb = (req: Request, res: Response, next: NextFunction) => {
+    if (!ObjectId.isValid(req.params.blogId)) {
+        res.status(404).send("Incorrect blogId,  please enter a valid one")
+    } else {
+        next()
+    }
+}
