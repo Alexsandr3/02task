@@ -6,21 +6,30 @@ const mongoUri = process.env.MONGO_URI || "mongodb://0.0.0.0:27017";
 
 export type BlogsType = {
     _id?: ObjectId
-    id?: string,
-    name: string,
-    youtubeUrl: string,
+    id?: string
+    name: string
+    youtubeUrl: string
     createdAt: string
 }
 export  type PostsType = {
     _id?: ObjectId
-    id?: string,
-    title: string,
-    shortDescription: string,
-    content: string,
-    blogId: string,
-    blogName: string,
+    id?: string
+    title: string
+    shortDescription: string
+    content: string
+    blogId: string
+    blogName: string
     createdAt: string
 }
+export type UsersType = {
+    _id?: ObjectId
+    id?: string
+    login: string
+    email: string
+    passwordHash?: string,
+    createdAt: string
+}
+
 
 
 export const client = new MongoClient(mongoUri);
@@ -29,6 +38,7 @@ const DB = client.db(dbName)
 
 export const blogsCollection = DB.collection<BlogsType>('blogs')
 export const postsCollection = DB.collection<PostsType>('posts')
+export const usersCollection = DB.collection<UsersType>('users')
 
 
 export async function runDb() {

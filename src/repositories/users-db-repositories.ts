@@ -1,0 +1,53 @@
+import {usersCollection, UsersType} from "../routes/db";
+import {ObjectId} from "mongodb";
+
+
+const userWithNewId = (object: UsersType): UsersType => {
+    return {
+        id: object._id?.toString(),
+        login: object.login,
+        email: object.email,
+        createdAt: object.createdAt
+    }
+}
+export type SortDirectionType = 'asc' | 'desc'
+
+export type FindUsersType = {
+    searchLoginTerm: string,
+    searchEmailTerm: string,
+    pageNumber: number,
+    pageSize: number,
+    sortBy: string,
+    sortDirection: SortDirectionType
+}
+
+export const usersRepositories = {
+    async createUser(user: UsersType): Promise<UsersType> {
+        const result = await usersCollection.insertOne(user)
+        return userWithNewId(user)
+    },
+    async findUsers(data: FindUsersType): Promise<UsersType[]> {
+        return (await usersCollection
+            .find({$or:[{"email": {$regex: data.searchEmailTerm, $options: 'i'}},{"login": {$regex: data.searchLoginTerm, $options: 'i'}}]})
+            .skip((data.pageNumber - 1) * data.pageSize)
+            .limit(data.pageSize)
+            .sort({[data.sortBy]: data.sortDirection})
+            .toArray())
+            .map(foundUser => userWithNewId(foundUser))
+    },
+    async deleteUserById(id: string): Promise<boolean> {
+        if (!ObjectId.isValid(id)) {
+            return false
+        }
+        const result = await usersCollection.deleteOne({_id: new ObjectId(id)})
+        return result.deletedCount === 1
+    },
+    async findByLoginOrEmail(loginOrEmail: string) {
+        const user = await usersCollection.findOne({$or: [{email: loginOrEmail}, {login: loginOrEmail}]})
+        return user
+    },
+    async usersCount(data: FindUsersType): Promise<number> {
+        const filter = data.searchLoginTerm ? {login: {$regex: data.searchLoginTerm, $options: 'i'}} : {}
+        return usersCollection.countDocuments(filter)
+    }
+}

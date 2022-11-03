@@ -12,7 +12,7 @@ import {checkBlogIdValidForMongodb, checkIdValidForMongodb} from "../middlewares
 export const blogsRoute = Router({})
 
 
-blogsRoute.get('/', pageValidations, async (req: Request, res: Response) => {
+blogsRoute.get('/', async (req: Request, res: Response) => {
     let data = req.query
     let dataForReposit = {
         searchNameTerm: null,

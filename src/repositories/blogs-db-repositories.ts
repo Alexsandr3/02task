@@ -13,6 +13,7 @@ const blogWithNewId = (object: BlogsType): BlogsType => {
 }
 
 export type SortDirectionType = 'asc' | 'desc'
+
 export type FindBlogsType = {
     searchNameTerm: string | null,
     pageNumber: number,
@@ -48,6 +49,9 @@ export const blogsRepositories = {
         return blogWithNewId(newBlog)
     },
     async findBlogById (id: string): Promise<BlogsType | null> {
+        if(!ObjectId.isValid(id)) {
+            return null
+        }
         const result = await blogsCollection.findOne({_id:new ObjectId(id)})
         if (!result){
             return null
@@ -65,10 +69,16 @@ export const blogsRepositories = {
 
     },
     async updateBlogById (id: string, name:string, youtubeUrl: string): Promise<boolean>{
+        if(!ObjectId.isValid(id)) {
+            return false
+        }
         const result = await blogsCollection.updateOne({_id:new ObjectId(id)},{$set: {name: name, youtubeUrl: youtubeUrl}})
         return result.matchedCount === 1
     },
     async deleteBlogById (id: string): Promise<boolean> {
+        if(!ObjectId.isValid(id)) {
+            return false
+        }
         const result = await blogsCollection.deleteOne({_id:new ObjectId(id)})
         return result.deletedCount === 1
     },

@@ -33,6 +33,9 @@ export const postsRepositories ={
         return postWithNewId(newPost)
     },
     async findByIdPost (id: string): Promise<PostsType | null> {
+        if(!ObjectId.isValid(id)) {
+            return null
+        }
         const result = await postsCollection.findOne({_id:new ObjectId(id)})
         if (!result){
             return null
@@ -41,10 +44,16 @@ export const postsRepositories ={
         }
     },
     async updatePostById (id: string, title: string, shortDescription: string, content: string, blogId: string): Promise<boolean>{
+        if(!ObjectId.isValid(id)) {
+            return false
+        }
         const result = await postsCollection.updateOne({_id: new ObjectId(id)},{$set: {title: title, shortDescription: shortDescription, content: content, blogId: blogId}})
         return result.matchedCount === 1
     },
     async deletePostById (id: string): Promise<boolean> {
+        if(!ObjectId.isValid(id)) {
+            return false
+        }
         const result = await postsCollection.deleteOne({_id: new ObjectId(id)})
         return result.deletedCount !== 0
     },
