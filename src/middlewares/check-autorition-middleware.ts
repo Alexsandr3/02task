@@ -17,7 +17,6 @@ export const checkAutoritionMiddleware = (req:Request, res:Response, next: NextF
 }
 
 
-
 /*
 export const checkAutoritionMiddleware = (req: Request, res:Response,next:NextFunction) => {
     const authorization = req.header('Authorization')

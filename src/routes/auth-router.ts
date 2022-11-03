@@ -8,8 +8,8 @@ export const authRoute = Router({})
 authRoute.post('/login',loginValidations, async (req: Request, res: Response) => {
    const user =  await usersService.checkCredentials(req.body.login, req.body.password)
    if (!user) {
-      return res.status(401).send()
+      return res.sendStatus(401)
    } else {
-      return res.status(204).send()
+      return res.sendStatus(204)
    }
 })
