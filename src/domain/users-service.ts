@@ -39,17 +39,22 @@ export const usersService = {
         return usersRepositories.deleteUserById(id)
     },
     async checkCredentials(loginOrEmail: string, password: string) {
+        console.log('0 ---', loginOrEmail,password)
         const user: any = await usersRepositories.findByLoginOrEmail(loginOrEmail)
+        console.log('1 - user', user)
         if (!user) return false
         const passwordHash = await this._compareHash(password, user.passwordHash)
+        console.log('3- passwordHash==', passwordHash)
         return passwordHash;
     },
     async _generateHash(password: string) {
         const result = await bcrypt.hash(password, 10)
+        console.log('4 -result', result)
         return result
     },
     async _compareHash(password: string, hash: string) {
         const validHash = await bcrypt.compare(password, hash)
+        console.log('2 --validHash==', validHash)
         return validHash
     }
 }
