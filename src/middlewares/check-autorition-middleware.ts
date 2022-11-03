@@ -14,7 +14,6 @@ export const checkAutoritionMiddleware = (req:Request, res:Response, next: NextF
         return
     }
     next()
-
 }
 
 /*
