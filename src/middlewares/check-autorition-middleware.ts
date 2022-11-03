@@ -9,11 +9,12 @@ export const checkAutoritionMiddleware = (req:Request, res:Response, next: NextF
     const encoderAut = Buffer.from(`${credentials.login}:${credentials.password}`).toString('base64')
 
     const validHeander = `Basic ${encoderAut}`
-    if (validHeander === authHeander){
-        next()
+    if (validHeander !== authHeander){
+        res.sendStatus(401)
+        return
     }
-    res.sendStatus(401)
-    return
+    next()
+
 }
 
 /*
