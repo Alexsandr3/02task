@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from "express";
-
+/*
 const credentials = {
     login: 'admin',
     password: 'qwerty'
@@ -15,10 +15,10 @@ export const checkAutoritionMiddleware = (req:Request, res:Response, next: NextF
     }
     next()
 }
+*/
 
 
 
-/*
 export const checkAutoritionMiddleware = (req: Request, res:Response,next:NextFunction) => {
     const authorization = req.header('Authorization')
     if (!authorization?.startsWith("Basic") ){
@@ -37,4 +37,4 @@ export const checkAutoritionMiddleware = (req: Request, res:Response,next:NextFu
         return res.sendStatus(401)
     }
 }
-*/
+
