@@ -14,8 +14,8 @@ export const checkAutoritionMiddleware = (req:Request, res:Response, next: NextF
         return
     }
     next()
-
 }
+
 
 /*
 export const checkAutoritionMiddleware = (req: Request, res:Response,next:NextFunction) => {
@@ -36,4 +36,5 @@ export const checkAutoritionMiddleware = (req: Request, res:Response,next:NextFu
         return res.sendStatus(401)
     }
 }
+
 */
