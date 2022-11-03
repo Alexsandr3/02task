@@ -17,7 +17,7 @@ const jsonBodyMiddleware = bodyParser.json()
 app.use(jsonBodyMiddleware)
 
 
-app.use('/auth', authRoute)
+app.use('/', authRoute)
 app.use('/blogs', blogsRoute)
 app.use('/posts', postsRoute)
 app.use('/users', usersRoute)
