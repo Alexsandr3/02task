@@ -1,4 +1,4 @@
-import {usersCollection, UsersType} from "../routes/db";
+import {postsCollection, usersCollection, UsersType} from "../routes/db";
 import {ObjectId} from "mongodb";
 
 
@@ -57,5 +57,7 @@ export const usersRepositories = {
                 {"login": {$regex: data.searchLoginTerm, $options: 'i'}}
             ]
         })
-    }
-}
+    },
+    async deleteAll() {
+        await usersCollection.deleteMany({})
+}}

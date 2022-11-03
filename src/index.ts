@@ -7,6 +7,7 @@ import {runDb} from "./routes/db";
 import {blogsRepositories} from "./repositories/blogs-db-repositories";
 import {postsRepositories} from "./repositories/posts-db-repositories";
 import {authRoute} from "./routes/auth-router";
+import {usersRepositories} from "./repositories/users-db-repositories";
 
 
 const app = express()
@@ -33,6 +34,7 @@ app.get('/', (req: Request, res: Response) => {
 app.delete('/testing/all-data', (req: Request, res: Response) => {
     blogsRepositories.deleteAll();
     postsRepositories.deleteAll();
+    usersRepositories.deleteAll();
     res.sendStatus(204)
 })
 
