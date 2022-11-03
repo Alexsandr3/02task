@@ -9,11 +9,9 @@ import {postsRepositories} from "./repositories/posts-db-repositories";
 import {authRoute} from "./routes/auth-router";
 
 
-
 const app = express()
 const port = process.env.PORT || 5002
 const jsonBodyMiddleware = bodyParser.json()
-
 
 
 app.use(jsonBodyMiddleware)
