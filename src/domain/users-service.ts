@@ -23,7 +23,7 @@ export const usersService = {
         }
         return usersRepositories.createUser(newUser)
     },
-    async findUsers(data: FindUsersType): Promise<UsersTypeForService> {
+    async findUsers(data: FindUsersType): Promise<UsersTypeForService | null> {
         const foundsUsers = await usersRepositories.findUsers(data)
         const totalCount = await usersRepositories.usersCount(data)
         const pagesCountRes = Math.ceil(totalCount / data.pageSize)
@@ -32,7 +32,7 @@ export const usersService = {
             page: data.pageNumber,
             pageSize: data.pageSize,
             totalCount: totalCount,
-            items: foundsUsers
+            items: foundsUsers ? foundsUsers : []
         }
     },
     async deleteUserById(id: string): Promise<boolean> {

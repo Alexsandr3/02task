@@ -28,7 +28,12 @@ export const usersRepositories = {
     },
     async findUsers(data: FindUsersType): Promise<UsersType[]> {
         return (await usersCollection
-            .find({$or:[{"email": {$regex: data.searchEmailTerm, $options: 'i'}},{"login": {$regex: data.searchLoginTerm, $options: 'i'}}]})
+            .find({
+                $or: [
+                    {"email": {$regex: data.searchEmailTerm, $options: 'i'}},
+                    {"login": {$regex: data.searchLoginTerm, $options: 'i'}}
+                ]
+            })
             .skip((data.pageNumber - 1) * data.pageSize)
             .limit(data.pageSize)
             .sort({[data.sortBy]: data.sortDirection})
