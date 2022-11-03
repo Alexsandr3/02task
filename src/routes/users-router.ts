@@ -5,9 +5,6 @@ import {preUsersValidations, usersValidations} from "../middlewares/users-valida
 import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middleware";
 
 
-
-
-
 export const usersRoute = Router({})
 
 

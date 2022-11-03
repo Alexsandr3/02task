@@ -43,8 +43,7 @@ export const usersRepositories = {
         return result.deletedCount === 1
     },
     async findByLoginOrEmail(loginOrEmail: string) {
-        const user = await usersCollection.findOne({$or: [{email: loginOrEmail}, {login: loginOrEmail}]})
-        return user
+        return  await usersCollection.findOne({$or: [{email: loginOrEmail}, {login: loginOrEmail}]})
     },
     async usersCount(data: FindUsersType): Promise<number> {
         const filter = data.searchLoginTerm ? {login: {$regex: data.searchLoginTerm, $options: 'i'}} : {}

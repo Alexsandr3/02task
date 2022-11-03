@@ -2,7 +2,6 @@ import {Request, Response, Router} from "express";
 import {usersService} from "../domain/users-service";
 import {loginValidations} from "../middlewares/auth_login-validation-middleware";
 
-
 export const authRoute = Router({})
 
 
