@@ -1,14 +1,18 @@
 import {Request, Response, Router} from "express";
 import {SortDirectionType} from "../repositories/blogs-db-repositories";
 import {usersService} from "../domain/users-service";
-import {preUsersValidations, usersValidations} from "../middlewares/users-validation-middleware";
+import {
+    preUsersGetValidations,
+    preUsersValidations,
+    usersValidations
+} from "../middlewares/users-validation-middleware";
 import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middleware";
 
 
 export const usersRoute = Router({})
 
 
-usersRoute.get('/', preUsersValidations, async (req: Request, res: Response) => {
+usersRoute.get('/', preUsersGetValidations, async (req: Request, res: Response) => {
     let data = req.query
     let dataForReposit = {
         searchLoginTerm: '',

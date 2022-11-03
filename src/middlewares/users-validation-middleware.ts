@@ -42,7 +42,11 @@ export const preUsersValidations =[
     pageSizeValidation,
     inputValidetionsMiddleware
 ]
-
+export const preUsersGetValidations =[
+    pageNumberValidation,
+    pageSizeValidation,
+    inputValidetionsMiddleware
+]
 
 export const usersValidations = [
     checkAutoritionMiddleware,
