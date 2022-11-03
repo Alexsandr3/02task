@@ -23,13 +23,13 @@ export type FindUsersType = {
 
 export const usersRepositories = {
     async createUser(user: UsersType): Promise<UsersType> {
-        const result = await usersCollection.insertOne(user)
+        await usersCollection.insertOne(user)
         return userWithNewId(user)
     },
     async findUsers(data: FindUsersType): Promise<UsersType[]> {
         return (await usersCollection
             .find({
-                $or: [
+                $and: [
                     {"email": {$regex: data.searchEmailTerm, $options: 'i'}},
                     {"login": {$regex: data.searchLoginTerm, $options: 'i'}}
                 ]
@@ -51,7 +51,11 @@ export const usersRepositories = {
         return  await usersCollection.findOne({$or: [{email: loginOrEmail}, {login: loginOrEmail}]})
     },
     async usersCount(data: FindUsersType): Promise<number> {
-        const filter = data.searchLoginTerm ? {login: {$regex: data.searchLoginTerm, $options: 'i'}} : {}
-        return usersCollection.countDocuments(filter)
+        return usersCollection.countDocuments({
+            $and: [
+                {"email": {$regex: data.searchEmailTerm, $options: 'i'}},
+                {"login": {$regex: data.searchLoginTerm, $options: 'i'}}
+            ]
+        })
     }
 }
