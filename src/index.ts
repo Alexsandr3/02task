@@ -11,7 +11,7 @@ import {authRoute} from "./routes/auth-router";
 
 
 const app = express()
-const port = process.env.MONGO_URI || 5002
+const port = process.env.PORT || 5002
 const jsonBodyMiddleware = bodyParser.json()
 
 
