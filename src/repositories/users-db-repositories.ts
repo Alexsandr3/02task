@@ -27,7 +27,6 @@ export const usersRepositories = {
         return userWithNewId(user)
     },
     async findUsers(data: FindUsersType): Promise<UsersType[]> {
-        console.log(data)
         return (await usersCollection
             .find({
                 $or: [
@@ -49,7 +48,7 @@ export const usersRepositories = {
         return result.deletedCount === 1
     },
     async findByLoginOrEmail(loginOrEmail: string) {
-        return  await usersCollection.findOne({$or: [{email: loginOrEmail}, {login: loginOrEmail}]})
+        return await usersCollection.findOne({$or: [{email: loginOrEmail}, {login: loginOrEmail}]})
     },
     async usersCount(data: FindUsersType): Promise<number> {
         return usersCollection.countDocuments({
@@ -61,4 +60,5 @@ export const usersRepositories = {
     },
     async deleteAll() {
         await usersCollection.deleteMany({})
-}}
+    }
+}
