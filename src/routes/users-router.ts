@@ -3,11 +3,9 @@ import {SortDirectionType} from "../repositories/blogs-db-repositories";
 import {usersService} from "../domain/users-service";
 import {
     preUsersGetValidations,
-    preUsersValidations,
     usersValidations
 } from "../middlewares/users-validation-middleware";
 import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middleware";
-
 
 export const usersRoute = Router({})
 

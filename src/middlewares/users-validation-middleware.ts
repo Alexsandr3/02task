@@ -42,6 +42,7 @@ export const preUsersValidations =[
     pageSizeValidation,
     inputValidetionsMiddleware
 ]
+
 export const preUsersGetValidations =[
     pageNumberValidation,
     pageSizeValidation,
