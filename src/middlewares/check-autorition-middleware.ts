@@ -7,7 +7,6 @@ const credentials = {
 export const checkAutoritionMiddleware = (req:Request, res:Response, next: NextFunction) => {
     const authHeander = req.headers.authorization
     const encoderAut = Buffer.from(`${credentials.login}:${credentials.password}`).toString('base64')
-    console.log('777 - authHeander= ', authHeander)
     const validHeander = `Basic ${encoderAut}`
     if (validHeander !== authHeander){
         res.sendStatus(401)
