@@ -1,4 +1,4 @@
-import {postsCollection, usersCollection, UsersType} from "../routes/db";
+import {usersCollection, UsersType} from "../routes/db";
 import {ObjectId} from "mongodb";
 
 
@@ -27,9 +27,10 @@ export const usersRepositories = {
         return userWithNewId(user)
     },
     async findUsers(data: FindUsersType): Promise<UsersType[]> {
+        console.log(data)
         return (await usersCollection
             .find({
-                $and: [
+                $or: [
                     {"email": {$regex: data.searchEmailTerm, $options: 'i'}},
                     {"login": {$regex: data.searchLoginTerm, $options: 'i'}}
                 ]
@@ -52,7 +53,7 @@ export const usersRepositories = {
     },
     async usersCount(data: FindUsersType): Promise<number> {
         return usersCollection.countDocuments({
-            $and: [
+            $or: [
                 {"email": {$regex: data.searchEmailTerm, $options: 'i'}},
                 {"login": {$regex: data.searchLoginTerm, $options: 'i'}}
             ]
