@@ -11,7 +11,6 @@ import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middlew
 
 export const usersRoute = Router({})
 
-
 usersRoute.get('/', preUsersGetValidations, async (req: Request, res: Response) => {
     let data = req.query
     let dataForReposit = {
