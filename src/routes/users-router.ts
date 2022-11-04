@@ -1,15 +1,20 @@
 import {Request, Response, Router} from "express";
 import {SortDirectionType} from "../repositories/blogs-db-repositories";
-import {usersService} from "../domain/users-service";
+import {usersService, UsersTypeForService} from "../domain/users-service";
 import {
-    preUsersGetValidations,
+    preGetUsersValidations,
     usersValidations
 } from "../middlewares/users-validation-middleware";
 import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middleware";
+import {RequestWithBody, RequestWithParams, RequestWithQeury} from "../types";
+import {QueryParams_GetUsersModel} from "../models/QueryParams_GetUsersModel";
+import {BodyParams_CreateUserModel} from "../models/BodyParams_CreateUserModel";
+import {UsersType} from "./db";
+import {URIParams_UserModel} from "../models/URIParams_UserModel";
 
 export const usersRoute = Router({})
 
-usersRoute.get('/', preUsersGetValidations, async (req: Request, res: Response) => {
+usersRoute.get('/', preGetUsersValidations, async (req: RequestWithQeury<QueryParams_GetUsersModel>, res: Response<UsersTypeForService | null>) => {
     let data = req.query
     let dataForReposit = {
         searchLoginTerm: '',
@@ -17,17 +22,17 @@ usersRoute.get('/', preUsersGetValidations, async (req: Request, res: Response) 
         pageNumber: 1,
         pageSize: 10,
         sortBy: 'createdAt',
-        sortDirection: 'desc' as SortDirectionType,
+        sortDirection: SortDirectionType.Desc,
         ...data,
     }
     const users = await usersService.findUsers(dataForReposit)
     res.send(users)
 })
-usersRoute.post('/', usersValidations, async (req: Request, res: Response) => {
+usersRoute.post('/', usersValidations, async (req: RequestWithBody<BodyParams_CreateUserModel>, res: Response<UsersType>) => {
     const newUser = await usersService.createUser(req.body.login, req.body.email, req.body.password)
     return res.status(201).send(newUser)
 })
-usersRoute.delete('/:id',checkAutoritionMiddleware, async (req: Request, res: Response) => {
+usersRoute.delete('/:id',checkAutoritionMiddleware, async (req: RequestWithParams<URIParams_UserModel>, res: Response) => {
     const id = req.params.id
     const isDelete = await usersService.deleteUserById(id)
     if (!isDelete) {

@@ -3,6 +3,7 @@ import {ObjectId} from "mongodb";
 import {postWithNewId} from "./posts-db-repositories";
 
 
+
 const blogWithNewId = (object: BlogsType): BlogsType => {
     return {
         id: object._id?.toString(),
@@ -12,10 +13,14 @@ const blogWithNewId = (object: BlogsType): BlogsType => {
     }
 }
 
-export type SortDirectionType = 'asc' | 'desc'
+//export type SortDirectionType = 'asc' | 'desc'
 
+export enum SortDirectionType {
+    Asc = 'asc',
+    Desc = 'desc'
+}
 export type FindBlogsType = {
-    searchNameTerm: string | null,
+    searchNameTerm: string,
     pageNumber: number,
     pageSize: number,
     sortBy: string,

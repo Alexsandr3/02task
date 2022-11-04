@@ -1,7 +1,7 @@
 import {body, query} from "express-validator";
 import {checkAutoritionMiddleware} from "./check-autorition-middleware";
 import {inputValidetionsMiddleware} from "./Input-validetions-middleware";
-import exp from "constants";
+
 
 
 const loginValidation =
@@ -36,19 +36,12 @@ const pageSizeValidation =
         .toInt()
         .default(10)
 
-export const preUsersValidations =[
-    checkAutoritionMiddleware,
+
+export const preGetUsersValidations =[
     pageNumberValidation,
     pageSizeValidation,
     inputValidetionsMiddleware
 ]
-
-export const preUsersGetValidations =[
-    pageNumberValidation,
-    pageSizeValidation,
-    inputValidetionsMiddleware
-]
-
 export const usersValidations = [
     checkAutoritionMiddleware,
     loginValidation,

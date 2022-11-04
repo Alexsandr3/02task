@@ -34,7 +34,6 @@ export const blogsService = {
             pageSize: data.pageSize,
             totalCount: totalCount,
             items: foundBlogs
-
         }
     },
     async createBlog (name: string, youtubeUrl: string): Promise<BlogsType>{

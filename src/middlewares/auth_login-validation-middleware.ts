@@ -17,7 +17,6 @@ const passwordValidation =
         .trim()
 
 
-
 export const loginValidations = [
     loginValidation,
     passwordValidation,

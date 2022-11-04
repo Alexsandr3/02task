@@ -23,7 +23,7 @@ const pageNumberValidation =
 const pageSizeValidation =
     query('pageSize',
         'pageSize must be a number')
-        .toInt()
+        .toInt().optional()
         .default(10)
 
 export const blogsValidations = [
