@@ -1,4 +1,4 @@
-import {Request, Response, Router} from "express";
+import { Response, Router} from "express";
 import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middleware";
 import {prePostsValidation} from "../middlewares/posts-validation-middleware";
 import {SortDirectionType} from "../repositories/blogs-db-repositories";

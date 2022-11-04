@@ -1,5 +1,4 @@
 import {body} from "express-validator";
-import {checkAutoritionMiddleware} from "./check-autorition-middleware";
 import {inputValidetionsMiddleware} from "./Input-validetions-middleware";
 
 

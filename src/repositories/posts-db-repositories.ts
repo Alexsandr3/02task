@@ -15,8 +15,8 @@ export const postWithNewId = (object: PostsType): PostsType => {
 }
 
 export const postsRepositories ={
-    async createPost (title: string, shortDescription: string, content: string, blogId: string): Promise<PostsType | null> {
-        const blog = await blogsRepositories.findBlogById(blogId)
+    async createPost (title: string, shortDescription: string, content: string, id: string): Promise<PostsType | null> {
+        const blog = await blogsRepositories.findBlogById(id)
         if (!blog) {
             return null
         }
@@ -25,7 +25,7 @@ export const postsRepositories ={
             title: title,
             shortDescription: shortDescription,
             content: content,
-            blogId: blogId,
+            blogId: id,
             blogName: blog.name,
             createdAt: new Date().toISOString()
         }

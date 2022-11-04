@@ -42,11 +42,11 @@ export const blogsService = {
     async findBlogById (id: string): Promise<BlogsType | null> {
         return blogsRepositories.findBlogById(id)
     },
-    async findPostsByIdBlog (blogId: string, data: FindPostsByIdType): Promise<BlogsTypeForServicePost | null> {
-        const blog = await blogsRepositories.findBlogById(blogId)
+    async findPostsByIdBlog (id: string, data: FindPostsByIdType): Promise<BlogsTypeForServicePost | null> {
+        const blog = await blogsRepositories.findBlogById(id)
         if (!blog) return null
-        const postsByIdBlog = await blogsRepositories.findPostsByIdBlog(blogId, data)
-        const totalCount = await postsRepositories.postsCount(blogId)
+        const postsByIdBlog = await blogsRepositories.findPostsByIdBlog(id, data)
+        const totalCount = await postsRepositories.postsCount(id)
         const pagesCountRes = Math.ceil(totalCount/data.pageSize)
 
         return {
@@ -60,8 +60,8 @@ export const blogsService = {
     async updateBlogById (id : string, name:string, youtubeUrl: string): Promise<boolean>{
         return await blogsRepositories.updateBlogById(id, name, youtubeUrl)
     },
-    async createPostsByIdBlog (blogId: string, title:string, shortDescription: string, content: string): Promise<PostsType | null>{
-        return await postsRepositories.createPost(title, shortDescription, content, blogId)
+    async createPostsByIdBlog (id: string, title:string, shortDescription: string, content: string): Promise<PostsType | null>{
+        return await postsRepositories.createPost(title, shortDescription, content, id)
     },
     async deleteBlogById (id: string): Promise<boolean> {
         return blogsRepositories.deleteBlogById(id)

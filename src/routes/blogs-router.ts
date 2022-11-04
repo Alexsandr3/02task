@@ -48,10 +48,10 @@ blogsRoute.get('/:id', checkIdValidForMongodb, async (req: RequestWithParams<URI
     }
     return res.send(blog)
 })
-blogsRoute.get('/:blogId/posts', checkBlogIdValidForMongodb, pageValidations, async (req: RequestWithParamsAndQeury<{blogId:string},QeuryParams_GetPostsModel>,
+blogsRoute.get('/:id/posts', checkBlogIdValidForMongodb, pageValidations, async (req: RequestWithParamsAndQeury<URIParams_BlogModel,QeuryParams_GetPostsModel>,
                                                                                      res: Response<BlogsTypeForServicePost>) => {
     let data = req.query
-    let blogId = req.params.blogId
+    let id = req.params.id
     let dataForReposit = {
         pageNumber: 1,
         pageSize: 10,
@@ -59,19 +59,19 @@ blogsRoute.get('/:blogId/posts', checkBlogIdValidForMongodb, pageValidations, as
         sortDirection: SortDirectionType.Desc,
         ...data,
     }
-    const posts = await blogsService.findPostsByIdBlog(blogId, dataForReposit)
+    const posts = await blogsService.findPostsByIdBlog(id, dataForReposit)
     if (!posts) {
         res.sendStatus(404)
         return;
     }
     return res.send(posts)
 })
-blogsRoute.post('/:blogId/posts',prePostsValidationByBlogId, async (req: RequestWithParamsAndBody<{blogId: string},BodyParams_FindBlogByIdAndCreatePostModel>, res: Response<PostsType>) => {
-    const blogId = req.params.blogId
+blogsRoute.post('/:blogId/posts',prePostsValidationByBlogId, async (req: RequestWithParamsAndBody<URIParams_BlogModel,BodyParams_FindBlogByIdAndCreatePostModel>, res: Response<PostsType>) => {
+    const id = req.params.id
     const title = req.body.title
     const shortDescription = req.body.shortDescription
     const content = req.body.content
-    const PostCreated = await blogsService.createPostsByIdBlog(blogId, title, shortDescription, content)
+    const PostCreated = await blogsService.createPostsByIdBlog(id, title, shortDescription, content)
     if (!PostCreated) {
         res.sendStatus(404)
         return;
