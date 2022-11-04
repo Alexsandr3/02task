@@ -12,6 +12,7 @@ const userWithNewId = (object: UsersType): UsersType => {
 }
 export type SortDirectionType = 'asc' | 'desc'
 
+
 export type FindUsersType = {
     searchLoginTerm: string,
     searchEmailTerm: string,
@@ -20,6 +21,7 @@ export type FindUsersType = {
     sortBy: string,
     sortDirection: SortDirectionType
 }
+
 
 export const usersRepositories = {
     async createUser(user: UsersType): Promise<UsersType> {

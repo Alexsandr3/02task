@@ -3,7 +3,6 @@ import {ObjectId} from "mongodb";
 import {postWithNewId} from "./posts-db-repositories";
 
 
-
 const blogWithNewId = (object: BlogsType): BlogsType => {
     return {
         id: object._id?.toString(),
@@ -12,6 +11,7 @@ const blogWithNewId = (object: BlogsType): BlogsType => {
         createdAt: object.createdAt
     }
 }
+
 
 export enum SortDirectionType {
     Asc = 'asc',
@@ -30,6 +30,7 @@ export type FindPostsByIdType = {
     sortBy: string,
     sortDirection: SortDirectionType
 }
+
 
 export const blogsRepositories = {
     async findBlogs(data: FindBlogsType): Promise<BlogsType[]>  {

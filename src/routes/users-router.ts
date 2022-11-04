@@ -12,7 +12,9 @@ import {BodyParams_CreateUserModel} from "../models/BodyParams_CreateUserModel";
 import {UsersType} from "./db";
 import {URIParams_UserModel} from "../models/URIParams_UserModel";
 
+
 export const usersRoute = Router({})
+
 
 usersRoute.get('/', preGetUsersValidations, async (req: RequestWithQeury<QueryParams_GetUsersModel>, res: Response<UsersTypeForService | null>) => {
     let data = req.query

@@ -2,6 +2,7 @@ import { postsCollection, PostsType} from "../routes/db";
 import {ObjectId} from "mongodb";
 import {blogsRepositories, FindPostsByIdType} from "./blogs-db-repositories";
 
+
 export const postWithNewId = (object: PostsType): PostsType => {
     return {
         id: object._id?.toString(),
@@ -13,6 +14,7 @@ export const postWithNewId = (object: PostsType): PostsType => {
         createdAt: object.createdAt
     }
 }
+
 
 export const postsRepositories ={
     async createPost (title: string, shortDescription: string, content: string, blogId: string): Promise<PostsType | null> {
