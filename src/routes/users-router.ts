@@ -38,6 +38,6 @@ usersRoute.delete('/:id',checkAutoritionMiddleware, async (req: RequestWithParam
     if (!isDelete) {
         res.sendStatus(404)
     } else {
-        res.send(204)
+        res.sendStatus(204)
     }
 })

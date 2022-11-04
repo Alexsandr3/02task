@@ -13,8 +13,6 @@ const blogWithNewId = (object: BlogsType): BlogsType => {
     }
 }
 
-//export type SortDirectionType = 'asc' | 'desc'
-
 export enum SortDirectionType {
     Asc = 'asc',
     Desc = 'desc'
