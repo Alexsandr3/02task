@@ -21,15 +21,12 @@ export const usersService = {
     async checkCredentials(loginOrEmail: string, password: string) {
         const user: any = await usersRepositories.findByLoginOrEmail(loginOrEmail)
         if (!user) return false
-        const passwordHash = await this._compareHash(password, user.passwordHash)
-        return passwordHash;
+        return  await this._compareHash(password, user.passwordHash)
     },
     async _generateHash(password: string) {
-        const result = await bcrypt.hash(password, 10)
-        return result
+        return  await bcrypt.hash(password, 10)
     },
     async _compareHash(password: string, hash: string) {
-        const validHash = await bcrypt.compare(password, hash)
-        return validHash
+        return  await bcrypt.compare(password, hash)
     }
 }
