@@ -1,35 +1,10 @@
-import {MongoClient, ObjectId} from "mongodb"
+import {MongoClient,} from "mongodb"
 import 'dotenv/config'
-
-
+import {BlogsType} from "../types/blogs_types";
+import {PostsType} from "../types/posts_types";
+import {UsersType} from "../types/users_types";
 
 const mongoUri = process.env.MONGO_URI || "mongodb://0.0.0.0:27017";
-
-export type BlogsType = {
-    _id?: ObjectId
-    id?: string
-    name: string
-    youtubeUrl: string
-    createdAt: string
-}
-export  type PostsType = {
-    _id?: ObjectId
-    id?: string
-    title: string
-    shortDescription: string
-    content: string
-    blogId: string
-    blogName: string
-    createdAt: string
-}
-export type UsersType = {
-    _id?: ObjectId
-    id?: string
-    login: string
-    email: string
-    passwordHash?: string,
-    createdAt: string
-}
 
 export const client = new MongoClient(mongoUri);
 const dbName = 'Homework'

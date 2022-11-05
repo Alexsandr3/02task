@@ -1,6 +1,7 @@
-import { postsCollection, PostsType} from "../routes/db";
+import { postsCollection} from "../routes/db";
 import {ObjectId} from "mongodb";
-import {blogsRepositories, FindPostsByIdType} from "./blogs-db-repositories";
+import {blogsQueryRepositories} from "./blogs-query-repositories";
+import {PostsType} from "../types/posts_types";
 
 
 export const postWithNewId = (object: PostsType): PostsType => {
@@ -18,7 +19,7 @@ export const postWithNewId = (object: PostsType): PostsType => {
 
 export const postsRepositories ={
     async createPost (title: string, shortDescription: string, content: string, blogId: string): Promise<PostsType | null> {
-        const blog = await blogsRepositories.findBlogById(blogId)
+        const blog = await blogsQueryRepositories.findBlogById(blogId)
         if (!blog) {
             return null
         }
@@ -34,17 +35,6 @@ export const postsRepositories ={
         await postsCollection.insertOne(newPost)
         return postWithNewId(newPost)
     },
-    async findByIdPost (id: string): Promise<PostsType | null> {
-        if(!ObjectId.isValid(id)) {
-            return null
-        }
-        const result = await postsCollection.findOne({_id:new ObjectId(id)})
-        if (!result){
-            return null
-        } else {
-            return postWithNewId(result)
-        }
-    },
     async updatePostById (id: string, title: string, shortDescription: string, content: string, blogId: string): Promise<boolean>{
         if(!ObjectId.isValid(id)) {
             return false
@@ -59,18 +49,7 @@ export const postsRepositories ={
         const result = await postsCollection.deleteOne({_id: new ObjectId(id)})
         return result.deletedCount !== 0
     },
-    async findPosts(data:FindPostsByIdType): Promise<PostsType[]> {
-        return (await postsCollection
-            .find({})
-            .skip( ( data.pageNumber - 1 ) * data.pageSize )
-            .limit(data.pageSize)
-            .sort({ [data.sortBy] : data.sortDirection })
-            .toArray()).map(foundPost => postWithNewId(foundPost))
-    },
     async deleteAll() {
         await postsCollection.deleteMany({})
-    },
-    async postsCount (blogId?: string): Promise<number> {
-        return postsCollection.countDocuments(blogId ? {blogId} : {})
     }
 }

@@ -1,15 +1,7 @@
-import {UsersType} from "../routes/db";
+import {UsersType} from "../types/users_types";
 import bcrypt from 'bcrypt'
 import {ObjectId} from "mongodb";
-import {FindUsersType, usersRepositories} from "../repositories/users-db-repositories";
-
-export type UsersTypeForService = {
-    pagesCount: number
-    page: number
-    pageSize: number
-    totalCount: number
-    items: UsersType[]
-}
+import { usersRepositories} from "../repositories/users-db-repositories";
 
 export const usersService = {
     async createUser(login: string, email: string, password: string): Promise<UsersType> {
@@ -22,18 +14,6 @@ export const usersService = {
             createdAt: new Date().toISOString()
         }
         return usersRepositories.createUser(newUser)
-    },
-    async findUsers(data: FindUsersType): Promise<UsersTypeForService | null> {
-        const foundsUsers = await usersRepositories.findUsers(data)
-        const totalCount = await usersRepositories.usersCount(data)
-        const pagesCountRes = Math.ceil(totalCount / data.pageSize)
-        return {
-            pagesCount: pagesCountRes,
-            page: data.pageNumber,
-            pageSize: data.pageSize,
-            totalCount: totalCount,
-            items: foundsUsers ? foundsUsers : []
-        }
     },
     async deleteUserById(id: string): Promise<boolean> {
         return usersRepositories.deleteUserById(id)

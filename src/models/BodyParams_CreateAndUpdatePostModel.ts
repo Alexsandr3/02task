@@ -1,6 +1,18 @@
 export type BodyParams_CreateAndUpdatePostModel = {
+    /**
+     * Title Posts
+     */
     title: string
+    /**
+     * Short description for Posts
+     */
     shortDescription: string
-    content: string,
+    /**
+     * content for Posts
+     */
+    content: string
+    /**
+     * id for Blog
+     */
     blogId: string
 }

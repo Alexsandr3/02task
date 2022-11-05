@@ -1,4 +1,4 @@
-import {SortDirectionType} from "../repositories/blogs-db-repositories";
+import {SortDirectionType} from "../types/blogs_types";
 
 export type QueryParams_GetUsersModel = {
     /**

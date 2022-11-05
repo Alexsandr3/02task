@@ -1,11 +1,11 @@
 import { Response, Router} from "express";
-import {blogsService, BlogsTypeForService, BlogsTypeForServicePost} from "../domain/blogs-service";
+import {blogsService} from "../domain/blogs-service";
 import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middleware";
 import {pageValidations, blogsValidations} from "../middlewares/blogs-validation-middleware";
-import {SortDirectionType} from "../repositories/blogs-db-repositories";
+import {BlogsType, TypeForView, SortDirectionType} from "../types/blogs_types";
 import {prePostsValidationByBlogId} from "../middlewares/posts-validation-middleware";
 import {checkBlogIdValidForMongodb, checkIdValidForMongodb} from "../middlewares/check-valid-id-from-db";
-import {BlogsType, PostsType} from "./db";
+import {PostsType} from "../types/posts_types";
 import {
     RequestWithBody,
     RequestWithParams,
@@ -18,12 +18,14 @@ import {QueryParams_GetBlogsModel} from "../models/QueryParams_GetBlogsModel";
 import {BodyParams_FindBlogByIdAndCreatePostModel} from "../models/BodyParams_FindBlogByIdAndCreatePostModel";
 import {QeuryParams_GetPostsModel} from "../models/QeuryParams_GetPostsModel";
 import {URIParams_BlogModel} from "../models/URIParams_BlogModel";
+import {blogsQueryRepositories} from "../repositories/blogs-query-repositories";
+import {PostsTypeForView} from "../types/posts_types";
 
 
 export const blogsRoute = Router({})
 
 
-blogsRoute.get('/', pageValidations, async (req: RequestWithQeury<QueryParams_GetBlogsModel>, res: Response<BlogsTypeForService>) => {
+blogsRoute.get('/', pageValidations, async (req: RequestWithQeury<QueryParams_GetBlogsModel>, res: Response<TypeForView>) => {
     let data = req.query
     let dataForReposit = {
         searchNameTerm: '',
@@ -33,23 +35,23 @@ blogsRoute.get('/', pageValidations, async (req: RequestWithQeury<QueryParams_Ge
         sortDirection: SortDirectionType.Desc,
         ...data,
     }
-    const blogs = await blogsService.findBlogs(dataForReposit)
+    const blogs = await blogsQueryRepositories.findBlogs(dataForReposit)
     res.send(blogs)
-}) //qre
+})
 blogsRoute.post('/', blogsValidations, async (req: RequestWithBody<BodyParams_CreateAndUpdateBlogModel>,res: Response<BlogsType>) => {
     const newBlog = await blogsService.createBlog(req.body.name, req.body.youtubeUrl)
     return res.status(201).send(newBlog)
 })
 blogsRoute.get('/:id', checkIdValidForMongodb, async (req: RequestWithParams<URIParams_BlogModel>, res: Response<BlogsType>) => {
-    const blog = await blogsService.findBlogById(req.params.id) //qre
+    const blog = await blogsQueryRepositories.findBlogById(req.params.id)
     if (!blog) {
         res.sendStatus(404)
         return;
     }
     return res.send(blog)
 })
-blogsRoute.get('/:blogId/posts', checkBlogIdValidForMongodb, pageValidations, async (req: RequestWithParamsAndQeury<{blogId: string},QeuryParams_GetPostsModel>,
-                                                                                     res: Response<BlogsTypeForServicePost>) => {
+blogsRoute.get('/:blogId/posts', checkBlogIdValidForMongodb, pageValidations, async (req: RequestWithParamsAndQeury<{blogId: string},QeuryParams_GetPostsModel>, //+++
+                                                                                     res: Response<PostsTypeForView>) => {
     let data = req.query
     let blogId = req.params.blogId
     let dataForReposit = {
@@ -59,7 +61,7 @@ blogsRoute.get('/:blogId/posts', checkBlogIdValidForMongodb, pageValidations, as
         sortDirection: SortDirectionType.Desc,
         ...data,
     }
-    const posts = await blogsService.findPostsByIdBlog(blogId, dataForReposit)
+    const posts = await blogsQueryRepositories.findPostsByIdBlog(blogId, dataForReposit)
     if (!posts) {
         res.sendStatus(404)
         return;

@@ -1,4 +1,4 @@
-import {SortDirectionType} from "../repositories/blogs-db-repositories";
+import {SortDirectionType} from "../types/blogs_types";
 
 export type QeuryParams_GetPostsModel = {
     /**
@@ -16,5 +16,5 @@ export type QeuryParams_GetPostsModel = {
     /**
      * Sort by desc or asc
      */
-    sortDirection?: SortDirectionType  //asc or desc
+    sortDirection?: SortDirectionType  //default: asc or desc
 }

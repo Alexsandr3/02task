@@ -1,8 +1,8 @@
 import {body} from "express-validator";
-import {blogsRepositories} from "../repositories/blogs-db-repositories";
 import {checkAutoritionMiddleware} from "./check-autorition-middleware";
 import {inputValidetionsMiddleware} from "./Input-validetions-middleware";
 import {checkBlogIdValidForMongodb} from "./check-valid-id-from-db";
+import {blogsQueryRepositories} from "../repositories/blogs-query-repositories";
 
 const titleValidation =
     body('title',
@@ -32,7 +32,7 @@ const blogIdIsExit =
         .notEmpty()
         .trim()
         .custom(async value => {
-        const searchById = await blogsRepositories.findBlogById(value)
+        const searchById = await blogsQueryRepositories.findBlogById(value)
         if (!searchById) throw new Error('Incorrect blogId')
         return true
     })

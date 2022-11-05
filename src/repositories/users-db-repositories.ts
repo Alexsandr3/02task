@@ -1,5 +1,6 @@
-import {usersCollection, UsersType} from "../routes/db";
+import {usersCollection} from "../routes/db";
 import {ObjectId} from "mongodb";
+import {UsersType} from "../types/users_types";
 
 
 const userWithNewId = (object: UsersType): UsersType => {
@@ -10,37 +11,12 @@ const userWithNewId = (object: UsersType): UsersType => {
         createdAt: object.createdAt
     }
 }
-export type SortDirectionType = 'asc' | 'desc'
-
-
-export type FindUsersType = {
-    searchLoginTerm: string,
-    searchEmailTerm: string,
-    pageNumber: number,
-    pageSize: number,
-    sortBy: string,
-    sortDirection: SortDirectionType
-}
 
 
 export const usersRepositories = {
     async createUser(user: UsersType): Promise<UsersType> {
         await usersCollection.insertOne(user)
         return userWithNewId(user)
-    },
-    async findUsers(data: FindUsersType): Promise<UsersType[]> {
-        return (await usersCollection
-            .find({
-                $or: [
-                    {"email": {$regex: data.searchEmailTerm, $options: 'i'}},
-                    {"login": {$regex: data.searchLoginTerm, $options: 'i'}}
-                ]
-            })
-            .skip((data.pageNumber - 1) * data.pageSize)
-            .limit(data.pageSize)
-            .sort({[data.sortBy]: data.sortDirection})
-            .toArray())
-            .map(foundUser => userWithNewId(foundUser))
     },
     async deleteUserById(id: string): Promise<boolean> {
         if (!ObjectId.isValid(id)) {
@@ -51,14 +27,6 @@ export const usersRepositories = {
     },
     async findByLoginOrEmail(loginOrEmail: string) {
         return await usersCollection.findOne({$or: [{email: loginOrEmail}, {login: loginOrEmail}]})
-    },
-    async usersCount(data: FindUsersType): Promise<number> {
-        return usersCollection.countDocuments({
-            $or: [
-                {"email": {$regex: data.searchEmailTerm, $options: 'i'}},
-                {"login": {$regex: data.searchLoginTerm, $options: 'i'}}
-            ]
-        })
     },
     async deleteAll() {
         await usersCollection.deleteMany({})

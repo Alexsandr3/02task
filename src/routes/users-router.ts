@@ -1,6 +1,6 @@
 import {Response, Router} from "express";
-import {SortDirectionType} from "../repositories/blogs-db-repositories";
-import {usersService, UsersTypeForService} from "../domain/users-service";
+import {SortDirectionType, TypeForView} from "../types/blogs_types";
+import {usersService} from "../domain/users-service";
 import {
     preGetUsersValidations,
     usersValidations
@@ -9,14 +9,15 @@ import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middlew
 import {RequestWithBody, RequestWithParams, RequestWithQeury} from "../Req_types";
 import {QueryParams_GetUsersModel} from "../models/QueryParams_GetUsersModel";
 import {BodyParams_CreateUserModel} from "../models/BodyParams_CreateUserModel";
-import {UsersType} from "./db";
+import {UsersType} from "../types/users_types";
 import {URIParams_UserModel} from "../models/URIParams_UserModel";
+import {usersQueryRepositories} from "../repositories/users-query-repositories";
 
 
 export const usersRoute = Router({})
 
 
-usersRoute.get('/', preGetUsersValidations, async (req: RequestWithQeury<QueryParams_GetUsersModel>, res: Response<UsersTypeForService | null>) => {
+usersRoute.get('/', preGetUsersValidations, async (req: RequestWithQeury<QueryParams_GetUsersModel>, res: Response<TypeForView | null>) => {
     let data = req.query
     let dataForReposit = {
         searchLoginTerm: '',
@@ -27,7 +28,7 @@ usersRoute.get('/', preGetUsersValidations, async (req: RequestWithQeury<QueryPa
         sortDirection: SortDirectionType.Desc,
         ...data,
     }
-    const users = await usersService.findUsers(dataForReposit)
+    const users = await usersQueryRepositories.findUsers(dataForReposit)
     res.send(users)
 })
 usersRoute.post('/', usersValidations, async (req: RequestWithBody<BodyParams_CreateUserModel>, res: Response<UsersType>) => {

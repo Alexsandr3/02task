@@ -1,6 +1,10 @@
-import {blogsCollection, BlogsType, postsCollection, PostsType} from "../routes/db";
+import {blogsCollection,postsCollection} from "../routes/db";
 import {ObjectId} from "mongodb";
-import {postWithNewId} from "./posts-db-repositories";
+import { postWithNewId} from "./posts-db-repositories";
+
+import {BlogsType, TypeForView, ForFindPostsByBlogIdType} from "../types/blogs_types";
+import {ForFindBlogType} from "../types/blogs_types";
+import {PostsTypeForView} from "../types/posts_types";
 
 
 const blogWithNewId = (object: BlogsType): BlogsType => {
@@ -13,44 +17,24 @@ const blogWithNewId = (object: BlogsType): BlogsType => {
 }
 
 
-export enum SortDirectionType {
-    Asc = 'asc',
-    Desc = 'desc'
-}
-export type FindBlogsType = {
-    searchNameTerm: string,
-    pageNumber: number,
-    pageSize: number,
-    sortBy: string,
-    sortDirection: SortDirectionType
-}
-export type FindPostsByIdType = {
-    pageNumber: number,
-    pageSize: number,
-    sortBy: string,
-    sortDirection: SortDirectionType
-}
-
-
-export const blogsRepositories = {
-    async findBlogs(data: FindBlogsType): Promise<BlogsType[]>  {
-        return (await blogsCollection
+export const blogsQueryRepositories = {
+    async findBlogs(data: ForFindBlogType): Promise<TypeForView>  {
+        const foundBlogs = (await blogsCollection
             .find( data.searchNameTerm ? {name: { $regex: data.searchNameTerm, $options: 'i' }} : {})
             .skip( ( data.pageNumber - 1 ) * data.pageSize )
             .limit(data.pageSize)
             .sort({ [data.sortBy] : data.sortDirection })
             .toArray())
             .map( foundBlog => blogWithNewId(foundBlog))
-    },
-    async createBlog (name: string, youtubeUrl: string): Promise<BlogsType>{
-        const newBlog: BlogsType = {
-            _id: new ObjectId(),
-            name,
-            youtubeUrl,
-            createdAt: new Date().toISOString()
+        const totalCount = await blogsCollection.countDocuments(data.searchNameTerm ? {name: { $regex: data.searchNameTerm, $options: 'i' }} : {})
+        const pagesCountRes = Math.ceil(totalCount/data.pageSize)
+        return {
+            pagesCount: pagesCountRes,
+            page: data.pageNumber,
+            pageSize: data.pageSize,
+            totalCount: totalCount,
+            items: foundBlogs
         }
-        await blogsCollection.insertOne(newBlog)
-        return blogWithNewId(newBlog)
     },
     async findBlogById (id: string): Promise<BlogsType | null> {
         if(!ObjectId.isValid(id)) {
@@ -63,34 +47,24 @@ export const blogsRepositories = {
             return blogWithNewId(result)
         }
     },
-    async findPostsByIdBlog (blogId: string, data: FindPostsByIdType): Promise<Array<PostsType> | null> {
-        return  (await postsCollection
+    async findPostsByIdBlog (blogId: string, data: ForFindPostsByBlogIdType): Promise<PostsTypeForView | null> {
+        const blog = await blogsQueryRepositories.findBlogById(blogId)
+        if (!blog) return null
+        const foundPosts = (await postsCollection
             .find({blogId})
             .skip((data.pageNumber - 1) * data.pageSize)
             .limit(data.pageSize)
             .sort({[data.sortBy]: data.sortDirection}).toArray())
             .map(postWithNewId)
-
-    },
-    async updateBlogById (id: string, name:string, youtubeUrl: string): Promise<boolean>{
-        if(!ObjectId.isValid(id)) {
-            return false
+        const totalCountPosts = await postsCollection.countDocuments(blogId ? {blogId} : {})
+        const pagesCountRes = Math.ceil(totalCountPosts / data.pageSize)
+        return {
+            pagesCount: pagesCountRes,
+            page: data.pageNumber,
+            pageSize: data.pageSize,
+            totalCount: totalCountPosts,
+            items: foundPosts
         }
-        const result = await blogsCollection.updateOne({_id:new ObjectId(id)},{$set: {name: name, youtubeUrl: youtubeUrl}})
-        return result.matchedCount === 1
+       
     },
-    async deleteBlogById (id: string): Promise<boolean> {
-        if(!ObjectId.isValid(id)) {
-            return false
-        }
-        const result = await blogsCollection.deleteOne({_id:new ObjectId(id)})
-        return result.deletedCount === 1
-    },
-    async deleteAll() {
-        await blogsCollection.deleteMany({})
-    },
-    async blogsCount (data: FindBlogsType): Promise<number> {
-        const filter = data.searchNameTerm ? {name: { $regex: data.searchNameTerm, $options: 'i' }} : {}
-        return blogsCollection.countDocuments(filter)
-    }
 }
