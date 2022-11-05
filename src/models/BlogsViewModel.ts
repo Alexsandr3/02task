@@ -6,3 +6,4 @@ export type BlogsViewModel = {
     youtubeUrl: string
     createdAt: string
 }
+

@@ -2,6 +2,7 @@ import {MongoClient, ObjectId} from "mongodb"
 import 'dotenv/config'
 
 
+
 const mongoUri = process.env.MONGO_URI || "mongodb://0.0.0.0:27017";
 
 export type BlogsType = {
@@ -29,8 +30,6 @@ export type UsersType = {
     passwordHash?: string,
     createdAt: string
 }
-
-
 
 export const client = new MongoClient(mongoUri);
 const dbName = 'Homework'

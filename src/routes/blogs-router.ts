@@ -12,7 +12,7 @@ import {
     RequestWithParamsAndBody,
     RequestWithParamsAndQeury,
     RequestWithQeury
-} from "../types";
+} from "../Req_types";
 import {BodyParams_CreateAndUpdateBlogModel} from "../models/BodyParams_CreateAndUpdateBlogModel";
 import {QueryParams_GetBlogsModel} from "../models/QueryParams_GetBlogsModel";
 import {BodyParams_FindBlogByIdAndCreatePostModel} from "../models/BodyParams_FindBlogByIdAndCreatePostModel";
@@ -35,13 +35,13 @@ blogsRoute.get('/', pageValidations, async (req: RequestWithQeury<QueryParams_Ge
     }
     const blogs = await blogsService.findBlogs(dataForReposit)
     res.send(blogs)
-})
+}) //qre
 blogsRoute.post('/', blogsValidations, async (req: RequestWithBody<BodyParams_CreateAndUpdateBlogModel>,res: Response<BlogsType>) => {
     const newBlog = await blogsService.createBlog(req.body.name, req.body.youtubeUrl)
     return res.status(201).send(newBlog)
 })
 blogsRoute.get('/:id', checkIdValidForMongodb, async (req: RequestWithParams<URIParams_BlogModel>, res: Response<BlogsType>) => {
-    const blog = await blogsService.findBlogById(req.params.id)
+    const blog = await blogsService.findBlogById(req.params.id) //qre
     if (!blog) {
         res.sendStatus(404)
         return;

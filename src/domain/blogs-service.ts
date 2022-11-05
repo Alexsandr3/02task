@@ -19,7 +19,7 @@ export type BlogsTypeForServicePost = {
     page: number
     pageSize: number
     totalCount: number
-    items: PostsType[] | []
+    items: PostsType[]
 }
 
 
@@ -54,7 +54,7 @@ export const blogsService = {
             page: data.pageNumber,
             pageSize: data.pageSize,
             totalCount: totalCount,
-            items: postsByIdBlog ? postsByIdBlog : []
+            items: postsByIdBlog
         }
     },
     async updateBlogById (id : string, name:string, youtubeUrl: string): Promise<boolean>{

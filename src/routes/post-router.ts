@@ -5,7 +5,7 @@ import {SortDirectionType} from "../repositories/blogs-db-repositories";
 import {postsService} from "../domain/posts-service";
 import {pageValidations} from "../middlewares/blogs-validation-middleware";
 import {checkIdValidForMongodb} from "../middlewares/check-valid-id-from-db";
-import {RequestWithBody, RequestWithParams, RequestWithParamsAndBody, RequestWithQeury} from "../types";
+import {RequestWithBody, RequestWithParams, RequestWithParamsAndBody, RequestWithQeury} from "../Req_types";
 import {QeuryParams_GetPostsModel} from "../models/QeuryParams_GetPostsModel";
 import {BlogsTypeForServicePost} from "../domain/blogs-service";
 import {BodyParams_CreateAndUpdatePostModel} from "../models/BodyParams_CreateAndUpdatePostModel";

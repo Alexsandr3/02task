@@ -63,7 +63,7 @@ export const blogsRepositories = {
             return blogWithNewId(result)
         }
     },
-    async findPostsByIdBlog (blogId: string, data: FindPostsByIdType): Promise<Array<PostsType>> {
+    async findPostsByIdBlog (blogId: string, data: FindPostsByIdType): Promise<Array<PostsType> | null> {
         return  (await postsCollection
             .find({blogId})
             .skip((data.pageNumber - 1) * data.pageSize)
