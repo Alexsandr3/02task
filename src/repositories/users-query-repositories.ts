@@ -1,6 +1,6 @@
 import {usersCollection} from "../routes/db";
 import {ForFindUsersType, UsersType} from "../types/users_types";
-import {TypeForView} from "../types/blogs_types";
+import {TypeForView} from "../models/TypeForView";
 
 
 const userWithNewId = (object: UsersType): UsersType => {
@@ -14,7 +14,7 @@ const userWithNewId = (object: UsersType): UsersType => {
 
 
 export const usersQueryRepositories = {
-    async findUsers(data: ForFindUsersType): Promise<TypeForView> {
+    async findUsers(data: ForFindUsersType): Promise<TypeForView<UsersType[]>> {
         const foundsUsers = (await usersCollection
             .find({
                 $or: [
@@ -39,7 +39,7 @@ export const usersQueryRepositories = {
             page: data.pageNumber,
             pageSize: data.pageSize,
             totalCount: totalCount,
-            items: foundsUsers ? foundsUsers : []
+            items: foundsUsers //exchange \\ items: foundsUsers ? foundsUsers : []
         }
     }
 }

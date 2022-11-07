@@ -11,13 +11,14 @@ import {BodyParams_CreateAndUpdatePostModel} from "../models/BodyParams_CreateAn
 import {PostsType} from "../types/posts_types";
 import {URIParams_PostModel} from "../models/URIParams_PostModel";
 import {postsQueryRepositories} from "../repositories/posts-query-repositories";
-import {PostsTypeForView} from "../types/posts_types";
+import {HTTP_STATUSES} from "../const/HTTP response status codes";
+import {TypeForView} from "../models/TypeForView";
 
 
 export const postsRoute = Router({})
 
 
-postsRoute.get('/', pageValidations, async (req: RequestWithQeury<QeuryParams_GetPostsModel>, res: Response<PostsTypeForView>) => {
+postsRoute.get('/', pageValidations, async (req: RequestWithQeury<QeuryParams_GetPostsModel>, res: Response<TypeForView<PostsType[]>>) => {
     let data = req.query
     let dataForRepos = {
         pageNumber: 1,
@@ -35,11 +36,11 @@ postsRoute.post('/', prePostsValidation, async (req: RequestWithBody<BodyParams_
     const content = req.body.content
     const blogId = req.body.blogId
     const newPost = await postsService.createPost(title, shortDescription, content, blogId)
-    return res.status(201).send(newPost)
+    return res.status(HTTP_STATUSES.CREATED_201).send(newPost)
 })
 postsRoute.get('/:id', checkIdValidForMongodb, async (req: RequestWithParams<URIParams_PostModel>, res: Response<PostsType>) => {
     const post = await postsQueryRepositories.findByIdPost(req.params.id)
-    if (!post) return res.sendStatus(404)
+    if (!post) return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
     return res.send(post)
 })
 postsRoute.put('/:id', checkIdValidForMongodb, prePostsValidation, async (req: RequestWithParamsAndBody<URIParams_PostModel, BodyParams_CreateAndUpdatePostModel>, res: Response) => {
@@ -50,16 +51,16 @@ postsRoute.put('/:id', checkIdValidForMongodb, prePostsValidation, async (req: R
     const blogId = req.body.blogId
     const isPostUpdated = await postsService.updatePostById(postId, title, shortDescription, content, blogId)
     if (!isPostUpdated) {
-        res.sendStatus(404)
+        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
         return;
     }
-    return res.sendStatus(204)
+    return res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })
 postsRoute.delete('/:id', checkIdValidForMongodb, checkAutoritionMiddleware, async (req: RequestWithParams<URIParams_PostModel>, res: Response) => {
     const isDelete = await postsService.deletePostById(req.params.id)
     if (!isDelete) {
-        res.sendStatus(404)
+        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
     } else {
-        res.sendStatus(204)
+        res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
 })

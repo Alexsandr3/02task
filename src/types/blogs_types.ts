@@ -1,6 +1,4 @@
 import {ObjectId} from "mongodb";
-import {PostsType} from "./posts_types";
-import {UsersType} from "./users_types";
 
 
 export type BlogsType = {
@@ -10,7 +8,6 @@ export type BlogsType = {
     youtubeUrl: string
     createdAt: string
 }
-
 export enum SortDirectionType {
     Asc = 'asc',
     Desc = 'desc'
@@ -24,12 +21,8 @@ export interface ForFindBlogType {
 }
 export type ForFindPostsByBlogIdType = Omit<ForFindBlogType, "searchNameTerm">
 
-export type TypeForView = {
-    pagesCount: number
-    page: number
-    pageSize: number
-    totalCount: number
-    items: BlogsType[] | PostsType[] | UsersType[]
-}
+
+
+
 
 

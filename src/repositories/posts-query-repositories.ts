@@ -1,6 +1,7 @@
 import { postsCollection} from "../routes/db";
 import {ObjectId} from "mongodb";
-import {ForFindPostsType, PostsType, PostsTypeForView} from "../types/posts_types";
+import {ForFindPostsType, PostsType} from "../types/posts_types";
+import {TypeForView} from "../models/TypeForView";
 
 
 
@@ -29,7 +30,7 @@ export const postsQueryRepositories ={
             return postWithNewId(result)
         }
     },
-    async findPosts(data:ForFindPostsType, blogId?: string): Promise<PostsTypeForView> {
+    async findPosts(data:ForFindPostsType, blogId?: string): Promise<TypeForView<PostsType[]>> {
         const foundPosts = (await postsCollection
             .find({})
             .skip( ( data.pageNumber - 1 ) * data.pageSize )

@@ -8,9 +8,10 @@ import {blogsRepositories} from "./repositories/blogs-db-repositories";
 import {postsRepositories} from "./repositories/posts-db-repositories";
 import {authRoute} from "./routes/auth-router";
 import {usersRepositories} from "./repositories/users-db-repositories";
+import {HTTP_STATUSES} from "./const/HTTP response status codes";
 
 
-const app = express()
+export const app = express()
 const port = process.env.PORT || 5002
 const jsonBodyMiddleware = bodyParser.json()
 
@@ -27,7 +28,7 @@ app.use('/users', usersRoute)
 
 
 app.get('/', (req: Request, res: Response) => {
-    res.status(200).json({
+    res.status(HTTP_STATUSES.OK_200).json({
         message: "Hi need "
     })
 })
@@ -35,7 +36,7 @@ app.delete('/testing/all-data', (req: Request, res: Response) => {
     blogsRepositories.deleteAll();
     postsRepositories.deleteAll();
     usersRepositories.deleteAll();
-    res.sendStatus(204)
+    res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })
 
 const startApp = async () => {

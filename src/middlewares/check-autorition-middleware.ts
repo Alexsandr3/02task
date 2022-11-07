@@ -1,4 +1,5 @@
 import {NextFunction, Request, Response} from "express";
+import {HTTP_STATUSES} from "../const/HTTP response status codes";
 
 const credentials = {
     login: 'admin',
@@ -9,7 +10,7 @@ export const checkAutoritionMiddleware = (req:Request, res:Response, next: NextF
     const encoderAut = Buffer.from(`${credentials.login}:${credentials.password}`).toString('base64')
     const validHeander = `Basic ${encoderAut}`
     if (validHeander !== authHeander){
-        res.sendStatus(401)
+        res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
         return
     }
     next()

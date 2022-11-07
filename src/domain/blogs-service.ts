@@ -1,7 +1,7 @@
 import {blogsRepositories} from "../repositories/blogs-db-repositories";
-import {PostsType} from "../routes/db";
 import {postsRepositories} from "../repositories/posts-db-repositories";
 import {BlogsType} from "../types/blogs_types";
+import {PostsType} from "../types/posts_types";
 
 
 

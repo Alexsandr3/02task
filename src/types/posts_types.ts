@@ -12,13 +12,6 @@ export  type PostsType = {
     createdAt: string
 }
 
-export type PostsTypeForView = {
-    pagesCount: number
-    page: number
-    pageSize: number
-    totalCount: number
-    items: PostsType[]
-}
 export type ForFindPostsType = Omit<ForFindBlogType, "searchNameTerm">
 
 

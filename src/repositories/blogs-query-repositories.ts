@@ -1,10 +1,11 @@
 import {blogsCollection,postsCollection} from "../routes/db";
 import {ObjectId} from "mongodb";
 import { postWithNewId} from "./posts-db-repositories";
-
-import {BlogsType, TypeForView, ForFindPostsByBlogIdType} from "../types/blogs_types";
+import {BlogsType,ForFindPostsByBlogIdType} from "../types/blogs_types";
 import {ForFindBlogType} from "../types/blogs_types";
-import {PostsTypeForView} from "../types/posts_types";
+import {PostsType} from "../types/posts_types";
+import {TypeForView} from "../models/TypeForView";
+
 
 
 const blogWithNewId = (object: BlogsType): BlogsType => {
@@ -18,7 +19,7 @@ const blogWithNewId = (object: BlogsType): BlogsType => {
 
 
 export const blogsQueryRepositories = {
-    async findBlogs(data: ForFindBlogType): Promise<TypeForView>  {
+    async findBlogs(data: ForFindBlogType): Promise<TypeForView<BlogsType[]>>  {
         const foundBlogs = (await blogsCollection
             .find( data.searchNameTerm ? {name: { $regex: data.searchNameTerm, $options: 'i' }} : {})
             .skip( ( data.pageNumber - 1 ) * data.pageSize )
@@ -47,7 +48,7 @@ export const blogsQueryRepositories = {
             return blogWithNewId(result)
         }
     },
-    async findPostsByIdBlog (blogId: string, data: ForFindPostsByBlogIdType): Promise<PostsTypeForView | null> {
+    async findPostsByIdBlog (blogId: string, data: ForFindPostsByBlogIdType): Promise<TypeForView<PostsType[]> | null> {
         const blog = await blogsQueryRepositories.findBlogById(blogId)
         if (!blog) return null
         const foundPosts = (await postsCollection
