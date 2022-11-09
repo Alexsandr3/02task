@@ -1,9 +1,17 @@
-import {ForFindBlogType} from "./blogs_types";
+import {paginatorBlogType} from "./blogs_types";
 import {ObjectId} from "mongodb";
 
-export  type PostsType = {
-    _id?: ObjectId
-    id?: string
+export  type PostsViewType = {
+    id: string
+    title: string
+    shortDescription: string
+    content: string
+    blogId: string
+    blogName: string
+    createdAt: string
+}
+export type PostsDBType = {
+    _id: ObjectId
     title: string
     shortDescription: string
     content: string
@@ -12,6 +20,6 @@ export  type PostsType = {
     createdAt: string
 }
 
-export type ForFindPostsType = Omit<ForFindBlogType, "searchNameTerm">
+export type ForFindPostsType = Omit<paginatorBlogType, "searchNameTerm">
 
 

@@ -1,9 +1,9 @@
 import {blogsCollection} from "../routes/db";
 import {ObjectId} from "mongodb";
-import {BlogsType} from "../types/blogs_types";
+import {BlogsDBType, BlogsViewType} from "../types/blogs_types";
 
 
-const blogWithNewId = (object: BlogsType): BlogsType => {
+const blogWithNewId = (object: BlogsDBType): BlogsViewType => {
     return {
         id: object._id?.toString(),
         name: object.name,
@@ -13,14 +13,15 @@ const blogWithNewId = (object: BlogsType): BlogsType => {
 }
 
 export const blogsRepositories = {
-    async createBlog(name: string, youtubeUrl: string): Promise<BlogsType> {
-        const newBlog: BlogsType = {
+    async createBlog(name: string, youtubeUrl: string): Promise<BlogsViewType> {
+        const newBlog: BlogsDBType = {
             _id: new ObjectId(),
             name,
             youtubeUrl,
             createdAt: new Date().toISOString()
         }
         await blogsCollection.insertOne(newBlog)
+        console.log('1 newBlog', newBlog)
         return blogWithNewId(newBlog)
     },
     async updateBlogById(id: string, name: string, youtubeUrl: string): Promise<boolean> {

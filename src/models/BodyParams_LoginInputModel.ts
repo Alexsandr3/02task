@@ -1,4 +1,4 @@
-export type BodyParams_GetUserModel ={
+export type BodyParams_LoginInputModel ={
     /**
      * login: Login User
      */

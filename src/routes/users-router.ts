@@ -8,18 +8,18 @@ import {
 import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middleware";
 import {RequestWithBody, RequestWithParams, RequestWithQeury} from "../Req_types";
 import {QueryParams_GetUsersModel} from "../models/QueryParams_GetUsersModel";
-import {BodyParams_CreateUserModel} from "../models/BodyParams_CreateUserModel";
 import {UsersViewType} from "../types/users_types";
 import {URIParams_UserModel} from "../models/URIParams_UserModel";
 import {usersQueryRepositories} from "../repositories/users-query-repositories";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
-import {TypeForView} from "../models/TypeForView";
+import {PaginatorType} from "../models/PaginatorType";
+import {BodyParams_UserInputModel} from "../models/BodyParams_UserInputModel";
 
 
 export const usersRoute = Router({})
 
 
-usersRoute.get('/', preGetUsersValidations, async (req: RequestWithQeury<QueryParams_GetUsersModel>, res: Response<TypeForView<UsersViewType[]> | null>) => {
+usersRoute.get('/', preGetUsersValidations, async (req: RequestWithQeury<QueryParams_GetUsersModel>, res: Response<PaginatorType<UsersViewType[]> | null>) => {
     let data = req.query
     let dataForReposit = {
         searchLoginTerm: '',
@@ -33,7 +33,7 @@ usersRoute.get('/', preGetUsersValidations, async (req: RequestWithQeury<QueryPa
     const users = await usersQueryRepositories.findUsers(dataForReposit)
     res.send(users)
 })
-usersRoute.post('/', usersValidations, async (req: RequestWithBody<BodyParams_CreateUserModel>, res: Response<UsersViewType>) => {
+usersRoute.post('/', usersValidations, async (req: RequestWithBody<BodyParams_UserInputModel>, res: Response<UsersViewType>) => {
     const newUser = await usersService.createUser(req.body.login, req.body.email, req.body.password)
     return res.status(HTTP_STATUSES.CREATED_201).send(newUser)
 })

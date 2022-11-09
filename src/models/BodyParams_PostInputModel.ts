@@ -1,4 +1,4 @@
-export type BodyParams_CreateAndUpdatePostModel = {
+export type BodyParams_PostInputModel = {
     /**
      * Title Posts
      */

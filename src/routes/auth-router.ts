@@ -3,7 +3,7 @@ import {usersService} from "../domain/users-service";
 import {loginValidations} from "../middlewares/auth_login-validation-middleware";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
 import {RequestWithBody} from "../Req_types";
-import {BodyParams_GetUserModel} from "../models/BodyParams_GetUserModel";
+import {BodyParams_LoginInputModel} from "../models/BodyParams_LoginInputModel";
 import {authMiddleware} from "../middlewares/auth-middleware";
 import {usersQueryRepositories} from "../repositories/users-query-repositories";
 
@@ -13,7 +13,7 @@ import {usersQueryRepositories} from "../repositories/users-query-repositories";
 export const authRoute = Router({})
 
 
-authRoute.post('/login',loginValidations, async (req: RequestWithBody<BodyParams_GetUserModel>, res: Response) => {
+authRoute.post('/login',loginValidations, async (req: RequestWithBody<BodyParams_LoginInputModel>, res: Response) => {
    const token =  await usersService.checkCredentials(req.body.login, req.body.password)
    if (token) {
       res.json({ 'accessToken': token})

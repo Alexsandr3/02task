@@ -1,15 +1,15 @@
 import {commentsCollection, postsCollection} from "../routes/db";
 import {ObjectId} from "mongodb";
-import {ForFindPostsType, PostsType} from "../types/posts_types";
-import {TypeForView} from "../models/TypeForView";
-import {ForFindPostsByBlogIdType} from "../types/blogs_types";
-import {CommentsType} from "../types/comments_types";
+import {ForFindPostsType, PostsDBType, PostsViewType} from "../types/posts_types";
+import {PaginatorType} from "../models/PaginatorType";
+import {PaginatorPostsBlogType} from "../types/blogs_types";
+import {CommentsViewType} from "../types/comments_types";
 import {commentWithNewId} from "./comments-query-repositories";
 
 
 
 
-export const postWithNewId = (object: PostsType): PostsType => {
+export const postWithNewId = (object: PostsDBType): PostsViewType => {
     return {
         id: object._id?.toString(),
         title: object.title,
@@ -23,7 +23,7 @@ export const postWithNewId = (object: PostsType): PostsType => {
 
 
 export const postsQueryRepositories ={
-    async findByIdPost (id: string): Promise<PostsType | null> {
+    async findByIdPost (id: string): Promise<PostsViewType | null> {
         if(!ObjectId.isValid(id)) {
             return null
         }
@@ -34,7 +34,7 @@ export const postsQueryRepositories ={
             return postWithNewId(result)
         }
     },
-    async findPosts(data:ForFindPostsType, blogId?: string): Promise<TypeForView<PostsType[]>> {
+    async findPosts(data:ForFindPostsType, blogId?: string): Promise<PaginatorType<PostsViewType[]>> {
         const foundPosts = (await postsCollection
             .find({})
             .skip( ( data.pageNumber - 1 ) * data.pageSize )
@@ -51,7 +51,7 @@ export const postsQueryRepositories ={
             items: foundPosts
         }
     },
-    async findCommentsByIdPost(postId: string, data: ForFindPostsByBlogIdType): Promise<TypeForView<CommentsType[]> | null> {
+    async findCommentsByIdPost(postId: string, data: PaginatorPostsBlogType): Promise<PaginatorType<CommentsViewType[]> | null> {
         const post = await postsQueryRepositories.findByIdPost(postId)
         if (!post) return null
         const Commets = (await commentsCollection.find({postId: postId})

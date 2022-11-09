@@ -1,6 +1,6 @@
 import {usersCollection} from "../routes/db";
-import {ForFindUsersType, MeViewModel, UsersDBType, UsersViewType} from "../types/users_types";
-import {TypeForView} from "../models/TypeForView";
+import {paginatorUsersType, MeViewModel, UsersDBType, UsersViewType} from "../types/users_types";
+import {PaginatorType} from "../models/PaginatorType";
 import {ObjectId} from "mongodb";
 
 
@@ -22,7 +22,7 @@ export const userForGet = (object: UsersDBType): MeViewModel => {
 
 
 export const usersQueryRepositories = {
-    async findUsers(data: ForFindUsersType): Promise<TypeForView<UsersViewType[]>> {
+    async findUsers(data: paginatorUsersType): Promise<PaginatorType<UsersViewType[]>> {
         const foundsUsers = (await usersCollection
             .find({
                 $or: [

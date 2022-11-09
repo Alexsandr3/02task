@@ -1,10 +1,10 @@
 import {postsRepositories} from "../repositories/posts-db-repositories";
-import {PostsType} from "../types/posts_types";
-import {CommentsType} from "../types/comments_types";
+import {PostsViewType} from "../types/posts_types";
+import {CommentsViewType} from "../types/comments_types";
 
 
 export const postsService = {
-    async createPost(title: string, shortDescription: string, content: string, blogId: string): Promise<PostsType | null> {
+    async createPost(title: string, shortDescription: string, content: string, blogId: string): Promise<PostsViewType | null> {
         return  await postsRepositories.createPost(title,shortDescription,content,blogId)
     },
     async updatePostById(id: string, title: string, shortDescription: string, content: string, blogId: string): Promise<boolean> {
@@ -13,7 +13,7 @@ export const postsService = {
     async deletePostById(id: string): Promise<boolean> {
         return await postsRepositories.deletePostById(id)
     },
-    async createCommentByIdPost(id: string, content: string, userId: string, userLogin: string): Promise<CommentsType | null>{
+    async createCommentByIdPost(id: string, content: string, userId: string, userLogin: string): Promise<CommentsViewType | null>{
         return await postsRepositories.createCommentByIdPost(id,content, userId, userLogin)
     }
 }

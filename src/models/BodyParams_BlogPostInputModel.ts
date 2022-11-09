@@ -1,4 +1,4 @@
-export type BodyParams_FindBlogByIdAndCreatePostModel = {
+export type BodyParams_BlogPostInputModel = {
     /**
      * Blog title
      */

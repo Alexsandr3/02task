@@ -1,11 +1,11 @@
-import { Response, Router} from "express";
+import {Response, Router} from "express";
 import {blogsService} from "../domain/blogs-service";
 import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middleware";
 import {pageValidations, blogsValidations} from "../middlewares/blogs-validation-middleware";
-import {BlogsType, SortDirectionType} from "../types/blogs_types";
+import {BlogsViewType, SortDirectionType} from "../types/blogs_types";
 import {prePostsValidationByBlogId} from "../middlewares/posts-validation-middleware";
 import {checkBlogIdValidForMongodb, checkIdValidForMongodb} from "../middlewares/check-valid-id-from-db";
-import {PostsType} from "../types/posts_types";
+import {PostsViewType} from "../types/posts_types";
 import {
     RequestWithBody,
     RequestWithParams,
@@ -13,20 +13,20 @@ import {
     RequestWithParamsAndQeury,
     RequestWithQeury
 } from "../Req_types";
-import {BodyParams_CreateAndUpdateBlogModel} from "../models/BodyParams_CreateAndUpdateBlogModel";
+import {BodyParams_BlogInputModel} from "../models/BodyParams_BlogInputModel";
 import {QueryParams_GetBlogsModel} from "../models/QueryParams_GetBlogsModel";
-import {BodyParams_FindBlogByIdAndCreatePostModel} from "../models/BodyParams_FindBlogByIdAndCreatePostModel";
+import {BodyParams_BlogPostInputModel} from "../models/BodyParams_BlogPostInputModel";
 import {QeuryParams_GetPostsModel} from "../models/QeuryParams_GetPostsModel";
 import {URIParams_BlogModel} from "../models/URIParams_BlogModel";
 import {blogsQueryRepositories} from "../repositories/blogs-query-repositories";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
-import {TypeForView} from "../models/TypeForView";
+import {PaginatorType} from "../models/PaginatorType";
 
 
 export const blogsRoute = Router({})
 
 
-blogsRoute.get('/', pageValidations, async (req: RequestWithQeury<QueryParams_GetBlogsModel>, res: Response<TypeForView<BlogsType[]>>) => {
+blogsRoute.get('/', pageValidations, async (req: RequestWithQeury<QueryParams_GetBlogsModel>, res: Response<PaginatorType<BlogsViewType[]>>) => {
     let data = req.query
     let dataForReposit = {
         searchNameTerm: '',
@@ -39,11 +39,11 @@ blogsRoute.get('/', pageValidations, async (req: RequestWithQeury<QueryParams_Ge
     const blogs = await blogsQueryRepositories.findBlogs(dataForReposit)
     res.send(blogs)
 })
-blogsRoute.post('/', blogsValidations, async (req: RequestWithBody<BodyParams_CreateAndUpdateBlogModel>,res: Response<BlogsType>) => {
+blogsRoute.post('/', blogsValidations, async (req: RequestWithBody<BodyParams_BlogInputModel>, res: Response<BlogsViewType>) => {
     const newBlog = await blogsService.createBlog(req.body.name, req.body.youtubeUrl)
     return res.status(HTTP_STATUSES.CREATED_201).send(newBlog)
 })
-blogsRoute.get('/:id', checkIdValidForMongodb, async (req: RequestWithParams<URIParams_BlogModel>, res: Response<BlogsType>) => {
+blogsRoute.get('/:id', checkIdValidForMongodb, async (req: RequestWithParams<URIParams_BlogModel>, res: Response<BlogsViewType>) => {
     const blog = await blogsQueryRepositories.findBlogById(req.params.id)
     if (!blog) {
         res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
@@ -51,8 +51,8 @@ blogsRoute.get('/:id', checkIdValidForMongodb, async (req: RequestWithParams<URI
     }
     return res.send(blog)
 })
-blogsRoute.get('/:blogId/posts', checkBlogIdValidForMongodb, pageValidations, async (req: RequestWithParamsAndQeury<{blogId: string},QeuryParams_GetPostsModel>, //+++
-                                                                                     res: Response<TypeForView<PostsType[]>>) => {
+blogsRoute.get('/:blogId/posts', checkBlogIdValidForMongodb, pageValidations, async (req: RequestWithParamsAndQeury<{ blogId: string }, QeuryParams_GetPostsModel>, //+++
+                                                                                     res: Response<PaginatorType<PostsViewType[]>>) => {
     let data = req.query
     let blogId = req.params.blogId
     let dataForReposit = {
@@ -69,7 +69,7 @@ blogsRoute.get('/:blogId/posts', checkBlogIdValidForMongodb, pageValidations, as
     }
     return res.send(posts)
 })
-blogsRoute.post('/:blogId/posts',prePostsValidationByBlogId, async (req: RequestWithParamsAndBody<{blogId:string},BodyParams_FindBlogByIdAndCreatePostModel>, res: Response<PostsType>) => {
+blogsRoute.post('/:blogId/posts', prePostsValidationByBlogId, async (req: RequestWithParamsAndBody<{ blogId: string }, BodyParams_BlogPostInputModel>, res: Response<PostsViewType>) => {
     const blogId = req.params.blogId
     const title = req.body.title
     const shortDescription = req.body.shortDescription
@@ -81,7 +81,7 @@ blogsRoute.post('/:blogId/posts',prePostsValidationByBlogId, async (req: Request
     }
     return res.status(HTTP_STATUSES.CREATED_201).send(PostCreated)
 })
-blogsRoute.put('/:id', checkIdValidForMongodb, blogsValidations, async (req: RequestWithParamsAndBody<URIParams_BlogModel,BodyParams_CreateAndUpdateBlogModel>, res: Response) => {
+blogsRoute.put('/:id', checkIdValidForMongodb, blogsValidations, async (req: RequestWithParamsAndBody<URIParams_BlogModel, BodyParams_BlogInputModel>, res: Response) => {
     const id = req.params.id
     let name = req.body.name
     let youtubeUrl = req.body.youtubeUrl

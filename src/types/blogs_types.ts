@@ -1,25 +1,33 @@
 import {ObjectId} from "mongodb";
 
 
-export type BlogsType = {
-    _id?: ObjectId
-    id?: string
+export type BlogsViewType = {
+    id: string
     name: string
     youtubeUrl: string
     createdAt: string
 }
+
+export type BlogsDBType = {
+    _id: ObjectId
+    name: string
+    youtubeUrl: string
+    createdAt: string
+}
+
 export enum SortDirectionType {
     Asc = 'asc',
     Desc = 'desc'
 }
-export interface ForFindBlogType {
+export interface paginatorBlogType {
     searchNameTerm: string,
     pageNumber: number,
     pageSize: number,
     sortBy: string,
     sortDirection: SortDirectionType
 }
-export type ForFindPostsByBlogIdType = Omit<ForFindBlogType, "searchNameTerm">
+
+export type PaginatorPostsBlogType = Omit<paginatorBlogType, "searchNameTerm">
 
 
 

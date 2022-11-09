@@ -1,13 +1,13 @@
 import {blogsCollection, postsCollection} from "../routes/db";
 import {ObjectId} from "mongodb";
 import {postWithNewId} from "./posts-db-repositories";
-import {BlogsType, ForFindPostsByBlogIdType} from "../types/blogs_types";
-import {ForFindBlogType} from "../types/blogs_types";
-import {PostsType} from "../types/posts_types";
-import {TypeForView} from "../models/TypeForView";
+import {BlogsDBType, BlogsViewType, PaginatorPostsBlogType} from "../types/blogs_types";
+import {paginatorBlogType} from "../types/blogs_types";
+import {PostsViewType} from "../types/posts_types";
+import {PaginatorType} from "../models/PaginatorType";
 
 
-const blogWithNewId = (object: BlogsType): BlogsType => {
+const blogWithNewId = (object: BlogsDBType): BlogsViewType => {
     return {
         id: object._id?.toString(),
         name: object.name,
@@ -18,7 +18,7 @@ const blogWithNewId = (object: BlogsType): BlogsType => {
 
 
 export const blogsQueryRepositories = {
-    async findBlogs(data: ForFindBlogType): Promise<TypeForView<BlogsType[]>> {
+    async findBlogs(data: paginatorBlogType): Promise<PaginatorType<BlogsViewType[]>> {
         const foundBlogs = (await blogsCollection
             .find(data.searchNameTerm ? {name: {$regex: data.searchNameTerm, $options: 'i'}} : {})
             .skip((data.pageNumber - 1) * data.pageSize)
@@ -41,7 +41,7 @@ export const blogsQueryRepositories = {
             items: foundBlogs
         }
     },
-    async findBlogById(id: string): Promise<BlogsType | null> {
+    async findBlogById(id: string): Promise<BlogsViewType | null> {
         if (!ObjectId.isValid(id)) {
             return null
         }
@@ -52,7 +52,7 @@ export const blogsQueryRepositories = {
             return blogWithNewId(result)
         }
     },
-    async findPostsByIdBlog(blogId: string, data: ForFindPostsByBlogIdType): Promise<TypeForView<PostsType[]> | null> {
+    async findPostsByIdBlog(blogId: string, data: PaginatorPostsBlogType): Promise<PaginatorType<PostsViewType[]> | null> {
         const blog = await blogsQueryRepositories.findBlogById(blogId)
         if (!blog) return null
         const foundPosts = (await postsCollection

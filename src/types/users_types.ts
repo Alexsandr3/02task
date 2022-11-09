@@ -20,8 +20,7 @@ export type MeViewModel = {
     login: string
     id: string
 }
-
-export type ForFindUsersType = {
+export type paginatorUsersType = {
     searchLoginTerm: string,
     searchEmailTerm: string,
     pageNumber: number,

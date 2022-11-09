@@ -1,14 +1,12 @@
 import {commentsCollection, postsCollection} from "../routes/db";
 import {ObjectId} from "mongodb";
 import {blogsQueryRepositories} from "./blogs-query-repositories";
-import {PostsType} from "../types/posts_types";
-import {CommentsType} from "../types/comments_types";
+import {PostsDBType, PostsViewType} from "../types/posts_types";
+import {CommentsViewType} from "../types/comments_types";
 import {commentWithNewId} from "./comments-query-repositories";
 
 
-
-
-export const postWithNewId = (object: PostsType): PostsType => {
+export const postWithNewId = (object: PostsDBType): PostsViewType => {
     return {
         id: object._id?.toString(),
         title: object.title,
@@ -21,9 +19,8 @@ export const postWithNewId = (object: PostsType): PostsType => {
 }
 
 
-
-export const postsRepositories ={
-    async createPost (title: string, shortDescription: string, content: string, blogId: string): Promise<PostsType | null> {
+export const postsRepositories = {
+    async createPost(title: string, shortDescription: string, content: string, blogId: string): Promise<PostsViewType | null> {
         const blog = await blogsQueryRepositories.findBlogById(blogId)
         if (!blog) {
             return null
@@ -40,15 +37,22 @@ export const postsRepositories ={
         await postsCollection.insertOne(newPost)
         return postWithNewId(newPost)
     },
-    async updatePostById (id: string, title: string, shortDescription: string, content: string, blogId: string): Promise<boolean>{
-        if(!ObjectId.isValid(id)) {
+    async updatePostById(id: string, title: string, shortDescription: string, content: string, blogId: string): Promise<boolean> {
+        if (!ObjectId.isValid(id)) {
             return false
         }
-        const result = await postsCollection.updateOne({_id: new ObjectId(id)},{$set: {title: title, shortDescription: shortDescription, content: content, blogId: blogId}})
+        const result = await postsCollection.updateOne({_id: new ObjectId(id)}, {
+            $set: {
+                title: title,
+                shortDescription: shortDescription,
+                content: content,
+                blogId: blogId
+            }
+        })
         return result.matchedCount === 1
     },
-    async deletePostById (id: string): Promise<boolean> {
-        if(!ObjectId.isValid(id)) {
+    async deletePostById(id: string): Promise<boolean> {
+        if (!ObjectId.isValid(id)) {
             return false
         }
         const result = await postsCollection.deleteOne({_id: new ObjectId(id)})
@@ -57,8 +61,8 @@ export const postsRepositories ={
     async deleteAll() {
         await postsCollection.deleteMany({})
     },
-    async createCommentByIdPost (id: string, content: string, userId: string, userLogin: string): Promise<CommentsType | null> {
-        const post = await postsCollection.findOne({_id:new ObjectId(id)})
+    async createCommentByIdPost(id: string, content: string, userId: string, userLogin: string): Promise<CommentsViewType | null> {
+        const post = await postsCollection.findOne({_id: new ObjectId(id)})
         if (!post) {
             return null
         }

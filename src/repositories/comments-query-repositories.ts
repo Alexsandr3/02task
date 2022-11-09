@@ -1,10 +1,10 @@
 import {commentsCollection} from "../routes/db";
 
-import {CommentsType} from "../types/comments_types";
+import {CommentsDBType, CommentsViewType} from "../types/comments_types";
 import {ObjectId} from "mongodb";
 
 
-export const commentWithNewId = (object: CommentsType): CommentsType => {
+export const commentWithNewId = (object: CommentsDBType): CommentsViewType => {
     return {
         id: object._id?.toString(),
         content: object.content,
@@ -15,7 +15,7 @@ export const commentWithNewId = (object: CommentsType): CommentsType => {
 }
 
 export const commentsQueryRepositories = {
-    async findComments(id: string): Promise<CommentsType | null> {
+    async findComments(id: string): Promise<CommentsViewType | null> {
         if(!ObjectId.isValid(id)) {
             return null
         }

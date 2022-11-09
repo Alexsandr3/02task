@@ -16,22 +16,22 @@ import {
     RequestWithQeury
 } from "../Req_types";
 import {QeuryParams_GetPostsModel} from "../models/QeuryParams_GetPostsModel";
-import {BodyParams_CreateAndUpdatePostModel} from "../models/BodyParams_CreateAndUpdatePostModel";
-import {PostsType} from "../types/posts_types";
+import {BodyParams_PostInputModel} from "../models/BodyParams_PostInputModel";
+import {PostsViewType} from "../types/posts_types";
 import {URIParams_PostModel} from "../models/URIParams_PostModel";
 import {postsQueryRepositories} from "../repositories/posts-query-repositories";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
-import {TypeForView} from "../models/TypeForView";
+import {PaginatorType} from "../models/PaginatorType";
 import {preCommentsValidation} from "../middlewares/comments-validation-middleware";
-import {BodyParams_ForCreateCommentByIdPostModel} from "../models/BodyParams_ForCreateCommentByIdPostModel";
 import {authMiddleware} from "../middlewares/auth-middleware";
 import {pageNumberValidation, pageSizeValidation} from "../middlewares/users-validation-middleware";
+import {BodyParams_CommentInputModel} from "../models/BodyParams_CommentInputModel";
 
 
 export const postsRoute = Router({})
 
 
-postsRoute.get('/', pageValidations, async (req: RequestWithQeury<QeuryParams_GetPostsModel>, res: Response<TypeForView<PostsType[]>>) => {
+postsRoute.get('/', pageValidations, async (req: RequestWithQeury<QeuryParams_GetPostsModel>, res: Response<PaginatorType<PostsViewType[]>>) => {
     let data = req.query
     let dataForRepos = {
         pageNumber: 1,
@@ -43,7 +43,7 @@ postsRoute.get('/', pageValidations, async (req: RequestWithQeury<QeuryParams_Ge
     const posts = await postsQueryRepositories.findPosts(dataForRepos);
     res.send(posts)
 })
-postsRoute.post('/', prePostsValidation, async (req: RequestWithBody<BodyParams_CreateAndUpdatePostModel>, res: Response<PostsType | null>) => {
+postsRoute.post('/', prePostsValidation, async (req: RequestWithBody<BodyParams_PostInputModel>, res: Response<PostsViewType | null>) => {
     const title = req.body.title
     const shortDescription = req.body.shortDescription
     const content = req.body.content
@@ -51,12 +51,12 @@ postsRoute.post('/', prePostsValidation, async (req: RequestWithBody<BodyParams_
     const newPost = await postsService.createPost(title, shortDescription, content, blogId)
     return res.status(HTTP_STATUSES.CREATED_201).send(newPost)
 })
-postsRoute.get('/:id', checkIdValidForMongodb, async (req: RequestWithParams<URIParams_PostModel>, res: Response<PostsType>) => {
+postsRoute.get('/:id', checkIdValidForMongodb, async (req: RequestWithParams<URIParams_PostModel>, res: Response<PostsViewType>) => {
     const post = await postsQueryRepositories.findByIdPost(req.params.id)
     if (!post) return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
     return res.send(post)
 })
-postsRoute.put('/:id', checkIdValidForMongodb, prePostsValidation, async (req: RequestWithParamsAndBody<URIParams_PostModel, BodyParams_CreateAndUpdatePostModel>, res: Response) => {
+postsRoute.put('/:id', checkIdValidForMongodb, prePostsValidation, async (req: RequestWithParamsAndBody<URIParams_PostModel, BodyParams_PostInputModel>, res: Response) => {
     const postId = req.params.id
     const title = req.body.title
     const shortDescription = req.body.shortDescription
@@ -77,7 +77,7 @@ postsRoute.delete('/:id', checkIdValidForMongodb, checkAutoritionMiddleware, asy
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
 })
-postsRoute.post('/:postId/comments', authMiddleware, checkPostIdValidForMongodb, preCommentsValidation, async (req: RequestWithParamsAndBody<{ postId: string }, BodyParams_ForCreateCommentByIdPostModel>, res: Response) => {
+postsRoute.post('/:postId/comments', authMiddleware, checkPostIdValidForMongodb, preCommentsValidation, async (req: RequestWithParamsAndBody<{postId: string}, BodyParams_CommentInputModel>, res: Response) => {
     const postId = req.params.postId
     const content = req.body.content
     if (!req.user) {
