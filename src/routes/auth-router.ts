@@ -16,7 +16,7 @@ export const authRoute = Router({})
 authRoute.post('/login',loginValidations, async (req: RequestWithBody<BodyParams_GetUserModel>, res: Response) => {
    const token =  await usersService.checkCredentials(req.body.login, req.body.password)
    if (token) {
-      res.status(HTTP_STATUSES.OK_200 ).send(token)
+      res.send(token)
    } else {
       res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
    }
