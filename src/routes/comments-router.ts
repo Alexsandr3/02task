@@ -25,7 +25,7 @@ commentsRoute.put('/:id', authMiddleware, preCommentsValidation, async (req: Req
     }
     res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })
-commentsRoute.delete('/:id', authMiddleware,preCommentsValidation, async (req: Request, res: Response) => {
+commentsRoute.delete('/:id', authMiddleware, async (req: Request, res: Response) => {
     const isDelete = await commentsService.deleteCommentById(req.params.id, req.user.id)
     if (isDelete.errorStatus) {
         return res.sendStatus(isDelete.errorStatus)
