@@ -22,10 +22,10 @@ export const commentsService = {
         const result = await commentsRepositories.updateCommentsById(id, content)
         if(!result) {
             return {
-                errorStatus: 500
+                errorStatus: 400
             }
         }
-        return {}
+        return { }
     },
     async deleteCommentById (id: string, userId: string): Promise<UpdateCommentResult>{
         const comment = await commentsRepositories.findCommentsById(id)
