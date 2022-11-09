@@ -9,7 +9,7 @@ import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middlew
 import {RequestWithBody, RequestWithParams, RequestWithQeury} from "../Req_types";
 import {QueryParams_GetUsersModel} from "../models/QueryParams_GetUsersModel";
 import {BodyParams_CreateUserModel} from "../models/BodyParams_CreateUserModel";
-import {UsersType} from "../types/users_types";
+import {UsersViewType} from "../types/users_types";
 import {URIParams_UserModel} from "../models/URIParams_UserModel";
 import {usersQueryRepositories} from "../repositories/users-query-repositories";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
@@ -19,7 +19,7 @@ import {TypeForView} from "../models/TypeForView";
 export const usersRoute = Router({})
 
 
-usersRoute.get('/', preGetUsersValidations, async (req: RequestWithQeury<QueryParams_GetUsersModel>, res: Response<TypeForView<UsersType[]> | null>) => {
+usersRoute.get('/', preGetUsersValidations, async (req: RequestWithQeury<QueryParams_GetUsersModel>, res: Response<TypeForView<UsersViewType[]> | null>) => {
     let data = req.query
     let dataForReposit = {
         searchLoginTerm: '',
@@ -33,11 +33,11 @@ usersRoute.get('/', preGetUsersValidations, async (req: RequestWithQeury<QueryPa
     const users = await usersQueryRepositories.findUsers(dataForReposit)
     res.send(users)
 })
-usersRoute.post('/', usersValidations, async (req: RequestWithBody<BodyParams_CreateUserModel>, res: Response<UsersType>) => {
+usersRoute.post('/', usersValidations, async (req: RequestWithBody<BodyParams_CreateUserModel>, res: Response<UsersViewType>) => {
     const newUser = await usersService.createUser(req.body.login, req.body.email, req.body.password)
     return res.status(HTTP_STATUSES.CREATED_201).send(newUser)
 })
-usersRoute.delete('/:id',checkAutoritionMiddleware, async (req: RequestWithParams<URIParams_UserModel>, res: Response) => {
+usersRoute.delete('/:id', checkAutoritionMiddleware, async (req: RequestWithParams<URIParams_UserModel>, res: Response) => {
     const id = req.params.id
     const isDelete = await usersService.deleteUserById(id)
     if (!isDelete) {

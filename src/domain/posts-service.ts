@@ -1,5 +1,6 @@
 import {postsRepositories} from "../repositories/posts-db-repositories";
 import {PostsType} from "../types/posts_types";
+import {CommentsType} from "../types/comments_types";
 
 
 export const postsService = {
@@ -11,5 +12,8 @@ export const postsService = {
     },
     async deletePostById(id: string): Promise<boolean> {
         return await postsRepositories.deletePostById(id)
+    },
+    async createCommentByIdPost(id: string, content: string, userId: string, userLogin: string): Promise<CommentsType | null>{
+        return await postsRepositories.createCommentByIdPost(id,content, userId, userLogin)
     }
 }

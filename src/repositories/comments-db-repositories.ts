@@ -1,4 +1,4 @@
-import {blogsCollection} from "../routes/db";
+import {blogsCollection, commentsCollection} from "../routes/db";
 import {ObjectId} from "mongodb";
 import {BlogsType} from "../types/blogs_types";
 
@@ -12,8 +12,8 @@ const blogWithNewId = (object: BlogsType): BlogsType => {
     }
 }
 
-export const blogsRepositories = {
-    async createBlog(name: string, youtubeUrl: string): Promise<BlogsType> {
+export const commentsRepositories = {
+    async createBlog (name: string, youtubeUrl: string): Promise<BlogsType>{
         const newBlog: BlogsType = {
             _id: new ObjectId(),
             name,
@@ -23,27 +23,25 @@ export const blogsRepositories = {
         await blogsCollection.insertOne(newBlog)
         return blogWithNewId(newBlog)
     },
-    async updateBlogById(id: string, name: string, youtubeUrl: string): Promise<boolean> {
-        if (!ObjectId.isValid(id)) {
+    async updateCommentsById (id: string, content: string): Promise<boolean>{
+        if(!ObjectId.isValid(id)) {
             return false
         }
-        const result = await blogsCollection.updateOne({_id: new ObjectId(id)}, {
-            $set: {
-                name: name,
-                youtubeUrl: youtubeUrl
-            }
-        })
+        const result = await commentsCollection.updateOne({_id:new ObjectId(id)},{$set: {content: content}})
         return result.matchedCount === 1
     },
-    async deleteBlogById(id: string): Promise<boolean> {
-        if (!ObjectId.isValid(id)) {
+    async deleteCommentsById (id: string): Promise<boolean> {
+        if(!ObjectId.isValid(id)) {
             return false
         }
-        const result = await blogsCollection.deleteOne({_id: new ObjectId(id)})
+        const result = await commentsCollection.deleteOne({_id:new ObjectId(id)})
         return result.deletedCount === 1
     },
+    async findCommentsById(id: string) {
+        return  await commentsCollection.findOne({_id:new ObjectId(id)})
+    },
     async deleteAll() {
-        await blogsCollection.deleteMany({})
+        await commentsCollection.deleteMany({})
     },
 
 }

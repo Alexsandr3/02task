@@ -9,6 +9,8 @@ import {postsRepositories} from "./repositories/posts-db-repositories";
 import {authRoute} from "./routes/auth-router";
 import {usersRepositories} from "./repositories/users-db-repositories";
 import {HTTP_STATUSES} from "./const/HTTP response status codes";
+import {commentsRoute} from "./routes/comments-router";
+import {commentsRepositories} from "./repositories/comments-db-repositories";
 
 
 export const app = express()
@@ -21,6 +23,7 @@ app.use(jsonBodyMiddleware)
 
 app.use('/auth', authRoute)
 app.use('/blogs', blogsRoute)
+app.use('/comments', commentsRoute)
 app.use('/posts', postsRoute)
 app.use('/users', usersRoute)
 
@@ -36,6 +39,7 @@ app.delete('/testing/all-data', (req: Request, res: Response) => {
     blogsRepositories.deleteAll();
     postsRepositories.deleteAll();
     usersRepositories.deleteAll();
+    commentsRepositories.deleteAll();
     res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })
 

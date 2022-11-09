@@ -1,9 +1,10 @@
 import {usersCollection} from "../routes/db";
-import {ForFindUsersType, UsersType} from "../types/users_types";
+import {ForFindUsersType, MeViewModel, UsersDBType, UsersViewType} from "../types/users_types";
 import {TypeForView} from "../models/TypeForView";
+import {ObjectId} from "mongodb";
 
 
-const userWithNewId = (object: UsersType): UsersType => {
+export const userWithNewId = (object: UsersDBType): UsersViewType => {
     return {
         id: object._id?.toString(),
         login: object.login,
@@ -11,10 +12,17 @@ const userWithNewId = (object: UsersType): UsersType => {
         createdAt: object.createdAt
     }
 }
+export const userForGet = (object: UsersDBType): MeViewModel => {
+    return {
+        email: object.email,
+        login: object.login,
+        id: object._id?.toString()
+    }
+}
 
 
 export const usersQueryRepositories = {
-    async findUsers(data: ForFindUsersType): Promise<TypeForView<UsersType[]>> {
+    async findUsers(data: ForFindUsersType): Promise<TypeForView<UsersViewType[]>> {
         const foundsUsers = (await usersCollection
             .find({
                 $or: [
@@ -40,6 +48,23 @@ export const usersQueryRepositories = {
             pageSize: data.pageSize,
             totalCount: totalCount,
             items: foundsUsers //exchange \\ items: foundsUsers ? foundsUsers : []
+        }
+    },
+    async findUserById(id: string) {
+        const result = await usersCollection.findOne({_id: new ObjectId(id)})
+        if (!result) {
+            return null
+        } else {
+            return userWithNewId(result)
+        }
+    },
+    async getUserById(id: string) {
+        const result = await usersCollection.findOne({_id: new ObjectId(id)})
+
+        if (!result) {
+            return null
+        } else {
+            return userForGet(result)
         }
     }
 }

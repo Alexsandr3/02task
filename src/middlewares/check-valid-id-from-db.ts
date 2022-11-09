@@ -16,3 +16,17 @@ export const checkBlogIdValidForMongodb = (req: Request, res: Response, next: Ne
         next()
     }
 }
+export const checkPostIdValidForMongodb = (req: Request, res: Response, next: NextFunction) => {
+    if (!ObjectId.isValid(req.params.postId)) {
+        res.status(HTTP_STATUSES.NOT_FOUND_404).send("Incorrect postId,  please enter a valid one")
+    } else {
+        next()
+    }
+}
+export const checkCommentIdValidForMongodb = (req: Request, res: Response, next: NextFunction) => {
+    if (!ObjectId.isValid(req.params.id)) {
+        res.status(HTTP_STATUSES.NOT_FOUND_404).send("Incorrect commentId,  please enter a valid one")
+    } else {
+        next()
+    }
+}

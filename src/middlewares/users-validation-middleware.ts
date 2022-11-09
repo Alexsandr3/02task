@@ -25,12 +25,12 @@ const emailValidation =
         .notEmpty()
         .trim()
         .isEmail()
-const pageNumberValidation =
+export const pageNumberValidation =
     query('pageNumber',
         'pageNumber must be a number')
         .toInt()
         .default(1)
-const pageSizeValidation =
+export const pageSizeValidation =
     query('pageSize',
         'pageSize must be a number')
         .toInt()

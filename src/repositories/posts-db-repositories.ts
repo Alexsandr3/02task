@@ -1,7 +1,11 @@
-import { postsCollection} from "../routes/db";
+import {commentsCollection, postsCollection} from "../routes/db";
 import {ObjectId} from "mongodb";
 import {blogsQueryRepositories} from "./blogs-query-repositories";
 import {PostsType} from "../types/posts_types";
+import {CommentsType} from "../types/comments_types";
+import {commentWithNewId} from "./comments-query-repositories";
+
+
 
 
 export const postWithNewId = (object: PostsType): PostsType => {
@@ -15,6 +19,7 @@ export const postWithNewId = (object: PostsType): PostsType => {
         createdAt: object.createdAt
     }
 }
+
 
 
 export const postsRepositories ={
@@ -51,5 +56,21 @@ export const postsRepositories ={
     },
     async deleteAll() {
         await postsCollection.deleteMany({})
+    },
+    async createCommentByIdPost (id: string, content: string, userId: string, userLogin: string): Promise<CommentsType | null> {
+        const post = await postsCollection.findOne({_id:new ObjectId(id)})
+        if (!post) {
+            return null
+        }
+        const newComment = {
+            _id: new ObjectId(),
+            postId: post._id.toString(),
+            content: content,
+            userId: userId,
+            userLogin: userLogin,
+            createdAt: new Date().toISOString()
+        }
+        await commentsCollection.insertOne(newComment)
+        return commentWithNewId(newComment)
     }
 }

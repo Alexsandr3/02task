@@ -1,11 +1,20 @@
-import { Response, Router} from "express";
+import {Response, Router} from "express";
 import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middleware";
 import {prePostsValidation} from "../middlewares/posts-validation-middleware";
 import {SortDirectionType} from "../types/blogs_types";
 import {postsService} from "../domain/posts-service";
 import {pageValidations} from "../middlewares/blogs-validation-middleware";
-import {checkIdValidForMongodb} from "../middlewares/check-valid-id-from-db";
-import {RequestWithBody, RequestWithParams, RequestWithParamsAndBody, RequestWithQeury} from "../Req_types";
+import {
+    checkIdValidForMongodb,
+    checkPostIdValidForMongodb
+} from "../middlewares/check-valid-id-from-db";
+import {
+    RequestWithBody,
+    RequestWithParams,
+    RequestWithParamsAndBody,
+    RequestWithParamsAndQeury,
+    RequestWithQeury
+} from "../Req_types";
 import {QeuryParams_GetPostsModel} from "../models/QeuryParams_GetPostsModel";
 import {BodyParams_CreateAndUpdatePostModel} from "../models/BodyParams_CreateAndUpdatePostModel";
 import {PostsType} from "../types/posts_types";
@@ -13,6 +22,10 @@ import {URIParams_PostModel} from "../models/URIParams_PostModel";
 import {postsQueryRepositories} from "../repositories/posts-query-repositories";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
 import {TypeForView} from "../models/TypeForView";
+import {preCommentsValidation} from "../middlewares/comments-validation-middleware";
+import {BodyParams_ForCreateCommentByIdPostModel} from "../models/BodyParams_ForCreateCommentByIdPostModel";
+import {authMiddleware} from "../middlewares/auth-middleware";
+import {pageNumberValidation, pageSizeValidation} from "../middlewares/users-validation-middleware";
 
 
 export const postsRoute = Router({})
@@ -63,4 +76,41 @@ postsRoute.delete('/:id', checkIdValidForMongodb, checkAutoritionMiddleware, asy
     } else {
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
+})
+postsRoute.post('/:postId/comments', authMiddleware, checkPostIdValidForMongodb, preCommentsValidation, async (req: RequestWithParamsAndBody<{ postId: string }, BodyParams_ForCreateCommentByIdPostModel>, res: Response) => {
+    const postId = req.params.postId
+    const content = req.body.content
+    if (!req.user) {
+        res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
+        return
+    }
+    const userId = req.user.id
+    const userLogin = req.user.login
+
+    const createdCommetn = await postsService.createCommentByIdPost(postId, content, userId, userLogin)
+    if (!createdCommetn) {
+        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
+        return;
+    }
+    return res.status(HTTP_STATUSES.CREATED_201).send(createdCommetn)
+})
+
+postsRoute.get('/:postId/comments', checkPostIdValidForMongodb, pageNumberValidation, pageSizeValidation, async (req: RequestWithParamsAndQeury<{ postId: string }, QeuryParams_GetPostsModel>,
+                                                                                                                 res: Response) => {
+
+    let data = req.query
+    let postId = req.params.postId
+    let dataForReposit = {
+        pageNumber: 1,
+        pageSize: 10,
+        sortBy: 'createdAt',
+        sortDirection: SortDirectionType.Desc,
+        ...data,
+    }
+    const comments = await postsQueryRepositories.findCommentsByIdPost(postId, dataForReposit)
+    if (!comments) {
+        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
+        return;
+    }
+    return res.send(comments)
 })

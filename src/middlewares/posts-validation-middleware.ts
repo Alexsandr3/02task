@@ -54,3 +54,4 @@ export const prePostsValidationByBlogId = [
     inputValidetionsMiddleware
 ]
 
+
