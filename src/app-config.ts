@@ -29,7 +29,6 @@ app.use('/users', usersRoute)
 
 
 
-
 app.get('/', (req: Request, res: Response) => {
     res.status(HTTP_STATUSES.OK_200).json({
         message: "Hi need "
