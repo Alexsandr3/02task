@@ -20,6 +20,7 @@ export const commentsService = {
             }
         }
         const result = await commentsRepositories.updateCommentsById(id, content)
+
         if(!result) {
             return {
                 errorStatus: 400

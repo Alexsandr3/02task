@@ -1,4 +1,4 @@
-export type PaginatorType<T> = {
+export type PaginatorType <T> = {
     pagesCount: number
     page: number
     pageSize: number

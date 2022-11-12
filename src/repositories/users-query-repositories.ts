@@ -1,21 +1,21 @@
 import {usersCollection} from "../routes/db";
-import {paginatorUsersType, MeViewModel, UsersDBType, UsersViewType} from "../types/users_types";
+import {paginatorUsersType, MeViewModel, UsersViewType, UsersAcountDBType} from "../types/users_types";
 import {PaginatorType} from "../models/PaginatorType";
 import {ObjectId} from "mongodb";
 
 
-export const userWithNewId = (object: UsersDBType): UsersViewType => {
+export const userWithNewId = (object: UsersAcountDBType): UsersViewType => {
     return {
         id: object._id?.toString(),
-        login: object.login,
-        email: object.email,
-        createdAt: object.createdAt
+        login: object.accountData.login,
+        email: object.accountData.email,
+        createdAt: object.accountData.createdAt
     }
 }
-export const userForGet = (object: UsersDBType): MeViewModel => {
+export const userForGet = (object: UsersAcountDBType): MeViewModel => {
     return {
-        email: object.email,
-        login: object.login,
+        email: object.accountData.email,
+        login: object.accountData.login,
         id: object._id?.toString()
     }
 }

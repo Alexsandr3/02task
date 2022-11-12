@@ -1,29 +1,25 @@
 import {usersCollection} from "../routes/db";
 import {ObjectId} from "mongodb";
-import {UsersDBType, UsersViewType} from "../types/users_types";
+import {UsersAcountDBType, UsersViewType} from "../types/users_types";
 
 
-const userWithNewId = (object: UsersDBType): UsersViewType => {
+const userWithNewId = (object: UsersAcountDBType): UsersViewType => {
     return {
         id: object._id.toString(),
-        login: object.login,
-        email: object.email,
-        createdAt: object.createdAt
+        login: object.accountData.login,
+        email: object.accountData.email,
+        createdAt: object.accountData.createdAt
     }
 }
 
 
 export const usersRepositories = {
-    async createUser(login: string, email: string, password: string, passwordHash: string): Promise<UsersViewType> {
-        const newUser: UsersDBType = {
-            _id: new ObjectId(),
-            login,
-            email,
-            passwordHash,
-            createdAt: new Date().toISOString()
-        }
+    async createUser(newUser: UsersAcountDBType): Promise<UsersViewType> {
         await usersCollection.insertOne(newUser)
         return userWithNewId(newUser)
+    },
+    async deleteUser(user: UsersAcountDBType){
+        return  await usersCollection.deleteOne(user)
     },
     async deleteUserById(id: string): Promise<boolean> {
         if (!ObjectId.isValid(id)) {
@@ -32,9 +28,25 @@ export const usersRepositories = {
         const result = await usersCollection.deleteOne({_id: new ObjectId(id)})
         return result.deletedCount === 1
     },
-    async findByLoginOrEmail(loginOrEmail: string): Promise<UsersDBType | null> {
-        return await usersCollection.findOne({$or: [{email: loginOrEmail}, {login: loginOrEmail}]})
+    async findByLoginOrEmail(loginOrEmail: string): Promise<UsersAcountDBType | null> {
+        return  await usersCollection.findOne({$or: [{"accountData.email": loginOrEmail}, {"accountData.login": loginOrEmail}]})
     },
+    async findUserByConfirmationCode(confirmationCode: string): Promise<UsersAcountDBType | null> {
+        return await usersCollection.findOne({'emailConfirmation.confirmationCode': confirmationCode})
+    },
+    async updateConfirmation(_id: ObjectId) {
+        const result = await usersCollection.updateOne({_id: _id},{$set:{'emailConfirmation.isConfirmation': true}})
+        return result.modifiedCount === 1
+    },
+    /*async updateConfirmation06(_id: ObjectId, confirmationCode: string) {
+        const result = await usersCollection.updateOne({_id: _id},{$set:
+                {
+                    'emailConfirmation.confirmationCode': confirmationCode,
+                    'emailConfirmation.isConfirmation': true,
+                }
+        })
+        return result.modifiedCount === 1
+    },*/
     async deleteAll() {
         await usersCollection.deleteMany({})
     }

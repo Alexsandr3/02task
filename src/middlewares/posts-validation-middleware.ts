@@ -37,6 +37,7 @@ const blogIdIsExit =
         return true
     })
 
+
 export const prePostsValidation = [
     checkAutoritionMiddleware,
     titleValidation,

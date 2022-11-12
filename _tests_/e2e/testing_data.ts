@@ -1,5 +1,5 @@
-import {BlogsViewType} from "../../types/blogs_types";
-import {UsersViewType} from "../../types/users_types";
+import {BlogsViewType} from "../../src/types/blogs_types";
+import {UsersViewType} from "../../src/types/users_types";
 
 export const dataForCreateBlog_01 = {
     name: "supertest_01",

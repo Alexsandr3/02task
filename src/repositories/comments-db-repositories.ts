@@ -1,28 +1,10 @@
-import {blogsCollection, commentsCollection} from "../routes/db";
+import {commentsCollection} from "../routes/db";
 import {ObjectId} from "mongodb";
-import {BlogsDBType, BlogsViewType} from "../types/blogs_types";
 
 
-const blogWithNewId = (object: BlogsDBType): BlogsViewType => {
-    return {
-        id: object._id?.toString(),
-        name: object.name,
-        youtubeUrl: object.youtubeUrl,
-        createdAt: object.createdAt
-    }
-}
+
 
 export const commentsRepositories = {
-    async createBlog (name: string, youtubeUrl: string): Promise<BlogsViewType>{
-        const newBlog: BlogsDBType = {
-            _id: new ObjectId(),
-            name,
-            youtubeUrl,
-            createdAt: new Date().toISOString()
-        }
-        await blogsCollection.insertOne(newBlog)
-        return blogWithNewId(newBlog)
-    },
     async updateCommentsById (id: string, content: string): Promise<boolean>{
         if(!ObjectId.isValid(id)) {
             return false

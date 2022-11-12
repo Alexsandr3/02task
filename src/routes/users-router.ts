@@ -33,7 +33,7 @@ usersRoute.get('/', preGetUsersValidations, async (req: RequestWithQeury<QueryPa
     const users = await usersQueryRepositories.findUsers(dataForReposit)
     res.send(users)
 })
-usersRoute.post('/', usersValidations, async (req: RequestWithBody<BodyParams_UserInputModel>, res: Response<UsersViewType>) => {
+usersRoute.post('/', usersValidations, async (req: RequestWithBody<BodyParams_UserInputModel>, res: Response<UsersViewType | null>) => {
     const newUser = await usersService.createUser(req.body.login, req.body.email, req.body.password)
     return res.status(HTTP_STATUSES.CREATED_201).send(newUser)
 })

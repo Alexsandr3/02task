@@ -2,8 +2,10 @@ import {MongoClient,} from "mongodb"
 import 'dotenv/config'
 import {BlogsDBType} from "../types/blogs_types";
 import {PostsDBType} from "../types/posts_types";
-import {UsersDBType} from "../types/users_types";
+import {UsersAcountDBType} from "../types/users_types";
 import {CommentsDBType} from "../types/comments_types";
+
+
 
 const mongoUri = process.env.MONGO_URI || "mongodb://0.0.0.0:27017";
 
@@ -13,7 +15,7 @@ const DB = client.db(dbName)
 
 export const blogsCollection = DB.collection<BlogsDBType>('blogs')
 export const postsCollection = DB.collection<PostsDBType>('posts')
-export const usersCollection = DB.collection<UsersDBType>('users')
+export const usersCollection = DB.collection<UsersAcountDBType>('users')
 export const commentsCollection = DB.collection<CommentsDBType>('comments')
 
 
