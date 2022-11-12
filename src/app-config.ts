@@ -10,7 +10,7 @@ import {blogsRepositories} from "./repositories/blogs-db-repositories";
 import {postsRepositories} from "./repositories/posts-db-repositories";
 import {usersRepositories} from "./repositories/users-db-repositories";
 import {commentsRepositories} from "./repositories/comments-db-repositories";
-import {emailRoute} from "./routes/email-router";
+
 
 export const app = express()
 
@@ -25,7 +25,7 @@ app.use('/blogs', blogsRoute)
 app.use('/comments', commentsRoute)
 app.use('/posts', postsRoute)
 app.use('/users', usersRoute)
-app.use('/email', emailRoute)
+
 
 
 
