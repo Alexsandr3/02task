@@ -32,7 +32,7 @@ export const emailValidation =
         .custom(async (loginOrEmail) => {
         const isValidUser = await usersRepositories.findByLoginOrEmail(loginOrEmail)
         if (isValidUser) throw new Error('E-mail already in use')
-        return true
+        return
     })
 
 export const pageNumberValidation =

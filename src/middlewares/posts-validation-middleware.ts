@@ -34,7 +34,7 @@ const blogIdIsExit =
         .custom(async value => {
         const searchById = await blogsQueryRepositories.findBlogById(value)
         if (!searchById) throw new Error('Incorrect blogId')
-        return true
+        return false
     })
 
 

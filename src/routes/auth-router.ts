@@ -45,7 +45,8 @@ authRoute.post('/registration-confirmation', async (req: RequestWithBody<BodyPar
    }
 })
 
-authRoute.post('/registration', usersAccountValidations, async (req: RequestWithBody<BodyParams_UserInputModel>, res: Response) => {
+authRoute.post('/registration',  usersAccountValidations, async (req: RequestWithBody<BodyParams_UserInputModel>, res: Response) => {
+
    const user = await usersService.createUser(req.body.login, req.body.email, req.body.password)
    if(user){
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
