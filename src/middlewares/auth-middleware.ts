@@ -7,13 +7,13 @@ import {usersQueryRepositories} from "../repositories/users-query-repositories";
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     debugger
     if (!req.headers.authorization) {
-        res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
+        res.send(HTTP_STATUSES.UNAUTHORIZED_401)
         return
     }
     const token = req.headers.authorization.split(' ')[1]
     const userId = await jwtService.getUserIdByToken(token)
     if (!userId) {
-        res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
+        res.send(HTTP_STATUSES.UNAUTHORIZED_401)
         return
     }
     req.user = await usersQueryRepositories.findUserById(userId)

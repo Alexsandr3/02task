@@ -63,7 +63,6 @@ describe('handtests', () => {
 
             const createBlog: BlogsViewType = createResponse.body
             expect(createBlog).toEqual(dataForComparisonBlog_01)
-            console.log('process.env.MONGO_URI', process.env.MONGO_URI)
         })
         it(`02 - should create new post for specific blog; status 201; content: created post; used additional methods: POST -> /blogs, GET -> /posts/:id`, async () => {
             const createResponse_02 = await request(app)

@@ -31,7 +31,7 @@ app.use('/users', usersRoute)
 
 app.get('/', (req: Request, res: Response) => {
     res.status(HTTP_STATUSES.OK_200).json({
-        message: "Hi need "
+        message: "Don't panic, eat draniks"
     })
 })
 app.delete('/testing/all-data', (req: Request, res: Response) => {
