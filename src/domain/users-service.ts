@@ -30,9 +30,11 @@ export const usersService = {
                 }]
             }
         }
+      //  console.log('00- user|', user) ////????>?>?>?>
         const newUser = await usersRepositories.createUser(user)
         try {
             await emailManagers.sendEmailConfirmation(newUser.email, user.emailConfirmation.confirmationCode)
+    //        console.log('01- message|', message) ////????>?>?>?>
         } catch (error){
             console.error(error)
             await usersRepositories.deleteUser(user)
@@ -68,7 +70,7 @@ export const usersService = {
     async recovereCode(email: string) {
         const user = await usersRepositories.findByLoginOrEmail(email)
         if (!user) return false
-        //if (!user.emailConfirmation.isConfirmation) return false;
+        if (!user.emailConfirmation.isConfirmation) return false;
         const code: any = {
             emailConfirmation: {
                 confirmationCode: uuidv4(),
@@ -83,7 +85,7 @@ export const usersService = {
             console.error(error)
             return null
         }
-        return true
+        return
     }
 
 }
