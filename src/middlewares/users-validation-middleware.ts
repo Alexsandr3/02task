@@ -13,6 +13,11 @@ const loginValidation =
         .notEmpty()
         .trim()
         .isLength({min:3, max:10})
+        .custom(async (login) => {
+            const isValidUser = await usersRepositories.findByLoginOrEmail(login)
+            if (isValidUser) throw new Error('Login already in use')
+            return true
+        })
 
 const passwordValidation =
     body('password',
@@ -29,10 +34,10 @@ export const emailValidation =
         .notEmpty()
         .trim()
         .isEmail()
-        .custom(async (loginOrEmail) => {
-        const isValidUser = await usersRepositories.findByLoginOrEmail(loginOrEmail)
-        if (isValidUser) throw new Error('E-mail already in use')
-        return
+        .custom(async (email) => {
+        const isValidUser = await usersRepositories.findByLoginOrEmail(email)
+        if (isValidUser) throw new Error('Login already in use')
+        return true
     })
 
 export const pageNumberValidation =
