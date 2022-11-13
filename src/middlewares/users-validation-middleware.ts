@@ -15,7 +15,7 @@ const loginValidation =
         .isLength({min:3, max:10})
         .custom(async (login) => {
             const isValidUser = await usersRepositories.findByLoginOrEmail(login)
-            if (isValidUser) throw new Error('Login already in use')
+            if (isValidUser) throw new Error('Login already in use, do you need choose new login')
             return true
         })
 
@@ -36,7 +36,7 @@ export const emailValidation =
         .isEmail()
         .custom(async (email) => {
         const isValidUser = await usersRepositories.findByLoginOrEmail(email)
-        if (isValidUser) throw new Error('Login already in use')
+        if (isValidUser) throw new Error('Email already in use, do you need choose new email')
         return true
     })
 

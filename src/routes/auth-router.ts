@@ -23,6 +23,7 @@ export const authRoute = Router({})
 
 authRoute.post('/login',loginValidations, async (req: RequestWithBody<BodyParams_LoginInputModel>, res: Response) => {
    const token =  await usersService.checkCredentials(req.body.login, req.body.password)
+   console.log('03 - token| ', token)
    if (token) {
       res.send({ 'accessToken': token})
    } else {
@@ -63,7 +64,7 @@ authRoute.post('/registration-email-resending',async (req: RequestWithBody<BodyP
       res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
          "errorsMessages": [
             {
-               "message": "E-mail: there is not email))",
+               "message": "There is not email))",
                "field": "email"
             }
          ]
