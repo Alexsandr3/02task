@@ -46,7 +46,7 @@ export const usersService = {
     async checkCredentials(loginOrEmail: string, password: string) {
         const user: any = await usersRepositories.findByLoginOrEmail(loginOrEmail)
         if (!user) return null;
-        if(user.emailConfirmation.isConfirmation) return false;
+        if(!user.emailConfirmation.isConfirmation) return null;
         const result = await this._compareHash(password, user.accountData.passwordHash)
         if (!result) return null;
         return await jwtService.createJwt(user)
@@ -67,8 +67,9 @@ export const usersService = {
     },
     async recovereCode(email: string) {
         const user = await usersRepositories.findByLoginOrEmail(email)
-        if (!user) return false
+        if (!user) return false;
         if (user.emailConfirmation.isConfirmation) return false;
+        if (user.emailConfirmation.expirationDate < new Date()) return false;
         const code: any = {
             emailConfirmation: {
                 confirmationCode: uuidv4(),

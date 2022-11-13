@@ -44,7 +44,6 @@ authRoute.post('/registration-confirmation', async (req: RequestWithBody<BodyPar
       })
    }
 })
-
 authRoute.post('/registration',  usersAccountValidations, async (req: RequestWithBody<BodyParams_UserInputModel>, res: Response) => {
    const user = await usersService.createUser(req.body.login, req.body.email, req.body.password)
    if(user){
@@ -54,7 +53,6 @@ authRoute.post('/registration',  usersAccountValidations, async (req: RequestWit
    }
 
 })
-
 authRoute.post('/registration-email-resending',async (req: RequestWithBody<BodyParams_RegistrationEmailResendingInputModel>, res: Response) => {
    const result = await usersService.recovereCode(req.body.email)
    if(result){
