@@ -3,7 +3,7 @@ import nodemailer from "nodemailer";
 
 
 export const emailAdapter = {
-    async sendEmail(email: string, message: string){
+    async sendEmail(email: string, confirmationCode: string){
         const transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
@@ -15,7 +15,8 @@ export const emailAdapter = {
             from: '"Free help 🔐" <forexperienceinincubatore@gmail.com>', // sender address
             to: email, // list of receivers
             subject: "learn home task 07", // Subject line
-            html: `<h1>Thank for your registration</h1><p>To finish registration please follow the link below:<a href="https://somesite.com/confirm-email?code=${message}">complete registration</a></p>`, // html body
+            html: `https://somesite.com/confirm-email?code=${confirmationCode}`
+            //html: `<h1>Thank for your registration</h1><p>To finish registration please follow the link below:<a href="https://somesite.com/confirm-email?code=${message}">complete registration</a></p>`, // html body
         });
         return info.envelope
     }
