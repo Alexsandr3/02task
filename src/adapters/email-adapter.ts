@@ -15,7 +15,7 @@ export const emailAdapter = {
             from: '"Free help 🔐" <forexperienceinincubatore@gmail.com>', // sender address
             to: email, // list of receivers
             subject: "learn home task 07", // Subject line
-            html: `<h1>Thank for your registration</h1><p>To finish registration please follow the link below:<a href="https://02task.vercel.app/registration-confirmation?code=${message}">complete registration</a></p>`, // html body
+            html: `<h1>Thank for your registration</h1><p>To finish registration please follow the link below:<a href="https://somesite.com/confirm-email?code=${message}">complete registration</a></p>`, // html body
         });
         return info.envelope
     }
