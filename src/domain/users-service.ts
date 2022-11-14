@@ -32,7 +32,7 @@ export const usersService = {
         }
         const newUser = await usersRepositories.createUser(user)
         try {
-            emailManagers.sendEmailConfirmation(newUser.email, user.emailConfirmation.confirmationCode)
+            await emailManagers.sendEmailConfirmation(newUser.email, user.emailConfirmation.confirmationCode)
         } catch (error){
             console.error(error)
             await usersRepositories.deleteUser(user)
@@ -80,7 +80,7 @@ export const usersService = {
         }
         const newUser = await usersRepositories.updateCodeConfirmation(user._id, code.emailConfirmation.confirmationCode, code.emailConfirmation.expirationDate)
         try {
-            emailManagers.sendEmailRecoveryMessage(user.accountData.email, code.emailConfirmation.confirmationCode)
+            await emailManagers.sendEmailRecoveryMessage(user.accountData.email, code.emailConfirmation.confirmationCode)
         } catch (error){
             console.error(error)
             return null
