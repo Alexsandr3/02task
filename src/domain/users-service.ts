@@ -59,6 +59,7 @@ export const usersService = {
     },
     async confirmByCode(code: string): Promise<boolean> {
         const user = await usersRepositories.findUserByConfirmationCode(code)
+        console.log('00 - user', user)
         if (!user) return false
         if (user.emailConfirmation.isConfirmation) return false;
         if (user.emailConfirmation.confirmationCode !== code) return false;
