@@ -55,6 +55,7 @@ authRoute.post('/registration',  usersAccountValidations, async (req: RequestWit
 })
 authRoute.post('/registration-email-resending',async (req: RequestWithBody<BodyParams_RegistrationEmailResendingInputModel>, res: Response) => {
    const result = await usersService.recovereCode(req.body.email)
+   console.log('03 - result|', result)
    if(result){
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {

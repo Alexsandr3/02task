@@ -32,7 +32,7 @@ export const usersService = {
         }
         const newUser = await usersRepositories.createUser(user)
         try {
-            await emailManagers.sendEmailConfirmation(newUser.email, user.emailConfirmation.confirmationCode)
+            emailManagers.sendEmailConfirmation(newUser.email, user.emailConfirmation.confirmationCode)
         } catch (error){
             console.error(error)
             await usersRepositories.deleteUser(user)
@@ -46,7 +46,7 @@ export const usersService = {
     async checkCredentials(loginOrEmail: string, password: string) {
         const user: any = await usersRepositories.findByLoginOrEmail(loginOrEmail)
         if (!user) return null;
-        if(!user.emailConfirmation.isConfirmation) return null;
+      //  if(!user.emailConfirmation.isConfirmation) return null;
         const result = await this._compareHash(password, user.accountData.passwordHash)
         if (!result) return null;
         return await jwtService.createJwt(user)
@@ -78,13 +78,14 @@ export const usersService = {
                 })
             }
         }
+        const newUser = await usersRepositories.updateCodeConfirmation(user._id, code.emailConfirmation.confirmationCode, code.emailConfirmation.expirationDate)
           try {
-            await emailManagers.sendEmailRecoveryMessage(user.accountData.email, code.emailConfirmation.confirmationCode)
+            emailManagers.sendEmailRecoveryMessage(user.accountData.email, code.emailConfirmation.confirmationCode)
         } catch (error){
             console.error(error)
             return null
         }
-        return code
+        return newUser
     }
 
 }
