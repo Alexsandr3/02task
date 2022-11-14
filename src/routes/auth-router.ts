@@ -37,7 +37,7 @@ authRoute.post('/registration-confirmation', async (req: RequestWithBody<BodyPar
       res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
          "errorsMessages": [
             {
-               "message": "Invalid code or code timed out",
+               "message": "Invalid code or you are already registered",
                "field": "code"
             }
          ]

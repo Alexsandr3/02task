@@ -43,7 +43,7 @@ export const commentsService = {
         const result = await commentsRepositories.deleteCommentsById(id)
         if(!result) {
             return {
-                errorStatus: 500
+                errorStatus: 400
             }
         }
         return {}
