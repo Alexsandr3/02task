@@ -21,7 +21,6 @@ export const blogsRepositories = {
             createdAt: new Date().toISOString()
         }
         await blogsCollection.insertOne(newBlog)
-        console.log('1 newBlog', newBlog)
         return blogWithNewId(newBlog)
     },
     async updateBlogById(id: string, name: string, youtubeUrl: string): Promise<boolean> {

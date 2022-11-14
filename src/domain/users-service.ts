@@ -57,20 +57,18 @@ export const usersService = {
     async _compareHash(password: string, hash: string): Promise<boolean> {
         return await bcrypt.compare(password, hash)
     },
-    async confirmEmail(code: string): Promise<boolean> {
+    async confirmByCode(code: string): Promise<boolean> {
         const user = await usersRepositories.findUserByConfirmationCode(code)
-        console.log('001- user', user)
         if (!user) return false
         if (user.emailConfirmation.isConfirmation) return false;
         if (user.emailConfirmation.confirmationCode !== code) return false;
         if (user.emailConfirmation.expirationDate < new Date()) return false;
         return await usersRepositories.updateConfirmation(user._id)
     },
-    async recovereCode(email: string) {
+    async resendingEmail(email: string) {
         const user = await usersRepositories.findByLoginOrEmail(email)
-        console.log('00- user|', user)
         if (!user) return false;
-       // if (user.emailConfirmation.isConfirmation) return false;
+        if (user.emailConfirmation.isConfirmation) return false;
         if (user.emailConfirmation.expirationDate < new Date()) return false;
         const code: any = {
             emailConfirmation: {
@@ -80,9 +78,7 @@ export const usersService = {
                 })
             }
         }
-        console.log('01 -code|', code)
         const newUser = await usersRepositories.updateCodeConfirmation(user._id, code.emailConfirmation.confirmationCode, code.emailConfirmation.expirationDate)
-        console.log('02 -newUser|', newUser)
         try {
             emailManagers.sendEmailRecoveryMessage(user.accountData.email, code.emailConfirmation.confirmationCode)
         } catch (error){
@@ -91,5 +87,4 @@ export const usersService = {
         }
         return newUser
     }
-
 }
