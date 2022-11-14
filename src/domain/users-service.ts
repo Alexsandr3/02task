@@ -46,7 +46,7 @@ export const usersService = {
     async checkCredentials(loginOrEmail: string, password: string) {
         const user: any = await usersRepositories.findByLoginOrEmail(loginOrEmail)
         if (!user) return null;
-        if(!user.emailConfirmation.isConfirmation) return null;
+      //  if(!user.emailConfirmation.isConfirmation) return null;
         const result = await this._compareHash(password, user.accountData.passwordHash)
         if (!result) return null;
         return await jwtService.createJwt(user)

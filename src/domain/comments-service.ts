@@ -9,6 +9,7 @@ type UpdateCommentResult = {
 export const commentsService = {
     async updateCommentsById (id: string, content: string, userId: string): Promise<UpdateCommentResult> {
         const comment = await commentsRepositories.findCommentsById(id)
+        console.log('01 - comment|', comment)
         if(!comment) {
             return  {
                 errorStatus: 404

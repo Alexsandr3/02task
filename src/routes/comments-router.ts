@@ -21,6 +21,7 @@ commentsRoute.get('/:id', checkCommentIdValidForMongodb, async (req: RequestWith
 })
 commentsRoute.put('/:id', authMiddleware, preCommentsValidation, async (req: RequestWithParamsAndBody<{id: string},BodyParams_CommentInputModel>, res: Response) => {
     const result = await commentsService.updateCommentsById(req.params.id, req.body.content, req.user.id)
+    console.log('02 - result|', result)
     if (result.errorStatus) {
         return res.sendStatus(result.errorStatus)
     }
