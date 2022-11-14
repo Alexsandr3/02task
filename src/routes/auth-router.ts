@@ -32,7 +32,7 @@ authRoute.post('/login',loginValidations, async (req: RequestWithBody<BodyParams
 })
 authRoute.post('/registration-confirmation', async (req: RequestWithBody<BodyParams_RegistrationConfirmationCodeInputModel>, res: Response) => {
    const result = await usersService.confirmEmail(req.body.code)
-   console.log('result|', result)
+   console.log('003 result|', result)
    if(result){
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {
@@ -58,14 +58,14 @@ authRoute.post('/registration',  usersAccountValidations, async (req: RequestWit
 })
 authRoute.post('/registration-email-resending',async (req: RequestWithBody<BodyParams_RegistrationEmailResendingInputModel>, res: Response) => {
    const result = await usersService.recovereCode(req.body.email)
-   console.log('result|', result)
+   console.log('03 - result|', result)
    if(result){
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {
       res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
          "errorsMessages": [
             {
-               "message": "There is not email))",
+               "message": "There is not email/ this email is already registered))",
                "field": "email"
             }
          ]

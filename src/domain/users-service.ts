@@ -59,6 +59,7 @@ export const usersService = {
     },
     async confirmEmail(code: string): Promise<boolean> {
         const user = await usersRepositories.findUserByConfirmationCode(code)
+        console.log('001- user', user)
         if (!user) return false
         if (user.emailConfirmation.isConfirmation) return false;
         if (user.emailConfirmation.confirmationCode !== code) return false;
@@ -67,8 +68,9 @@ export const usersService = {
     },
     async recovereCode(email: string) {
         const user = await usersRepositories.findByLoginOrEmail(email)
+        console.log('00- user|', user)
         if (!user) return false;
-        if (user.emailConfirmation.isConfirmation) return false;
+       // if (user.emailConfirmation.isConfirmation) return false;
         if (user.emailConfirmation.expirationDate < new Date()) return false;
         const code: any = {
             emailConfirmation: {
@@ -78,8 +80,10 @@ export const usersService = {
                 })
             }
         }
+        console.log('01 -code|', code)
         const newUser = await usersRepositories.updateCodeConfirmation(user._id, code.emailConfirmation.confirmationCode, code.emailConfirmation.expirationDate)
-          try {
+        console.log('02 -newUser|', newUser)
+        try {
             emailManagers.sendEmailRecoveryMessage(user.accountData.email, code.emailConfirmation.confirmationCode)
         } catch (error){
             console.error(error)
