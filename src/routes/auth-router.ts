@@ -23,16 +23,14 @@ export const authRoute = Router({})
 
 authRoute.post('/login',loginValidations, async (req: RequestWithBody<BodyParams_LoginInputModel>, res: Response) => {
    const token =  await usersService.checkCredentials(req.body.login, req.body.password)
-   console.log('token|', token)
    if (token) {
-      res.send({ 'accessToken': token})
+      res.send({'accessToken': token})
    } else {
       res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
    }
 })
 authRoute.post('/registration-confirmation', async (req: RequestWithBody<BodyParams_RegistrationConfirmationCodeInputModel>, res: Response) => {
    const result = await usersService.confirmByCode(req.body.code)
-   console.log('003 result|', result)
    if(result){
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {
@@ -48,7 +46,6 @@ authRoute.post('/registration-confirmation', async (req: RequestWithBody<BodyPar
 })
 authRoute.post('/registration',  usersAccountValidations, async (req: RequestWithBody<BodyParams_UserInputModel>, res: Response) => {
    const user = await usersService.createUser(req.body.login, req.body.email, req.body.password)
-   console.log('user|', user)
    if(user){
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {
@@ -58,14 +55,13 @@ authRoute.post('/registration',  usersAccountValidations, async (req: RequestWit
 })
 authRoute.post('/registration-email-resending',async (req: RequestWithBody<BodyParams_RegistrationEmailResendingInputModel>, res: Response) => {
    const result = await usersService.resendingEmail(req.body.email)
-   console.log('03 - result|', result)
    if(result){
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {
       res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
          "errorsMessages": [
             {
-               "message": "There is not email/ this email is already registered))",
+               "message": "This email is already registered))",
                "field": "email"
             }
          ]
