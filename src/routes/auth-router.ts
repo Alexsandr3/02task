@@ -16,15 +16,26 @@ import {BodyParams_UserInputModel} from "../models/BodyParams_UserInputModel";
 import {usersAccountValidations} from "../middlewares/users-validation-middleware";
 
 
-
-
 export const authRoute = Router({})
 
 
 authRoute.post('/login',loginValidations, async (req: RequestWithBody<BodyParams_LoginInputModel>, res: Response) => {
    const token =  await usersService.checkCredentials(req.body.login, req.body.password)
    if (token) {
-      res.send({'accessToken': token})
+      res.cookie('refreshToken',token.refreshToken,{httpOnly:true, secure: true});
+      res.send({'accessToken': token.accessToken})
+
+   } else {
+      res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
+   }
+})
+authRoute.post('/refresh-token', async (req: Request, res: Response) => {
+   const refreshToken = req.cookies.refreshToken
+   const token =  await usersService.verifyToken(refreshToken)
+   if (token) {
+      res.cookie('refreshToken',token.refreshToken,{httpOnly:true, secure: true});
+      res.send({'accessToken': token.accessToken})
+
    } else {
       res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
    }

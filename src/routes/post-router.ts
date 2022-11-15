@@ -49,7 +49,6 @@ postsRoute.post('/', prePostsValidation, async (req: RequestWithBody<BodyParams_
     const content = req.body.content
     const blogId = req.body.blogId
     const newPost = await postsService.createPost(title, shortDescription, content, blogId)
-    console.log('newPost|', newPost)
     return res.status(HTTP_STATUSES.CREATED_201).send(newPost)
 })
 postsRoute.get('/:id', checkIdValidForMongodb, async (req: RequestWithParams<URIParams_PostModel>, res: Response<PostsViewType>) => {

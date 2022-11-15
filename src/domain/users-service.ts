@@ -6,6 +6,7 @@ import {v4 as uuidv4} from 'uuid'
 import add from 'date-fns/add'
 import {ObjectId} from "mongodb";
 import {emailManagers} from "../managers/email-managers";
+import {usersQueryRepositories} from "../repositories/users-query-repositories";
 
 
 export const usersService = {
@@ -49,7 +50,22 @@ export const usersService = {
       //  if(!user.emailConfirmation.isConfirmation) return null;
         const result = await this._compareHash(password, user.accountData.passwordHash)
         if (!result) return null;
-        return await jwtService.createJwt(user)
+        const tokens =  await jwtService.createJwt(user)
+
+        return tokens
+    },
+    async verifyToken(refreshToken: string) {
+        const result = await jwtService.verifyToken(refreshToken)
+        if(result){
+            const verifiedToken = await usersQueryRepositories.verifyToken(refreshToken)
+            if (!verifiedToken) {
+                const newTokens = await jwtService.createJwt(result)
+                await usersRepositories.saveExpiredRefreshToken(refreshToken)
+                return newTokens
+            }
+            return false
+        }
+        return false
     },
     async _generateHash(password: string) {
         return await bcrypt.hash(password, 10)
@@ -59,7 +75,6 @@ export const usersService = {
     },
     async confirmByCode(code: string): Promise<boolean> {
         const user = await usersRepositories.findUserByConfirmationCode(code)
-        console.log('00 - user', user)
         if (!user) return false
         if (user.emailConfirmation.isConfirmation) return false;
         if (user.emailConfirmation.confirmationCode !== code) return false;

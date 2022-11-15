@@ -1,3 +1,4 @@
 export const settings = {
-    JWT_SECRET: process.env.PORT || "354"
+    ACCESS_TOKEN_SECRET: process.env.PORT || "secret key Belarus",
+    REFRESH_TOKEN_SECRET: process.env.PORT || "secret key jive"
 }

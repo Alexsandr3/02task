@@ -1,4 +1,4 @@
-import {usersCollection} from "../routes/db";
+import {refreshTokenCollection, usersCollection} from "../routes/db";
 import {ObjectId} from "mongodb";
 import {UsersAcountDBType, UsersViewType} from "../types/users_types";
 
@@ -41,6 +41,9 @@ export const usersRepositories = {
     async updateCodeConfirmation(_id: ObjectId, code: string, expirationDate: Date) {
         const result = await usersCollection.updateOne({_id: _id},{$set:{'emailConfirmation.confirmationCode': code, "emailConfirmation.expirationDate": expirationDate}})
         return result.modifiedCount === 1
+    },
+    async saveExpiredRefreshToken(refreshToken: string) {
+        return  await refreshTokenCollection.insertOne({refreshCode: refreshToken})
     },
     async deleteAll() {
         await usersCollection.deleteMany({})

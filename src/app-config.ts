@@ -10,7 +10,8 @@ import {blogsRepositories} from "./repositories/blogs-db-repositories";
 import {postsRepositories} from "./repositories/posts-db-repositories";
 import {usersRepositories} from "./repositories/users-db-repositories";
 import {commentsRepositories} from "./repositories/comments-db-repositories";
-
+import cookieParser from "cookie-parser";
+import cors from "cors";
 
 export const app = express()
 
@@ -18,7 +19,8 @@ const jsonBodyMiddleware = bodyParser.json()
 
 
 app.use(jsonBodyMiddleware)
-
+app.use(cookieParser())
+app.use(cors())
 
 app.use('/auth', authRoute)
 app.use('/blogs', blogsRoute)
