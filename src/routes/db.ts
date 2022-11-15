@@ -4,7 +4,7 @@ import {BlogsDBType} from "../types/blogs_types";
 import {PostsDBType} from "../types/posts_types";
 import {UsersAcountDBType} from "../types/users_types";
 import {CommentsDBType} from "../types/comments_types";
-import {RefreshTokenDBType} from "../types/refresh-token_types";
+import {RefreshTokenDBType} from "../types/token_types";
 
 
 

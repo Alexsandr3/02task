@@ -79,6 +79,15 @@ authRoute.post('/registration-email-resending',async (req: RequestWithBody<BodyP
       })
    }
 })
+authRoute.post('/logout',async (req: Request, res: Response) => {
+   const refreshToken = req.cookies.refreshToken
+   const token =  await usersService.verifyTokenForAddBlackList(refreshToken)
+   if (token) {
+      res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
+   } else {
+      res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
+   }
+})
 authRoute.get('/me', authMiddleware, async (req: Request, res: Response) => {
    const result = await usersQueryRepositories.getUserById(req.user.id)
    return res.send(result)

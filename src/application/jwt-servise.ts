@@ -1,6 +1,7 @@
 import {UsersAcountDBType} from "../types/users_types";
 import jwt from 'jsonwebtoken'
 import {settings} from "../settings";
+import {TokensType} from "../types/token_types";
 
 
 export const jwtService = {
@@ -8,7 +9,7 @@ export const jwtService = {
 
         const accessToken =  jwt.sign({userId: user._id}, settings.ACCESS_TOKEN_SECRET, {expiresIn: '10s'})
         const refreshToken =   jwt.sign({userId: user._id}, settings.REFRESH_TOKEN_SECRET, {expiresIn: '20s'})
-        const returnedTokens ={
+        const returnedTokens: TokensType ={
             accessToken,
             refreshToken
         }

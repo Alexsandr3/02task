@@ -50,9 +50,7 @@ export const usersService = {
       //  if(!user.emailConfirmation.isConfirmation) return null;
         const result = await this._compareHash(password, user.accountData.passwordHash)
         if (!result) return null;
-        const tokens =  await jwtService.createJwt(user)
-
-        return tokens
+        return   await jwtService.createJwt(user)
     },
     async verifyToken(refreshToken: string) {
         const result = await jwtService.verifyToken(refreshToken)
@@ -62,6 +60,17 @@ export const usersService = {
                 const newTokens = await jwtService.createJwt(result)
                 await usersRepositories.saveExpiredRefreshToken(refreshToken)
                 return newTokens
+            }
+            return false
+        }
+        return false
+    },
+    async verifyTokenForAddBlackList(refreshToken: string) {
+        const result = await jwtService.verifyToken(refreshToken)
+        if (result) {
+            const expiredToken = await usersRepositories.saveExpiredRefreshToken(refreshToken)
+            if (expiredToken) {
+                return true
             }
             return false
         }
