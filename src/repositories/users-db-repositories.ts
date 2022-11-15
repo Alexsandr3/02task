@@ -43,7 +43,7 @@ export const usersRepositories = {
         return result.modifiedCount === 1
     },
     async saveExpiredRefreshToken(refreshToken: string) {
-        return  await refreshTokenCollection.insertOne({refreshCode: refreshToken})
+        return await refreshTokenCollection.insertOne({refreshCode: refreshToken})
     },
     async deleteAll() {
         await usersCollection.deleteMany({})
