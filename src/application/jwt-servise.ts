@@ -18,6 +18,7 @@ export const jwtService = {
     async getUserIdByToken(token: string){
         try {
             const result: any = jwt.verify(token, settings.ACCESS_TOKEN_SECRET)
+            console.log('result------',result)
             return result.userId
         } catch (error) {
             return  null
