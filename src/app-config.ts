@@ -20,7 +20,7 @@ const jsonBodyMiddleware = bodyParser.json()
 
 app.use(jsonBodyMiddleware)
 app.use(cookieParser())
-app.use(cors())
+//app.use(cors())
 
 app.use('/auth', authRoute)
 app.use('/blogs', blogsRoute)
