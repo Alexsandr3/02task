@@ -21,7 +21,6 @@ export const authRoute = Router({})
 
 authRoute.post('/login',loginValidations, async (req: RequestWithBody<BodyParams_LoginInputModel>, res: Response) => {
    const token =  await usersService.checkCredentials(req.body.login, req.body.password)
-   console.log('000 - token', token)
    if (token) {
       res.cookie('refreshToken',token.refreshToken,{httpOnly:true, secure: true});
       res.send({'accessToken': token.accessToken})
@@ -31,7 +30,6 @@ authRoute.post('/login',loginValidations, async (req: RequestWithBody<BodyParams
    }
 })
 authRoute.post('/refresh-token', async (req: Request, res: Response) => {
-   console.log('token', req.cookies)
    const refreshToken = req.cookies.refreshToken
    const token =  await usersService.verifyToken(refreshToken)
    if (token) {
@@ -59,7 +57,6 @@ authRoute.post('/registration-confirmation', async (req: RequestWithBody<BodyPar
 })
 authRoute.post('/registration',  usersAccountValidations, async (req: RequestWithBody<BodyParams_UserInputModel>, res: Response) => {
    const user = await usersService.createUser(req.body.login, req.body.email, req.body.password)
-   console.log('003 user|', user)
    if(user){
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {
@@ -94,7 +91,7 @@ authRoute.post('/logout',async (req: Request, res: Response) => {
 })
 authRoute.get('/me', authMiddleware, async (req: Request, res: Response) => {
 
-   //const result = await usersQueryRepositories.getUserById(req.user.id)
-   return res.send(req.user)
-   // return res.send(result)
+   const result = await usersQueryRepositories.getUserById(req.user.id)
+   //return res.send(req.user)
+   return res.send(result)
 })

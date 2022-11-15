@@ -6,10 +6,9 @@ import {TokensType} from "../types/token_types";
 
 export const jwtService = {
     async createJwt(user: UsersAcountDBType) {
-        console.log('user._id-------',user._id)
-
-        const accessToken =  jwt.sign({userId: user._id}, settings.ACCESS_TOKEN_SECRET, {expiresIn: '10s'})
-        const refreshToken =   jwt.sign({userId: user._id}, settings.REFRESH_TOKEN_SECRET, {expiresIn: '20s'})
+        const userId = user._id.toString()
+        const accessToken =  jwt.sign({userId: userId}, settings.ACCESS_TOKEN_SECRET, {expiresIn: '10s'})
+        const refreshToken =   jwt.sign({userId: userId}, settings.REFRESH_TOKEN_SECRET, {expiresIn: '20s'})
         const returnedTokens: TokensType ={
             accessToken,
             refreshToken
@@ -19,7 +18,6 @@ export const jwtService = {
     async getUserIdByToken(token: string){
         try {
             const result: any = jwt.verify(token, settings.ACCESS_TOKEN_SECRET)
-            console.log('result------',result)
             return result.userId
         } catch (error) {
             return  null
