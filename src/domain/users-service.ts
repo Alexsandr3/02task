@@ -71,10 +71,7 @@ export const usersService = {
             const verifiedToken = await usersQueryRepositories.verifyToken(refreshToken)
             if(!verifiedToken){
                 const expiredToken = await usersRepositories.saveExpiredRefreshToken(refreshToken)
-                if(expiredToken){
-                    return true
-                }
-                return false
+                return true
             }
             return false
         }
