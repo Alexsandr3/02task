@@ -33,7 +33,7 @@ authRoute.post('/refresh-token', async (req: Request, res: Response) => {
    const refreshToken = req.cookies.refreshToken
    const token =  await usersService.verifyToken(refreshToken)
    if (token) {
-      res.cookie("cookie",token.refreshToken,{httpOnly:true, secure: true});
+      res.cookie("refreshToken",token.refreshToken,{httpOnly:true, secure: true});
       res.send({'accessToken': token.accessToken})
 
    } else {
