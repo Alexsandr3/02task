@@ -17,10 +17,10 @@ export const app = express()
 
 const jsonBodyMiddleware = bodyParser.json()
 
-
+app.use(cors())
 app.use(jsonBodyMiddleware)
 app.use(cookieParser())
-//app.use(cors())
+
 
 app.use('/auth', authRoute)
 app.use('/blogs', blogsRoute)

@@ -67,8 +67,11 @@ export const usersService = {
     },
     async verifyTokenForAddBlackList(refreshToken: string) {
         const result = await jwtService.verifyToken(refreshToken)
+        console.log('00 -result', result)
         if (result) {
             const expiredToken = await usersRepositories.saveExpiredRefreshToken(refreshToken)
+            console.log('01 -expiredToken', expiredToken)
+
             if(expiredToken){
                 return true
             }

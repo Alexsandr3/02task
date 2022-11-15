@@ -21,8 +21,9 @@ export const authRoute = Router({})
 
 authRoute.post('/login',loginValidations, async (req: RequestWithBody<BodyParams_LoginInputModel>, res: Response) => {
    const token =  await usersService.checkCredentials(req.body.login, req.body.password)
+   console.log('000 - token', token)
    if (token) {
-      res.cookie("refreshToken",token.refreshToken,{httpOnly:true, secure: true});
+      res.cookie('refreshToken',token.refreshToken,{httpOnly:true, secure: true});
       res.send({'accessToken': token.accessToken})
 
    } else {
@@ -30,10 +31,11 @@ authRoute.post('/login',loginValidations, async (req: RequestWithBody<BodyParams
    }
 })
 authRoute.post('/refresh-token', async (req: Request, res: Response) => {
+   console.log('token', req.cookies)
    const refreshToken = req.cookies.refreshToken
    const token =  await usersService.verifyToken(refreshToken)
    if (token) {
-      res.cookie("refreshToken",token.refreshToken,{httpOnly:true, secure: true});
+      res.cookie('refreshToken',token.refreshToken,{httpOnly:true, secure: true});
       res.send({'accessToken': token.accessToken})
 
    } else {
@@ -81,8 +83,11 @@ authRoute.post('/registration-email-resending',async (req: RequestWithBody<BodyP
    }
 })
 authRoute.post('/logout',async (req: Request, res: Response) => {
+   console.log('token', req.cookies)
+   console.log('headers', req.headers)
    const refreshToken = req.cookies.refreshToken
    const token =  await usersService.verifyTokenForAddBlackList(refreshToken)
+   console.log('03 -token|', token)
    if (token) {
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {
