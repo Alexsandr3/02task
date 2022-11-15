@@ -22,7 +22,7 @@ export const authRoute = Router({})
 authRoute.post('/login',loginValidations, async (req: RequestWithBody<BodyParams_LoginInputModel>, res: Response) => {
    const token =  await usersService.checkCredentials(req.body.login, req.body.password)
    if (token) {
-      res.cookie('refreshToken',token.refreshToken,{httpOnly:true, secure: false});
+      res.cookie('refreshToken',token.refreshToken,{httpOnly:true, secure: true});
       res.send({'accessToken': token.accessToken})
 
    } else {
@@ -33,7 +33,7 @@ authRoute.post('/refresh-token', async (req: Request, res: Response) => {
    const refreshToken = req.cookies.refreshToken
    const token =  await usersService.verifyToken(refreshToken)
    if (token) {
-      res.cookie('refreshToken',token.refreshToken,{httpOnly:true, secure: false});
+      res.cookie('refreshToken',token.refreshToken,{httpOnly:true, secure: true});
       res.send({'accessToken': token.accessToken})
 
    } else {
