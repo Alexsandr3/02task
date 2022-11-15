@@ -22,7 +22,7 @@ export const authRoute = Router({})
 authRoute.post('/login',loginValidations, async (req: RequestWithBody<BodyParams_LoginInputModel>, res: Response) => {
    const token =  await usersService.checkCredentials(req.body.login, req.body.password)
    if (token) {
-      res.cookie("cookie",token.refreshToken,{httpOnly:true, secure: true});
+      res.cookie("refreshToken",token.refreshToken,{httpOnly:true, secure: true});
       res.send({'accessToken': token.accessToken})
 
    } else {
