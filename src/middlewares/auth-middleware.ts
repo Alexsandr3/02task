@@ -5,6 +5,7 @@ import {usersQueryRepositories} from "../repositories/users-query-repositories";
 
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+    console.log('headers------',req.headers)
 
     if (!req.headers.authorization) {
         res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
