@@ -23,11 +23,12 @@ export const userForGet = (object: UsersAcountDBType): MeViewModel => {
 
 export const usersQueryRepositories = {
     async findUsers(data: paginatorUsersType): Promise<PaginatorType<UsersViewType[]>> {
+
         const foundsUsers = (await usersCollection
             .find({
                 $or: [
-                    {"email": {$regex: data.searchEmailTerm, $options: 'i'}},
-                    {"login": {$regex: data.searchLoginTerm, $options: 'i'}}
+                    {"accountData.email": {$regex: data.searchEmailTerm, $options: 'i'}},
+                    {"accountData.login": {$regex: data.searchLoginTerm, $options: 'i'}}
                 ]
             })
             .skip((data.pageNumber - 1) * data.pageSize)
@@ -37,8 +38,8 @@ export const usersQueryRepositories = {
             .map(foundUser => userWithNewId(foundUser))
         const totalCount = await usersCollection.countDocuments({
             $or: [
-                {"email": {$regex: data.searchEmailTerm, $options: 'i'}},
-                {"login": {$regex: data.searchLoginTerm, $options: 'i'}}
+                {"accountData.email": {$regex: data.searchEmailTerm, $options: 'i'}},
+                {"accountData.login": {$regex: data.searchLoginTerm, $options: 'i'}}
             ]
         })
         const pagesCountRes = Math.ceil(totalCount / data.pageSize)
