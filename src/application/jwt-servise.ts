@@ -6,6 +6,7 @@ import {TokensType} from "../types/token_types";
 
 export const jwtService = {
     async createJwt(user: UsersAcountDBType) {
+        console.log('user._id-------',user._id)
 
         const accessToken =  jwt.sign({userId: user._id}, settings.ACCESS_TOKEN_SECRET, {expiresIn: '10s'})
         const refreshToken =   jwt.sign({userId: user._id}, settings.REFRESH_TOKEN_SECRET, {expiresIn: '20s'})
