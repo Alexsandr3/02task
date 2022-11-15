@@ -61,7 +61,6 @@ export const usersQueryRepositories = {
     },
     async getUserById(id: string) {
         const result = await usersCollection.findOne({_id: new ObjectId(id)})
-
         if (!result) {
             return null
         } else {
