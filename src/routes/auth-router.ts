@@ -57,6 +57,7 @@ authRoute.post('/registration-confirmation', async (req: RequestWithBody<BodyPar
 })
 authRoute.post('/registration',  usersAccountValidations, async (req: RequestWithBody<BodyParams_UserInputModel>, res: Response) => {
    const user = await usersService.createUser(req.body.login, req.body.email, req.body.password)
+
    if(user){
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {
@@ -90,7 +91,6 @@ authRoute.post('/logout',async (req: Request, res: Response) => {
    }
 })
 authRoute.get('/me', authMiddleware, async (req: Request, res: Response) => {
-
    const result = await usersQueryRepositories.getUserById(req.user.id)
    //return res.send(req.user)
    return res.send(result)

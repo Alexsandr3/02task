@@ -53,11 +53,11 @@ export const usersService = {
         return await jwtService.createJwt(user)
     },
     async verifyToken(refreshToken: string) {
-        const result = await jwtService.verifyToken(refreshToken)
-        if(result){
+        const result_id = await jwtService.verifyToken(refreshToken)
+        if(result_id){
             const verifiedToken = await usersQueryRepositories.verifyToken(refreshToken)
             if (!verifiedToken) {
-                const newTokens = await jwtService.createJwt(result)
+                const newTokens = await jwtService.createUpdateJwt(result_id)
                 await usersRepositories.saveExpiredRefreshToken(refreshToken)
                 return newTokens
             }
