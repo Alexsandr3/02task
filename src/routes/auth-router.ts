@@ -92,6 +92,5 @@ authRoute.post('/logout',async (req: Request, res: Response) => {
 })
 authRoute.get('/me', authMiddleware, async (req: Request, res: Response) => {
    const result = await usersQueryRepositories.getUserById(req.user.id)
-   //return res.send(req.user)
    return res.send(result)
 })

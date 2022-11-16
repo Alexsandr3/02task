@@ -20,7 +20,7 @@ export type UsersViewType = {
 export type MeViewModel = {
     email: string
     login: string
-    id: string
+    userId: string
 }
 export type paginatorUsersType = {
     searchLoginTerm: string,
