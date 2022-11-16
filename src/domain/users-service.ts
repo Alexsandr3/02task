@@ -6,7 +6,6 @@ import {v4 as uuidv4} from 'uuid'
 import add from 'date-fns/add'
 import {ObjectId} from "mongodb";
 import {emailManagers} from "../managers/email-managers";
-import {usersQueryRepositories} from "../repositories/users-query-repositories";
 
 
 export const usersService = {
@@ -55,7 +54,7 @@ export const usersService = {
     async verifyToken(refreshToken: string) {
         const result_id = await jwtService.verifyToken(refreshToken)
         if(result_id){
-            const verifiedToken = await usersQueryRepositories.verifyToken(refreshToken)
+            const verifiedToken = await usersRepositories.blackList(refreshToken)
             if (!verifiedToken) {
                 const newTokens = await jwtService.createUpdateJwt(result_id)
                 await usersRepositories.saveExpiredRefreshToken(refreshToken)
@@ -66,12 +65,11 @@ export const usersService = {
         return false
     },
     async verifyTokenForAddBlackList(refreshToken: string) {
-        const result = await jwtService.verifyToken(refreshToken)
-        if (result) {
-            const verifiedToken = await usersQueryRepositories.verifyToken(refreshToken)
+        const result_userId = await jwtService.verifyToken(refreshToken)
+        if (result_userId) {
+            const verifiedToken = await usersRepositories.blackList(refreshToken)
             if(!verifiedToken){
-                const expiredToken = await usersRepositories.saveExpiredRefreshToken(refreshToken)
-                return true
+                return  await usersRepositories.saveExpiredRefreshToken(refreshToken)
             }
             return false
         }

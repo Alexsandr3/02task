@@ -45,6 +45,10 @@ export const usersRepositories = {
     async saveExpiredRefreshToken(refreshToken: string) {
         return await refreshTokenCollection.insertOne({refreshCode: refreshToken})
     },
+    async blackList(refreshToken: string): Promise<boolean> {
+        const result = await refreshTokenCollection.findOne({refreshCode: refreshToken})
+        return !!result;
+    },
     async deleteAll() {
         await usersCollection.deleteMany({})
     }

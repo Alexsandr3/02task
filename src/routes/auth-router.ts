@@ -57,13 +57,11 @@ authRoute.post('/registration-confirmation', async (req: RequestWithBody<BodyPar
 })
 authRoute.post('/registration',  usersAccountValidations, async (req: RequestWithBody<BodyParams_UserInputModel>, res: Response) => {
    const user = await usersService.createUser(req.body.login, req.body.email, req.body.password)
-
    if(user){
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {
       res.status(HTTP_STATUSES.BAD_REQUEST_400).send({})
    }
-
 })
 authRoute.post('/registration-email-resending',async (req: RequestWithBody<BodyParams_RegistrationEmailResendingInputModel>, res: Response) => {
    const result = await usersService.resendingEmail(req.body.email)
@@ -83,7 +81,6 @@ authRoute.post('/registration-email-resending',async (req: RequestWithBody<BodyP
 authRoute.post('/logout',async (req: Request, res: Response) => {
    const refreshToken = req.cookies.refreshToken
    const token =  await usersService.verifyTokenForAddBlackList(refreshToken)
-
    if (token) {
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {

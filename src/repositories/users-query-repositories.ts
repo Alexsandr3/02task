@@ -1,4 +1,4 @@
-import {refreshTokenCollection, usersCollection} from "../routes/db";
+import {usersCollection} from "../routes/db";
 import {paginatorUsersType, MeViewModel, UsersViewType, UsersAcountDBType} from "../types/users_types";
 import {PaginatorType} from "../models/PaginatorType";
 import {ObjectId} from "mongodb";
@@ -23,7 +23,6 @@ export const userForGet = (object: UsersAcountDBType): MeViewModel => {
 
 export const usersQueryRepositories = {
     async findUsers(data: paginatorUsersType): Promise<PaginatorType<UsersViewType[]>> {
-
         const foundsUsers = (await usersCollection
             .find({
                 $or: [
@@ -66,12 +65,5 @@ export const usersQueryRepositories = {
         } else {
             return userForGet(result)
         }
-    },
-    async verifyToken(refreshToken: string): Promise<boolean> {
-        const result = await refreshTokenCollection.findOne({refreshCode: refreshToken})
-        if (result) {
-            return true
-        }
-        return false
     }
 }
