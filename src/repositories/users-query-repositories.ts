@@ -16,7 +16,7 @@ export const userForGet = (object: UsersAcountDBType): MeViewModel => {
     return {
         email: object.accountData.email,
         login: object.accountData.login,
-        id: object._id?.toString()
+        userId: object._id?.toString()
     }
 }
 
