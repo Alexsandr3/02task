@@ -83,7 +83,7 @@ export const deviceRepositories = {
         return result.deletedCount === 1
     },
     async deleteDeviceByDeviceId(payload: PayloadType): Promise<boolean> {
-        const result = await deviceCollection.deleteMany({userId: payload.userId})
+        const result = await deviceCollection.deleteMany({deviceId: payload.deviceId})
         return result.deletedCount === 1
     },
     async deleteAll() {
