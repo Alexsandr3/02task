@@ -19,7 +19,7 @@ securityRoute.get('/devices', checkRefreshTokenMiddleware, async (req: Request, 
    }
 })
 securityRoute.delete('/devices', checkRefreshTokenMiddleware, async (req: Request, res: Response<boolean>) => {
-   const isDelete = await deviceRepositories.deleteDeviceById(req.payload.userId)
+   const isDelete = await deviceRepositories.deleteDevices(req.payload)
    if (isDelete) {
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {
