@@ -9,10 +9,10 @@ export const checkValidDeviceMiddleware = async (req: Request, res: Response, ne
     if (!refreshToken) return res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
     if (!req.params.id) return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
     const payload = await jwtService.verifyToken(refreshToken)
-    const user = await deviceRepositories.findDeviceByUserId(payload.userId)
     const dateExp = new Date(payload.exp)
     if (dateExp < new Date()) return res.sendStatus(HTTP_STATUSES.FORBIDDEN_403)
     if (payload.deviceId !== req.params.id) return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
+    const user = await deviceRepositories.findDeviceByUserId(payload.userId)
     if (payload.userId !== user?.userId) return res.sendStatus(HTTP_STATUSES.FORBIDDEN_403)
     req.payload = payload
     next()
