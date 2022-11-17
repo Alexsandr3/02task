@@ -2,7 +2,7 @@ import {Request, Response, Router} from "express";
 import {usersService} from "../domain/users-service";
 import {loginValidations} from "../middlewares/auth_login-validation-middleware";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
-import {RequestWithBody} from "../Req_types";
+import {RequestWithBody} from "../types/Req_types";
 import {BodyParams_LoginInputModel} from "../models/BodyParams_LoginInputModel";
 import {authMiddleware} from "../middlewares/auth-middleware";
 import {usersQueryRepositories} from "../repositories/users-query-repositories";
@@ -14,28 +14,28 @@ import {
 } from "../models/BodyParams_RegistrationEmailResendingInputModel";
 import {BodyParams_UserInputModel} from "../models/BodyParams_UserInputModel";
 import {usersAccountValidations} from "../middlewares/users-validation-middleware";
+import {MeViewModel} from "../types/users_types";
+import {checkRefreshTokenMiddleware} from "../middlewares/refreshtoken-middleware";
 
 
 export const authRoute = Router({})
 
-
-authRoute.post('/login',loginValidations, async (req: RequestWithBody<BodyParams_LoginInputModel>, res: Response) => {
-   const token =  await usersService.checkCredentials(req.body.login, req.body.password)
+authRoute.post('/login', loginValidations, async (req: RequestWithBody<BodyParams_LoginInputModel>, res: Response) => {
+   const ipAddress = req.ip
+   const deviceName = req.headers["user-agent"]
+   const token = await usersService.checkCredentials(req.body.login, req.body.password, ipAddress, deviceName!)
    if (token) {
-      res.cookie('refreshToken',token.refreshToken,{httpOnly:true, secure: true});
+      res.cookie('refreshToken', token.refreshToken, {httpOnly: true, secure: true});
       res.send({'accessToken': token.accessToken})
-
    } else {
       res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
    }
 })
-authRoute.post('/refresh-token', async (req: Request, res: Response) => {
-   const refreshToken = req.cookies.refreshToken
-   const token =  await usersService.verifyToken(refreshToken)
+authRoute.post('/refresh-token', checkRefreshTokenMiddleware, async (req: Request, res: Response) => {
+   const token =  await usersService.verifyToken(req.payload)
    if (token) {
       res.cookie('refreshToken',token.refreshToken,{httpOnly:true, secure: true});
       res.send({'accessToken': token.accessToken})
-
    } else {
       res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
    }
@@ -78,16 +78,15 @@ authRoute.post('/registration-email-resending',async (req: RequestWithBody<BodyP
       })
    }
 })
-authRoute.post('/logout',async (req: Request, res: Response) => {
-   const refreshToken = req.cookies.refreshToken
-   const token =  await usersService.verifyTokenForAddBlackList(refreshToken)
+authRoute.post('/logout', checkRefreshTokenMiddleware, async (req: Request, res: Response) => {
+   const token = await usersService.verifyTokenForDeleteDevice(req.payload)
    if (token) {
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {
       res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
    }
 })
-authRoute.get('/me', authMiddleware, async (req: Request, res: Response) => {
+authRoute.get('/me', authMiddleware, async (req: Request, res: Response<MeViewModel | null>) => {
    const result = await usersQueryRepositories.getUserById(req.user.id)
    return res.send(result)
 })

@@ -5,6 +5,7 @@ import {PostsDBType} from "../types/posts_types";
 import {UsersAcountDBType} from "../types/users_types";
 import {CommentsDBType} from "../types/comments_types";
 import {RefreshTokenDBType} from "../types/token_types";
+import {DeviceDBType} from "../types/device_types";
 
 
 
@@ -19,6 +20,7 @@ export const postsCollection = DB.collection<PostsDBType>('posts')
 export const usersCollection = DB.collection<UsersAcountDBType>('users')
 export const commentsCollection = DB.collection<CommentsDBType>('comments')
 export const refreshTokenCollection = DB.collection<RefreshTokenDBType>('refreshToken')
+export const deviceCollection = DB.collection<DeviceDBType>('device')
 
 
 export async function runDb() {

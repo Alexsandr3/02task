@@ -6,6 +6,7 @@ import {v4 as uuidv4} from 'uuid'
 import add from 'date-fns/add'
 import {ObjectId} from "mongodb";
 import {emailManagers} from "../managers/email-managers";
+import {deviceRepositories, PayloadType} from "../repositories/device-db-repositories";
 
 
 export const usersService = {
@@ -21,7 +22,7 @@ export const usersService = {
             },
             emailConfirmation: {
                 confirmationCode: uuidv4(),
-                expirationDate: add(new Date(),{
+                expirationDate: add(new Date(), {
                     hours: 1
                 }),
                 isConfirmation: false,
@@ -33,7 +34,7 @@ export const usersService = {
         const newUser = await usersRepositories.createUser(user)
         try {
             await emailManagers.sendEmailConfirmation(newUser.email, user.emailConfirmation.confirmationCode)
-        } catch (error){
+        } catch (error) {
             console.error(error)
             await usersRepositories.deleteUser(user)
             return null
@@ -43,37 +44,30 @@ export const usersService = {
     async deleteUserById(id: string): Promise<boolean> {
         return usersRepositories.deleteUserById(id)
     },
-    async checkCredentials(loginOrEmail: string, password: string) {
+    async checkCredentials(loginOrEmail: string, password: string, ipAddress: string, deviceName: string) {
         const user: any = await usersRepositories.findByLoginOrEmail(loginOrEmail)
         if (!user) return null;
-        //  if(!user.emailConfirmation.isConfirmation) return null;
         const result = await this._compareHash(password, user.accountData.passwordHash)
         if (!result) return null;
-        return await jwtService.createJwt(user)
+        const device = await deviceRepositories.createDevice(user, ipAddress, deviceName)
+        if (!device) return null;
+        return await jwtService.createJwt(device)
     },
-    async verifyToken(refreshToken: string) {
-        const result_id = await jwtService.verifyToken(refreshToken)
-        if(result_id){
-            const verifiedToken = await usersRepositories.blackList(refreshToken)
-            if (!verifiedToken) {
-                const newTokens = await jwtService.createUpdateJwt(result_id)
-                await usersRepositories.saveExpiredRefreshToken(refreshToken)
-                return newTokens
-            }
-            return false
-        }
-        return false
+    async verifyToken(payload: PayloadType) {
+        const device = await deviceRepositories.findDevice(payload)
+        if (!device) return null
+        const newTokens = await jwtService.createJwt(device)
+        const payloadNew = await jwtService.verifyToken(newTokens.refreshToken)
+        const updateDevice = await deviceRepositories.updateDevice(payloadNew)
+        if (!updateDevice) return null
+        return newTokens
     },
-    async verifyTokenForAddBlackList(refreshToken: string) {
-        const result_userId = await jwtService.verifyToken(refreshToken)
-        if (result_userId) {
-            const verifiedToken = await usersRepositories.blackList(refreshToken)
-            if(!verifiedToken){
-                return  await usersRepositories.saveExpiredRefreshToken(refreshToken)
-            }
-            return false
-        }
-        return false
+    async verifyTokenForDeleteDevice(payload: PayloadType) {
+        const device = await deviceRepositories.findDevice(payload)
+        if (!device) return null
+        const isDeleted = await deviceRepositories.deleteDevice(payload)
+        if (!isDeleted) return null
+        return true
     },
     async _generateHash(password: string) {
         return await bcrypt.hash(password, 10)
@@ -105,7 +99,7 @@ export const usersService = {
         const newUser = await usersRepositories.updateCodeConfirmation(user._id, code.emailConfirmation.confirmationCode, code.emailConfirmation.expirationDate)
         try {
             await emailManagers.sendEmailRecoveryMessage(user.accountData.email, code.emailConfirmation.confirmationCode)
-        } catch (error){
+        } catch (error) {
             console.error(error)
             return null
         }

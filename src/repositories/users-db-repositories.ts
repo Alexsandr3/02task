@@ -18,8 +18,8 @@ export const usersRepositories = {
         await usersCollection.insertOne(newUser)
         return userWithNewId(newUser)
     },
-    async deleteUser(user: UsersAcountDBType){
-        return  await usersCollection.deleteOne(user)
+    async deleteUser(user: UsersAcountDBType) {
+        return await usersCollection.deleteOne(user)
     },
     async deleteUserById(id: string): Promise<boolean> {
         if (!ObjectId.isValid(id)) {
@@ -29,25 +29,30 @@ export const usersRepositories = {
         return result.deletedCount === 1
     },
     async findByLoginOrEmail(loginOrEmail: string): Promise<UsersAcountDBType | null> {
-        return  await usersCollection.findOne({$or: [{"accountData.email": loginOrEmail}, {"accountData.login": loginOrEmail}]})
+        return await usersCollection.findOne({$or: [{"accountData.email": loginOrEmail}, {"accountData.login": loginOrEmail}]})
     },
     async findUserByConfirmationCode(confirmationCode: string): Promise<UsersAcountDBType | null> {
         return await usersCollection.findOne({'emailConfirmation.confirmationCode': confirmationCode})
     },
-    async updateConfirmation(_id: ObjectId) {
-        const result = await usersCollection.updateOne({_id: _id},{$set:{'emailConfirmation.isConfirmation': true}})
+    async updateConfirmation(_id: ObjectId): Promise<boolean> {
+        const result = await usersCollection.updateOne({_id: _id}, {$set: {'emailConfirmation.isConfirmation': true}})
         return result.modifiedCount === 1
     },
-    async updateCodeConfirmation(_id: ObjectId, code: string, expirationDate: Date) {
-        const result = await usersCollection.updateOne({_id: _id},{$set:{'emailConfirmation.confirmationCode': code, "emailConfirmation.expirationDate": expirationDate}})
+    async updateCodeConfirmation(_id: ObjectId, code: string, expirationDate: Date): Promise<boolean> {
+        const result = await usersCollection.updateOne({_id: _id}, {
+            $set: {
+                'emailConfirmation.confirmationCode': code,
+                "emailConfirmation.expirationDate": expirationDate
+            }
+        })
         return result.modifiedCount === 1
     },
     async saveExpiredRefreshToken(refreshToken: string) {
         return await refreshTokenCollection.insertOne({refreshCode: refreshToken})
     },
-    async blackList(refreshToken: string): Promise<boolean> {
+    async findUsedRefreshToken(refreshToken: string): Promise<boolean> {
         const result = await refreshTokenCollection.findOne({refreshCode: refreshToken})
-        return !!result;
+        return !!result; //to simplify if
     },
     async deleteAll() {
         await usersCollection.deleteMany({})

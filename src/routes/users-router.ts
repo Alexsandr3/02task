@@ -6,7 +6,7 @@ import {
     usersValidations
 } from "../middlewares/users-validation-middleware";
 import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middleware";
-import {RequestWithBody, RequestWithParams, RequestWithQeury} from "../Req_types";
+import {RequestWithBody, RequestWithParams, RequestWithQeury} from "../types/Req_types";
 import {QueryParams_GetUsersModel} from "../models/QueryParams_GetUsersModel";
 import {UsersViewType} from "../types/users_types";
 import {URIParams_UserModel} from "../models/URIParams_UserModel";

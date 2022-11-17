@@ -50,7 +50,7 @@ export const usersQueryRepositories = {
             items: foundsUsers //exchange \\ items: foundsUsers ? foundsUsers : []
         }
     },
-    async findUserById(id: string) {
+    async findUserById(id: string): Promise<UsersViewType | null> {
         const result = await usersCollection.findOne({_id: new ObjectId(id)})
         if (!result) {
             return null
@@ -58,7 +58,7 @@ export const usersQueryRepositories = {
             return userWithNewId(result)
         }
     },
-    async getUserById(id: string) {
+    async getUserById(id: string): Promise<MeViewModel | null> {
         const result = await usersCollection.findOne({_id: new ObjectId(id)})
         if (!result) {
             return null

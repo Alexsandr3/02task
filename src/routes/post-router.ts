@@ -14,7 +14,7 @@ import {
     RequestWithParamsAndBody,
     RequestWithParamsAndQeury,
     RequestWithQeury
-} from "../Req_types";
+} from "../types/Req_types";
 import {QeuryParams_GetPostsModel} from "../models/QeuryParams_GetPostsModel";
 import {BodyParams_PostInputModel} from "../models/BodyParams_PostInputModel";
 import {PostsViewType} from "../types/posts_types";

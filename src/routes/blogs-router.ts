@@ -12,7 +12,7 @@ import {
     RequestWithParamsAndBody,
     RequestWithParamsAndQeury,
     RequestWithQeury
-} from "../Req_types";
+} from "../types/Req_types";
 import {BodyParams_BlogInputModel} from "../models/BodyParams_BlogInputModel";
 import {QueryParams_GetBlogsModel} from "../models/QueryParams_GetBlogsModel";
 import {BodyParams_BlogPostInputModel} from "../models/BodyParams_BlogPostInputModel";

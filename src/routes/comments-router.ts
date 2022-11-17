@@ -1,5 +1,5 @@
-import {Request, Response, Router} from "express";
-import {RequestWithParams, RequestWithParamsAndBody} from "../Req_types";
+import {Response, Router} from "express";
+import {RequestWithParams, RequestWithParamsAndBody} from "../types/Req_types";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
 import {commentsQueryRepositories} from "../repositories/comments-query-repositories";
 import {authMiddleware} from "../middlewares/auth-middleware";
@@ -7,12 +7,13 @@ import {commentsService} from "../domain/comments-service";
 import {preCommentsValidation} from "../middlewares/comments-validation-middleware";
 import {checkCommentIdValidForMongodb} from "../middlewares/check-valid-id-from-db";
 import {BodyParams_CommentInputModel} from "../models/BodyParams_CommentInputModel";
+import {CommentsViewType} from "../types/comments_types";
 
 
 export const commentsRoute = Router({})
 
 
-commentsRoute.get('/:id', checkCommentIdValidForMongodb, async (req: RequestWithParams<{id: string}>, res: Response) => {
+commentsRoute.get('/:id', checkCommentIdValidForMongodb, async (req: RequestWithParams<{id: string}>, res: Response<CommentsViewType>) => {
     const comments = await commentsQueryRepositories.findComments(req.params.id)
     if (!comments) {
         return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
@@ -26,7 +27,7 @@ commentsRoute.put('/:id', authMiddleware, preCommentsValidation, async (req: Req
     }
     res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })
-commentsRoute.delete('/:id', authMiddleware, async (req: Request, res: Response) => {
+commentsRoute.delete('/:id', authMiddleware, async (req: RequestWithParams<{id: string}>, res: Response) => {
     const isDelete = await commentsService.deleteCommentById(req.params.id, req.user.id)
     if (isDelete.errorStatus) {
         return res.sendStatus(isDelete.errorStatus)
