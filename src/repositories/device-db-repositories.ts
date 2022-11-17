@@ -56,7 +56,6 @@ export const deviceRepositories = {
     async updateDevice(payload: PayloadType): Promise<boolean> {
         const dateCreatedToken = (new Date(payload.iat)).toISOString();
         const dateExpiredToken = (new Date(payload.exp)).toISOString();
-
         const result = await deviceCollection.updateOne({
             $and: [
                 {userId: {$eq: payload.userId}},
@@ -84,7 +83,6 @@ export const deviceRepositories = {
         return result.deletedCount === 1
     },
     async deleteDeviceByDeviceId(payload: PayloadType): Promise<boolean> {
-       // const result = await deviceCollection.deleteOne({deviceId: deviceId})
         const result = await deviceCollection.deleteMany({userId: payload.userId, deviceId: {$ne: payload.deviceId}})
         return result.deletedCount === 1
     },
