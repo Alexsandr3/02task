@@ -87,13 +87,11 @@ export const deviceRepositories = {
         })
         return result.deletedCount === 1
     },
-    async deleteDevices(payload: PayloadType): Promise<boolean> {
-        const result = await deviceCollection.deleteMany({userId: payload.userId, deviceId: {$ne: payload.deviceId}})
-        return result.deletedCount === 1
+    async deleteDevices(payload: PayloadType) {
+        return  await deviceCollection.deleteMany({userId: payload.userId, deviceId: {$ne: payload.deviceId}})
     },
-    async deleteDeviceByDeviceId(deviceId: string): Promise<boolean> {
-        const result = await deviceCollection.deleteMany({deviceId: deviceId})
-        return result.deletedCount === 1
+    async deleteDeviceByDeviceId(deviceId: string) {
+        return  await deviceCollection.deleteMany({deviceId: deviceId})
     },
     async deleteAll() {
         await deviceCollection.deleteMany({})
