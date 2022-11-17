@@ -53,6 +53,15 @@ export const deviceRepositories = {
             return result
         }
     },
+    async findDeviceByDeviceId(deviceId: string): Promise<DeviceDBType | null> {
+        const result = await deviceCollection
+            .findOne({deviceId: deviceId})
+        if (!result) {
+            return null
+        } else {
+            return result
+        }
+    },
     async updateDevice(payload: PayloadType): Promise<boolean> {
         const dateCreatedToken = (new Date(payload.iat)).toISOString();
         const dateExpiredToken = (new Date(payload.exp)).toISOString();
