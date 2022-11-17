@@ -83,9 +83,9 @@ export const deviceRepositories = {
         const result = await deviceCollection.deleteMany({userId: userId})
         return result.deletedCount === 1
     },
-    async deleteDeviceByDeviceId(deviceId: string): Promise<boolean> {
+    async deleteDeviceByDeviceId(payload: PayloadType): Promise<boolean> {
        // const result = await deviceCollection.deleteOne({deviceId: deviceId})
-        const result = await deviceCollection.deleteMany({deviceId:{$nin:[deviceId]}})
+        const result = await deviceCollection.deleteMany({userId: payload.userId, deviceId: {$ne: payload.deviceId}})
         return result.deletedCount === 1
     },
     async deleteAll() {
