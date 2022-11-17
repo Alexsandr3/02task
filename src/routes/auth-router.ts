@@ -15,7 +15,7 @@ import {
 import {BodyParams_UserInputModel} from "../models/BodyParams_UserInputModel";
 import {usersAccountValidations} from "../middlewares/users-validation-middleware";
 import {MeViewModel} from "../types/users_types";
-import {checkRefreshTokenMiddleware} from "../middlewares/refreshtoken-middleware";
+import {checkPayloadTokena} from "../middlewares/refreshtoken-middleware";
 import {limiter} from "../middlewares/ip-client-middleware";
 
 
@@ -32,7 +32,7 @@ authRoute.post('/login', limiter, loginValidations, async (req: RequestWithBody<
       res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
    }
 })
-authRoute.post('/refresh-token', checkRefreshTokenMiddleware, async (req: Request, res: Response) => {
+authRoute.post('/refresh-token', checkPayloadTokena, async (req: Request, res: Response) => {
    const token = await usersService.verifyToken(req.payload)
    if (token) {
       res.cookie('refreshToken', token.refreshToken, {httpOnly: true, secure: true});
@@ -79,7 +79,7 @@ authRoute.post('/registration-email-resending', limiter, async (req: RequestWith
       })
    }
 })
-authRoute.post('/logout', checkRefreshTokenMiddleware, async (req: Request, res: Response) => {
+authRoute.post('/logout', checkPayloadTokena, async (req: Request, res: Response) => {
    const token = await usersService.verifyTokenForDeleteDevice(req.payload)
    if (token) {
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)

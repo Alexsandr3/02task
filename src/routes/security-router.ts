@@ -1,7 +1,7 @@
 import {Request, Response, Router} from "express";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
 import {deviceQueryRepositories} from "../repositories/device-query-repositories";
-import {checkRefreshTokenMiddleware} from "../middlewares/refreshtoken-middleware";
+import {checkPayloadTokena} from "../middlewares/refreshtoken-middleware";
 import {DeviceViewModel} from "../types/device_types";
 import {deviceRepositories} from "../repositories/device-db-repositories";
 import {validationInputMiddleware} from "../middlewares/check-valid-devices-middleware";
@@ -10,7 +10,7 @@ import {validationInputMiddleware} from "../middlewares/check-valid-devices-midd
 export const securityRoute = Router({})
 
 
-securityRoute.get('/devices', checkRefreshTokenMiddleware, async (req: Request, res: Response<DeviceViewModel[] | null>) => {
+securityRoute.get('/devices', checkPayloadTokena, async (req: Request, res: Response<DeviceViewModel[] | null>) => {
    const devices = await deviceQueryRepositories.findDevices(req.payload.userId)
    if (devices) {
       res.send(devices).status(HTTP_STATUSES.OK_200) //
@@ -18,7 +18,7 @@ securityRoute.get('/devices', checkRefreshTokenMiddleware, async (req: Request, 
       res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
    }
 })
-securityRoute.delete('/devices', checkRefreshTokenMiddleware, async (req: Request, res: Response<boolean>) => {
+securityRoute.delete('/devices', checkPayloadTokena, async (req: Request, res: Response<boolean>) => {
    const isDeleted = await deviceRepositories.deleteDevices(req.payload)
    if (isDeleted) {
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
