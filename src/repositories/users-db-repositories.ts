@@ -1,4 +1,4 @@
-import {refreshTokenCollection, usersCollection} from "../routes/db";
+import {usersCollection} from "../routes/db";
 import {ObjectId} from "mongodb";
 import {UsersAcountDBType, UsersViewType} from "../types/users_types";
 
@@ -46,13 +46,6 @@ export const usersRepositories = {
             }
         })
         return result.modifiedCount === 1
-    },
-    async saveExpiredRefreshToken(refreshToken: string) {
-        return await refreshTokenCollection.insertOne({refreshCode: refreshToken})
-    },
-    async findUsedRefreshToken(refreshToken: string): Promise<boolean> {
-        const result = await refreshTokenCollection.findOne({refreshCode: refreshToken})
-        return !!result; //to simplify if
     },
     async deleteAll() {
         await usersCollection.deleteMany({})

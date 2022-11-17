@@ -89,6 +89,5 @@ export const deviceRepositories = {
     },
     async deleteAll() {
         await deviceCollection.deleteMany({})
-    },
-
+    }
 }

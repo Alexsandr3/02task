@@ -14,6 +14,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import {securityRoute} from "./routes/security-router";
 import {deviceRepositories} from "./repositories/device-db-repositories";
+import {ipRepositories} from "./repositories/ip-db-repositories";
 
 export const app = express()
 
@@ -47,5 +48,6 @@ app.delete('/testing/all-data', (req: Request, res: Response) => {
     usersRepositories.deleteAll();
     commentsRepositories.deleteAll();
     deviceRepositories.deleteAll();
+    ipRepositories.deleteAll();
     res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })

@@ -16,11 +16,12 @@ import {BodyParams_UserInputModel} from "../models/BodyParams_UserInputModel";
 import {usersAccountValidations} from "../middlewares/users-validation-middleware";
 import {MeViewModel} from "../types/users_types";
 import {checkRefreshTokenMiddleware} from "../middlewares/refreshtoken-middleware";
+import {limiter} from "../middlewares/ip-client-middleware";
 
 
 export const authRoute = Router({})
 
-authRoute.post('/login', loginValidations, async (req: RequestWithBody<BodyParams_LoginInputModel>, res: Response) => {
+authRoute.post('/login', limiter, loginValidations, async (req: RequestWithBody<BodyParams_LoginInputModel>, res: Response) => {
    const ipAddress = req.ip
    const deviceName = req.headers["user-agent"]
    const token = await usersService.checkCredentials(req.body.login, req.body.password, ipAddress, deviceName!)
@@ -32,17 +33,17 @@ authRoute.post('/login', loginValidations, async (req: RequestWithBody<BodyParam
    }
 })
 authRoute.post('/refresh-token', checkRefreshTokenMiddleware, async (req: Request, res: Response) => {
-   const token =  await usersService.verifyToken(req.payload)
+   const token = await usersService.verifyToken(req.payload)
    if (token) {
-      res.cookie('refreshToken',token.refreshToken,{httpOnly:true, secure: true});
+      res.cookie('refreshToken', token.refreshToken, {httpOnly: true, secure: true});
       res.send({'accessToken': token.accessToken})
    } else {
       res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
    }
 })
-authRoute.post('/registration-confirmation', async (req: RequestWithBody<BodyParams_RegistrationConfirmationCodeInputModel>, res: Response) => {
+authRoute.post('/registration-confirmation', limiter, async (req: RequestWithBody<BodyParams_RegistrationConfirmationCodeInputModel>, res: Response) => {
    const result = await usersService.confirmByCode(req.body.code)
-   if(result){
+   if (result) {
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {
       res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
@@ -55,17 +56,17 @@ authRoute.post('/registration-confirmation', async (req: RequestWithBody<BodyPar
       })
    }
 })
-authRoute.post('/registration',  usersAccountValidations, async (req: RequestWithBody<BodyParams_UserInputModel>, res: Response) => {
+authRoute.post('/registration', limiter, usersAccountValidations, async (req: RequestWithBody<BodyParams_UserInputModel>, res: Response) => {
    const user = await usersService.createUser(req.body.login, req.body.email, req.body.password)
-   if(user){
+   if (user) {
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {
       res.status(HTTP_STATUSES.BAD_REQUEST_400).send({})
    }
 })
-authRoute.post('/registration-email-resending',async (req: RequestWithBody<BodyParams_RegistrationEmailResendingInputModel>, res: Response) => {
+authRoute.post('/registration-email-resending', limiter, async (req: RequestWithBody<BodyParams_RegistrationEmailResendingInputModel>, res: Response) => {
    const result = await usersService.resendingEmail(req.body.email)
-   if(result){
+   if (result) {
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {
       res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
