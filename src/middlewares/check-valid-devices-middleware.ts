@@ -16,6 +16,6 @@ export const checkValidDeviceMiddleware = async (req: Request, res: Response, ne
   //  if (payload.deviceId !== req.params.id) return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
     const user = await deviceRepositories.findDeviceByUserId(payload.userId)
     if (payload.userId !== user?.userId) return res.sendStatus(HTTP_STATUSES.FORBIDDEN_403)
-    req.payload = payload
+  //  req.payload = payload
     next()
 }
