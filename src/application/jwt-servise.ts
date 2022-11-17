@@ -11,7 +11,7 @@ export const jwtService = {
             userId: device.userId,
             deviceId: device.deviceId,
             lastActiveDate: device.lastActiveDate,
-        }, settings.REFRESH_TOKEN_SECRET, {expiresIn: '10s'})
+        }, settings.REFRESH_TOKEN_SECRET, {expiresIn: '20s'})
         const returnedTokens: TokensType = {
             accessToken,
             refreshToken
