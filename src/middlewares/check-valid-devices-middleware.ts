@@ -7,6 +7,7 @@ import {deviceRepositories} from "../repositories/device-db-repositories";
 export const checkValidDeviceMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     const refreshToken = req.cookies.refreshToken
     if (!refreshToken) return res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
+    if (!req.params.id) return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
     const payload = await jwtService.verifyToken(refreshToken)
     const user = await deviceRepositories.findDeviceByUserId(payload.userId)
     const dateExp = new Date(payload.exp)
