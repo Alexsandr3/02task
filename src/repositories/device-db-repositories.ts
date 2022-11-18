@@ -1,8 +1,6 @@
 import {deviceCollection} from "../routes/db";
 import {ObjectId} from "mongodb";
-import {UsersAcountDBType} from "../types/users_types";
 import {DeviceDBType} from "../types/device_types";
-import {randomUUID} from "crypto";
 
 
 
@@ -16,15 +14,17 @@ export type PayloadType = {
 
 
 export const deviceRepositories = {
-    async createDevice(user: UsersAcountDBType, ipAddress: string, deviceName: string, dateOfLogin: string) {
+    async createDevice(userId: string, ipAddress: string, deviceName: string, deviceId: string, exp: number, iat: number) {
+        const dateCreatedToken = (new Date(iat*1000)).toISOString();
+        const dateExpiredToken = (new Date(exp*1000)).toISOString();
         const newDevice: DeviceDBType = {
             _id: new ObjectId(),
-            userId: user._id.toString(),
+            userId: userId,
             ip: ipAddress,
             title: deviceName,
-            lastActiveDate: dateOfLogin,
-            expiredDate: new Date().toISOString(),
-            deviceId: randomUUID()
+            lastActiveDate: dateCreatedToken,
+            expiredDate: dateExpiredToken,
+            deviceId: deviceId
         }
         console.log('newDevice||||_____', newDevice)
         await deviceCollection.insertOne(newDevice)
@@ -91,7 +91,6 @@ export const deviceRepositories = {
             ]
         }, {
             $set: {
-             //   lastActiveDate: dateCreatedToken,
                 expiredDate: dateExpiredToken
             }
         })

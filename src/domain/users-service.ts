@@ -7,6 +7,7 @@ import add from 'date-fns/add'
 import {ObjectId} from "mongodb";
 import {emailManagers} from "../managers/email-managers";
 import {deviceRepositories, PayloadType} from "../repositories/device-db-repositories";
+import {randomUUID} from "crypto";
 
 
 export const usersService = {
@@ -49,22 +50,18 @@ export const usersService = {
         if (!user) return null;
         const result = await this._compareHash(password, user.accountData.passwordHash)
         if (!result) return null;
-        const dateOfLogin = new Date().toISOString()
-        const device = await deviceRepositories.createDevice(user, ipAddress, deviceName, dateOfLogin)
-        const token = await jwtService.createJwt(device.userId, device.deviceId)
+        const deviceId = randomUUID()
+        const userId = user._id.toString()
+        const token = await jwtService.createJwt(userId, deviceId)
         const payloadNew = await jwtService.verifyToken(token.refreshToken)
-        await deviceRepositories.updateExpDateDevice(payloadNew)
+        await deviceRepositories.createDevice(userId, ipAddress, deviceName, deviceId, payloadNew.exp, payloadNew.iat)
         console.log('0101010 - payloadNew.exp---', payloadNew.exp)
         console.log('0101010 - tokenREFRESH ---', token.refreshToken)
         return token
     },
     async refreshToken(payload: PayloadType) {
-        //const device = await deviceRepositories.findDevice(payload)
-        //if (!device) return null
-       // const newTokens = await jwtService.createJwt(payload.userId, payload.deviceId, payload.lastActiveDate)
         const newTokens = await jwtService.createJwt(payload.userId, payload.deviceId)
         const payloadNew = await jwtService.verifyToken(newTokens.refreshToken)
-
         const updateDevice = await deviceRepositories.updateDevice(payloadNew)
         console.log("REFRESHtoken.refreshToken-0-0-0-0", newTokens.refreshToken)
         if (!updateDevice) return null
