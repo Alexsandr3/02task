@@ -11,7 +11,8 @@ const blogWithNewId = (object: BlogsDBType): BlogsViewType => {
     return {
         id: object._id?.toString(),
         name: object.name,
-        youtubeUrl: object.youtubeUrl,
+        description: object.description,
+        websiteUrl: object.websiteUrl,
         createdAt: object.createdAt
     }
 }
