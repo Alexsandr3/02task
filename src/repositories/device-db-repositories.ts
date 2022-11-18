@@ -98,6 +98,10 @@ export const deviceRepositories = {
         })
         return result.deletedCount === 1
     },
+    async findByIdDeviceAndUserId(userId: string, deviceId: string){
+        return  await deviceCollection.findOne({userId,deviceId},)
+
+    },
     async deleteDevices(payload: PayloadType) {
         return  await deviceCollection.deleteMany({userId: payload.userId, deviceId: {$ne: payload.deviceId}})
     },
