@@ -62,7 +62,7 @@ export const usersService = {
     async refreshToken(payload: PayloadType) {
         const newTokens = await jwtService.createJwt(payload.userId, payload.deviceId)
         const payloadNew = await jwtService.verifyToken(newTokens.refreshToken)
-        const updateDevice = await deviceRepositories.updateDevice(payloadNew)
+        const updateDevice = await deviceRepositories.updateDevice(payloadNew, payload.iat)
         console.log("REFRESHtoken.refreshToken-0-0-0-0", newTokens.refreshToken)
         if (!updateDevice) return null
         return newTokens

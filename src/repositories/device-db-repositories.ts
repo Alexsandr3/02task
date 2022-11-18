@@ -7,7 +7,6 @@ import {DeviceDBType} from "../types/device_types";
 export type PayloadType = {
     userId: string//"6376111dfe0c28e48bc83560",
     deviceId: string//"ef83c60c-347d-408c-80c0-bc430186b525",
-    lastActiveDate: string
     iat: number
     exp: number
 }
@@ -31,12 +30,13 @@ export const deviceRepositories = {
         return newDevice
     },
     async findDevice(payload: PayloadType): Promise<DeviceDBType | null> {
+        const dateCreatedToken = (new Date(payload.iat*1000)).toISOString();
         const result = await deviceCollection
             .findOne({
                 $and: [
                     {userId: {$eq: payload.userId}},
                     {deviceId: {$eq: payload.deviceId}},
-                    {lastActiveDate: {$eq: payload.lastActiveDate}} //?!
+                    {lastActiveDate: {$eq: dateCreatedToken}} //?!
                 ]
             })
         if (!result) {
@@ -63,18 +63,19 @@ export const deviceRepositories = {
             return result
         }
     },
-    async updateDevice(payload: PayloadType): Promise<boolean> {
-        const dateCreatedToken = (new Date(payload.iat*1000)).toISOString();
+    async updateDevice(payload: PayloadType, oldIat: number): Promise<boolean> {
+        const dateCreatedOldToken = (new Date(oldIat*1000)).toISOString();
+        const dateCreateToken = (new Date(payload.iat*1000)).toISOString();
         const dateExpiredToken = (new Date(payload.exp*1000)).toISOString();
         const result = await deviceCollection.updateOne({
             $and: [
                 {userId: {$eq: payload.userId}},
                 {deviceId: {$eq: payload.deviceId}},
-                {lastActiveDate: {$eq: dateCreatedToken}},
+                {lastActiveDate: {$eq: dateCreatedOldToken}},
             ]
         }, {
             $set: {
-                lastActiveDate: dateCreatedToken,
+                lastActiveDate: dateCreateToken,
                 expiredDate: dateExpiredToken
             }
         })
