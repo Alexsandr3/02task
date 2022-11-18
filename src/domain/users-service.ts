@@ -54,6 +54,8 @@ export const usersService = {
         const token = await jwtService.createJwt(device.userId, device.deviceId, device.lastActiveDate)
         const payloadNew = await jwtService.verifyToken(token.refreshToken)
         await deviceRepositories.updateExpDateDevice(payloadNew)
+        console.log('0101010 - payloadNew.exp---', payloadNew.exp)
+        console.log('0101010 - tokenREFRESH ---', token.refreshToken)
         return token
     },
     async verifyToken(payload: PayloadType) {

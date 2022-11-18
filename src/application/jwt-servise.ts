@@ -1,8 +1,6 @@
 import jwt from 'jsonwebtoken'
 import {settings} from "../settings";
 import {TokensType} from "../types/token_types";
-import {DeviceDBType} from "../types/device_types";
-import {PayloadType} from "../repositories/device-db-repositories";
 
 
 export const jwtService = {
