@@ -12,5 +12,6 @@ export const checkPayloadTokena = async (req: Request, res: Response, next: Next
     const user = await deviceRepositories.findDeviceByUserId(payload.userId)
     if (payload.userId !== user?.userId) return res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
     req.payload = payload
+    console.log('pre -payload"REFRESHtoken.refreshToken-0-0-0-0"', payload)
     next()
 }
