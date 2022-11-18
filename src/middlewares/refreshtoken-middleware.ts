@@ -8,6 +8,8 @@ export const checkPayloadTokena = async (req: Request, res: Response, next: Next
     const refreshToken = req.cookies.refreshToken
     if (!refreshToken) return res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
     const payload = await jwtService.verifyToken(refreshToken)
+
+
     if (!payload.userId) return res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
     const user = await deviceRepositories.findDeviceByUserId(payload.userId)
     if (payload.userId !== user?.userId) return res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)

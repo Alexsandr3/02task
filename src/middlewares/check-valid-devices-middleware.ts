@@ -14,6 +14,7 @@ export const validationInputMiddleware = async (req: Request, res: Response, nex
     const payload = await jwtService.verifyToken(refreshToken)
     console.log('002-payload----',payload)
     const dateExp = new Date(payload.exp * 1000)
+    //const dateIat = new Date(payload.iat * 1000)
     console.log('003-dateExp----',dateExp)
     console.log('004-newDate----',new Date())
     if (payload.deviceId !== req.params.id) return res.status(HTTP_STATUSES.FORBIDDEN_403).send("incorrect deviceId") ///???
