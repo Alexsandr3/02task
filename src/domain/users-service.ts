@@ -44,15 +44,17 @@ export const usersService = {
     async deleteUserById(id: string): Promise<boolean> {
         return usersRepositories.deleteUserById(id)
     },
-    async checkCredentials(loginOrEmail: string, password: string, ipAddress: string, deviceName: string) {
+    async login(loginOrEmail: string, password: string, ipAddress: string, deviceName: string) {
         const user: any = await usersRepositories.findByLoginOrEmail(loginOrEmail)
         if (!user) return null;
         const result = await this._compareHash(password, user.accountData.passwordHash)
         if (!result) return null;
         const dateOfLogin = new Date().toISOString()
         const device = await deviceRepositories.createDevice(user, ipAddress, deviceName, dateOfLogin)
-        if (!device) return null;
-        return await jwtService.createJwt(device.userId, device.deviceId, device.lastActiveDate )
+        const token = await jwtService.createJwt(device.userId, device.deviceId, device.lastActiveDate)
+        const payloadNew = await jwtService.verifyToken(token.refreshToken)
+        await deviceRepositories.updateExpDateDevice(payloadNew)
+        return token
     },
     async verifyToken(payload: PayloadType) {
        // const device = await deviceRepositories.findDevice(payload)

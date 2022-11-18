@@ -22,8 +22,8 @@ export const deviceRepositories = {
             userId: user._id.toString(),
             ip: ipAddress,
             title: deviceName,
-            lastActiveDate: new Date().toISOString(),
-            expiredDate: dateOfLogin,
+            lastActiveDate: dateOfLogin,
+            expiredDate: new Date().toISOString(),
             deviceId: randomUUID()
         }
         await deviceCollection.insertOne(newDevice)
@@ -73,6 +73,22 @@ export const deviceRepositories = {
         }, {
             $set: {
                 lastActiveDate: dateCreatedToken,
+                expiredDate: dateExpiredToken
+            }
+        })
+        return result.modifiedCount === 1
+    },
+    async updateExpDateDevice(payload: PayloadType){
+       // const dateCreatedToken = (new Date(payload.iat)).toISOString();
+        const dateExpiredToken = (new Date(payload.exp)).toISOString();
+        const result = await deviceCollection.updateOne({
+            $and: [
+                {userId: {$eq: payload.userId}},
+                {deviceId: {$eq: payload.deviceId}},
+            ]
+        }, {
+            $set: {
+             //   lastActiveDate: dateCreatedToken,
                 expiredDate: dateExpiredToken
             }
         })

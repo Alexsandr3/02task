@@ -24,7 +24,7 @@ export const authRoute = Router({})
 authRoute.post('/login', limiter, loginValidations, async (req: RequestWithBody<BodyParams_LoginInputModel>, res: Response) => {
    const ipAddress = req.ip
    const deviceName = req.headers["user-agent"]
-   const token = await usersService.checkCredentials(req.body.login, req.body.password, ipAddress, deviceName!)
+   const token = await usersService.login(req.body.login, req.body.password, ipAddress, deviceName!)
    if (token) {
       res.cookie('refreshToken', token.refreshToken, {httpOnly: true, secure: true});
       res.send({'accessToken': token.accessToken})
