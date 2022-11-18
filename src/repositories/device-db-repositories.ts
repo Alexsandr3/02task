@@ -45,9 +45,9 @@ export const deviceRepositories = {
             return result
         }
     },
-    async findDeviceByUserId(userId: string): Promise<DeviceDBType | null> {
+    async findDeviceByUserId(userId: string, deviceId: string): Promise<DeviceDBType | null> {
         const result = await deviceCollection
-            .findOne({userId: userId})
+            .findOne({userId: userId, deviceId: deviceId})
         if (!result) {
             return null
         } else {
@@ -76,22 +76,6 @@ export const deviceRepositories = {
         }, {
             $set: {
                 lastActiveDate: dateCreateToken,
-                expiredDate: dateExpiredToken
-            }
-        })
-        return result.modifiedCount === 1
-    },
-    async updateExpDateDevice(payload: PayloadType){
-       // const dateCreatedToken = (new Date(payload.iat)).toISOString();
-        const exp = payload.exp*1000
-        const dateExpiredToken = (new Date(exp)).toISOString();
-        const result = await deviceCollection.updateOne({
-            $and: [
-                {userId: {$eq: payload.userId}},
-                {deviceId: {$eq: payload.deviceId}},
-            ]
-        }, {
-            $set: {
                 expiredDate: dateExpiredToken
             }
         })

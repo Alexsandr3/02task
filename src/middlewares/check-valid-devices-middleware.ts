@@ -17,11 +17,14 @@ export const validationInputMiddleware = async (req: Request, res: Response, nex
     //const dateIat = new Date(payload.iat * 1000)
     console.log('003-dateExp----',dateExp)
     console.log('004-newDate----',new Date())
-    if (payload.deviceId !== req.params.id) return res.status(HTTP_STATUSES.FORBIDDEN_403).send("incorrect deviceId") ///???
+  //  if (payload.deviceId !== req.params.id) return res.status(HTTP_STATUSES.FORBIDDEN_403).send("incorrect deviceId") ///???
     if (dateExp < new Date()) return res.status(HTTP_STATUSES.FORBIDDEN_403).send('Incorrect date EXP') //????
-    const user = await deviceRepositories.findDeviceByUserId(payload.userId)
-    console.log('005-user----',user)
-    if (payload.userId !== user?.userId) return res.status(HTTP_STATUSES.FORBIDDEN_403).send("Incorrect userId")
-  //  req.payload = payload
+    const userD = await deviceRepositories.findDeviceByUserId(payload.userId, req.params.id)
+    if(userD) return res.status(HTTP_STATUSES.FORBIDDEN_403).send('Incorrect userId deviceId') //????
+
+    //find device userId deviceId
+    //
+   // if (payload.userId !== userD?.userId) return res.status(HTTP_STATUSES.FORBIDDEN_403).send("Incorrect userId")
+   // if (payload.userId !== user?.userI) return res.status(HTTP_STATUSES.FORBIDDEN_403).send("Incorrect userId")
     next()
 }
