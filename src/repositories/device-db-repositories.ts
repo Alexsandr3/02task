@@ -16,14 +16,14 @@ export type PayloadType = {
 
 
 export const deviceRepositories = {
-    async createDevice(user: UsersAcountDBType, ipAddress: string, deviceName: string) {
+    async createDevice(user: UsersAcountDBType, ipAddress: string, deviceName: string, dateOfLogin: string) {
         const newDevice: DeviceDBType = {
             _id: new ObjectId(),
             userId: user._id.toString(),
             ip: ipAddress,
             title: deviceName,
             lastActiveDate: new Date().toISOString(),
-            expiredDate: ' ',
+            expiredDate: dateOfLogin,
             deviceId: randomUUID()
         }
         await deviceCollection.insertOne(newDevice)
@@ -34,8 +34,8 @@ export const deviceRepositories = {
             .findOne({
                 $and: [
                     {userId: {$eq: payload.userId}},
-                    {deviceId: {$eq: payload.deviceId}},
-                    {lastActiveDate: {$eq: payload.lastActiveDate}}
+                    {deviceId: {$eq: payload.deviceId}}
+                    //{lastActiveDate: {$eq: payload.lastActiveDate}}
                 ]
             })
         if (!result) {

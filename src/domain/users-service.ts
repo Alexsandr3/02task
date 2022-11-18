@@ -49,14 +49,15 @@ export const usersService = {
         if (!user) return null;
         const result = await this._compareHash(password, user.accountData.passwordHash)
         if (!result) return null;
-        const device = await deviceRepositories.createDevice(user, ipAddress, deviceName)
+        const dateOfLogin = new Date().toISOString()
+        const device = await deviceRepositories.createDevice(user, ipAddress, deviceName, dateOfLogin)
         if (!device) return null;
-        return await jwtService.createJwt(device)
+        return await jwtService.createJwt(device.userId, device.deviceId, device.lastActiveDate )
     },
     async verifyToken(payload: PayloadType) {
-        const device = await deviceRepositories.findDevice(payload)
-        if (!device) return null
-        const newTokens = await jwtService.createJwt(device)
+       // const device = await deviceRepositories.findDevice(payload)
+      //  if (!device) return null
+        const newTokens = await jwtService.createJwt(payload.userId, payload.deviceId, payload.lastActiveDate)
         const payloadNew = await jwtService.verifyToken(newTokens.refreshToken)
         const updateDevice = await deviceRepositories.updateDevice(payloadNew)
         if (!updateDevice) return null

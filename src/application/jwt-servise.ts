@@ -2,15 +2,16 @@ import jwt from 'jsonwebtoken'
 import {settings} from "../settings";
 import {TokensType} from "../types/token_types";
 import {DeviceDBType} from "../types/device_types";
+import {PayloadType} from "../repositories/device-db-repositories";
 
 
 export const jwtService = {
-    async createJwt(device: DeviceDBType) {
-        const accessToken = jwt.sign({userId: device.userId}, settings.ACCESS_TOKEN_SECRET, {expiresIn: '10s'})
+    async createJwt(userId: string, deviceId: string, lastActiveDate: string) {
+        const accessToken = jwt.sign({userId: userId}, settings.ACCESS_TOKEN_SECRET, {expiresIn: '10s'})
         const refreshToken = jwt.sign({
-            userId: device.userId,
-            deviceId: device.deviceId,
-            lastActiveDate: device.lastActiveDate,
+            userId: userId,
+            deviceId: deviceId,
+            lastActiveDate: lastActiveDate,
         }, settings.REFRESH_TOKEN_SECRET, {expiresIn: '20s'})
         const returnedTokens: TokensType = {
             accessToken,
