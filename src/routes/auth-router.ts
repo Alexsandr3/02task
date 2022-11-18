@@ -15,8 +15,8 @@ import {
 import {BodyParams_UserInputModel} from "../models/BodyParams_UserInputModel";
 import {usersAccountValidations} from "../middlewares/users-validation-middleware";
 import {MeViewModel} from "../types/users_types";
-import {checkPayloadTokena} from "../middlewares/check-Payload-Tokena";
-import {limiter} from "../middlewares/ip-client-middleware";
+import {checkRefreshTokena} from "../middlewares/check-refresh-tokena";
+import {limiter} from "../middlewares/limiter-middleware";
 
 
 export const authRoute = Router({})
@@ -32,7 +32,7 @@ authRoute.post('/login', limiter, loginValidations, async (req: RequestWithBody<
       res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
    }
 })
-authRoute.post('/refresh-token', checkPayloadTokena, async (req: Request, res: Response) => {
+authRoute.post('/refresh-token', checkRefreshTokena, async (req: Request, res: Response) => {
    const token = await usersService.refreshToken(req.payload)
 
    if (token) {
@@ -80,7 +80,7 @@ authRoute.post('/registration-email-resending', limiter, async (req: RequestWith
       })
    }
 })
-authRoute.post('/logout', checkPayloadTokena, async (req: Request, res: Response) => {
+authRoute.post('/logout', checkRefreshTokena, async (req: Request, res: Response) => {
    const token = await usersService.verifyTokenForDeleteDevice(req.payload)
    if (token) {
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)

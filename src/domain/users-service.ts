@@ -8,6 +8,7 @@ import {ObjectId} from "mongodb";
 import {emailManagers} from "../managers/email-managers";
 import {deviceRepositories, PayloadType} from "../repositories/device-db-repositories";
 import {randomUUID} from "crypto";
+import {TokensType} from "../types/token_types";
 
 
 export const usersService = {
@@ -45,7 +46,7 @@ export const usersService = {
     async deleteUserById(id: string): Promise<boolean> {
         return usersRepositories.deleteUserById(id)
     },
-    async login(loginOrEmail: string, password: string, ipAddress: string, deviceName: string) {
+    async login(loginOrEmail: string, password: string, ipAddress: string, deviceName: string): Promise<TokensType | null> {
         const user: any = await usersRepositories.findByLoginOrEmail(loginOrEmail)
         if (!user) return null;
         const result = await this._compareHash(password, user.accountData.passwordHash)
@@ -60,7 +61,7 @@ export const usersService = {
     async refreshToken(payload: PayloadType) {
         const newTokens = await jwtService.createJwt(payload.userId, payload.deviceId)
         const payloadNew = await jwtService.verifyToken(newTokens.refreshToken)
-        const updateDevice = await deviceRepositories.updateDevice(payloadNew, payload.iat)
+        const updateDevice = await deviceRepositories.updateDateDevice(payloadNew, payload.iat)
         if (!updateDevice) return null
         return newTokens
     },

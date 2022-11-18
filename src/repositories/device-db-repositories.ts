@@ -15,9 +15,9 @@ export type PayloadType = {
 
 
 export const deviceRepositories = {
-    async createDevice(userId: string, ipAddress: string, deviceName: string, deviceId: string, exp: number, iat: number) {
-        const dateCreatedToken = (new Date(iat*1000)).toISOString();
-        const dateExpiredToken = (new Date(exp*1000)).toISOString();
+    async createDevice(userId: string, ipAddress: string, deviceName: string, deviceId: string, exp: number, iat: number):Promise<DeviceDBType> {
+        const dateCreatedToken = (new Date(iat * 1000)).toISOString();
+        const dateExpiredToken = (new Date(exp * 1000)).toISOString();
         const newDevice: DeviceDBType = {
             _id: new ObjectId(),
             userId: userId,
@@ -71,10 +71,10 @@ export const deviceRepositories = {
             return result
         }
     },
-    async updateDevice(payload: PayloadType, oldIat: number): Promise<boolean> {
-        const dateCreatedOldToken = (new Date(oldIat*1000)).toISOString();
-        const dateCreateToken = (new Date(payload.iat*1000)).toISOString();
-        const dateExpiredToken = (new Date(payload.exp*1000)).toISOString();
+    async updateDateDevice(payload: PayloadType, oldIat: number): Promise<boolean> {
+        const dateCreatedOldToken = (new Date(oldIat * 1000)).toISOString();
+        const dateCreateToken = (new Date(payload.iat * 1000)).toISOString();
+        const dateExpiredToken = (new Date(payload.exp * 1000)).toISOString();
         const result = await deviceCollection.updateOne({
             $and: [
                 {userId: {$eq: payload.userId}},
