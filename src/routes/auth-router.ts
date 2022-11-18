@@ -25,6 +25,7 @@ authRoute.post('/login', limiter, loginValidations, async (req: RequestWithBody<
    const ipAddress = req.ip
    const deviceName = req.headers["user-agent"]
    const token = await usersService.login(req.body.loginOrEmail, req.body.password, ipAddress, deviceName!)
+   console.log('0001---token-----', token)
    if (token) {
       res.cookie('refreshToken', token.refreshToken, {httpOnly: true, secure: true});
       res.send({'accessToken': token.accessToken})
@@ -34,7 +35,7 @@ authRoute.post('/login', limiter, loginValidations, async (req: RequestWithBody<
 })
 authRoute.post('/refresh-token', checkRefreshTokena, async (req: Request, res: Response) => {
    const token = await usersService.refreshToken(req.payload)
-
+   console.log('0002---token-----', token)
    if (token) {
       res.cookie('refreshToken', token.refreshToken, {httpOnly: true, secure: true});
       res.send({'accessToken': token.accessToken})

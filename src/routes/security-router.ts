@@ -13,6 +13,7 @@ export const securityRoute = Router({})
 
 securityRoute.get('/devices', checkRefreshTokena, async (req: Request, res: Response<DeviceViewModel[] | null>) => {
    const devices = await deviceQueryRepositories.findDevicesSessions(req.payload.userId)
+   console.log('0003---devices-----', devices)
    if (devices) {
       res.send(devices).status(HTTP_STATUSES.OK_200) 
    } else {
