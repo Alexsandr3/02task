@@ -21,7 +21,6 @@ securityRoute.get('/devices', checkPayloadTokena, async (req: Request, res: Resp
 })
 securityRoute.delete('/devices', checkPayloadTokena, async (req: Request, res: Response<boolean>) => {
    const isDeleted = await deviceRepositories.deleteDevices(req.payload)
-   console.log('0000-/devices ----',isDeleted)
    if (isDeleted) {
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {

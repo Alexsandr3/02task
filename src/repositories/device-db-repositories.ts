@@ -26,6 +26,7 @@ export const deviceRepositories = {
             expiredDate: new Date().toISOString(),
             deviceId: randomUUID()
         }
+        console.log('newDevice||||_____', newDevice)
         await deviceCollection.insertOne(newDevice)
         return newDevice
     },
