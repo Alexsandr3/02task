@@ -34,8 +34,8 @@ export const deviceRepositories = {
             .findOne({
                 $and: [
                     {userId: {$eq: payload.userId}},
-                    {deviceId: {$eq: payload.deviceId}}
-                    //{lastActiveDate: {$eq: payload.lastActiveDate}}
+                    {deviceId: {$eq: payload.deviceId}},
+                    {lastActiveDate: {$eq: payload.lastActiveDate}} //?!
                 ]
             })
         if (!result) {
