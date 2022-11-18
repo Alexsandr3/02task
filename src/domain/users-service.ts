@@ -59,9 +59,10 @@ export const usersService = {
         return token
     },
     async verifyToken(payload: PayloadType) {
-       // const device = await deviceRepositories.findDevice(payload)
-      //  if (!device) return null
-        const newTokens = await jwtService.createJwt(payload.userId, payload.deviceId, payload.lastActiveDate)
+        const device = await deviceRepositories.findDevice(payload)
+        if (!device) return null
+       // const newTokens = await jwtService.createJwt(payload.userId, payload.deviceId, payload.lastActiveDate)
+        const newTokens = await jwtService.createJwt(device.userId, device.deviceId, device.lastActiveDate)
         const payloadNew = await jwtService.verifyToken(newTokens.refreshToken)
         const updateDevice = await deviceRepositories.updateDevice(payloadNew)
         if (!updateDevice) return null
