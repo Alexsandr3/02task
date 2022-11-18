@@ -13,7 +13,7 @@ const deviceForView = (object: DeviceDBType): DeviceViewModel => {
 
 
 export const deviceQueryRepositories = {
-    async findDevices(userId: string): Promise<DeviceViewModel[] | null> {
+    async findDevicesSessions(userId: string): Promise<DeviceViewModel[] | null> {
         const result = (await deviceCollection
             .find({userId: userId}).toArray()).map(foundDevice => deviceForView(foundDevice))
         if (!result) {

@@ -11,9 +11,9 @@ export const securityRoute = Router({})
 
 
 securityRoute.get('/devices', checkRefreshTokena, async (req: Request, res: Response<DeviceViewModel[] | null>) => {
-   const devices = await deviceQueryRepositories.findDevices(req.payload.userId)
+   const devices = await deviceQueryRepositories.findDevicesSessions(req.payload.userId)
    if (devices) {
-      res.send(devices).status(HTTP_STATUSES.OK_200) //
+      res.send(devices).status(HTTP_STATUSES.OK_200) 
    } else {
       res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
    }
