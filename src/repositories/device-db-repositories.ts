@@ -110,5 +110,9 @@ export const deviceRepositories = {
     },
     async deleteAll() {
         await deviceCollection.deleteMany({})
+    },
+    async test (fromDeviceId: string, deleteDeviceId: string, userId: string) {
+        const result = await deviceCollection.find({userId, deviceId: {$or: [{fromDeviceId},{ deleteDeviceId}]}}).toArray()
+        return result.length === 2
     }
 }

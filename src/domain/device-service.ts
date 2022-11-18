@@ -10,5 +10,6 @@ export const deviceService = {
         if (!deviceForDelete) return null
         const isDelete = await deviceRepositories.deleteDeviceByDeviceId(deviceIdForDelete)
         if (!isDelete) return null
+        return true
     }
 }
