@@ -34,7 +34,7 @@ authRoute.post('/login', limiter, loginValidations, async (req: RequestWithBody<
 })
 authRoute.post('/refresh-token', checkPayloadTokena, async (req: Request, res: Response) => {
    const token = await usersService.refreshToken(req.payload)
-   console.log("token.refreshToken-0-0-0-0", token.refreshToken)
+
    if (token) {
       res.cookie('refreshToken', token.refreshToken, {httpOnly: true, secure: true});
       res.send({'accessToken': token.accessToken})

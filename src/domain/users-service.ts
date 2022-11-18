@@ -65,6 +65,7 @@ export const usersService = {
         const newTokens = await jwtService.createJwt(device.userId, device.deviceId, device.lastActiveDate)
         const payloadNew = await jwtService.verifyToken(newTokens.refreshToken)
         const updateDevice = await deviceRepositories.updateDevice(payloadNew)
+        console.log("REFRESHtoken.refreshToken-0-0-0-0", newTokens.refreshToken)
         if (!updateDevice) return null
         return newTokens
     },
