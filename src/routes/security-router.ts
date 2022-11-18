@@ -12,6 +12,7 @@ export const securityRoute = Router({})
 
 securityRoute.get('/devices', checkPayloadTokena, async (req: Request, res: Response<DeviceViewModel[] | null>) => {
    const devices = await deviceQueryRepositories.findDevices(req.payload.userId)
+   console.log('0000-/devices ----',devices)
    if (devices) {
       res.send(devices).status(HTTP_STATUSES.OK_200) //
    } else {
@@ -20,6 +21,7 @@ securityRoute.get('/devices', checkPayloadTokena, async (req: Request, res: Resp
 })
 securityRoute.delete('/devices', checkPayloadTokena, async (req: Request, res: Response<boolean>) => {
    const isDeleted = await deviceRepositories.deleteDevices(req.payload)
+   console.log('0000-/devices ----',isDeleted)
    if (isDeleted) {
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {
@@ -28,6 +30,7 @@ securityRoute.delete('/devices', checkPayloadTokena, async (req: Request, res: R
 })
 securityRoute.delete('/devices/:id', validationInputMiddleware, async (req: Request, res: Response<boolean>) => {
    const isDeleted = await deviceRepositories.deleteDeviceByDeviceId(req.params.id)
+   console.log('0000-/devices/:id ----',isDeleted)
    if (isDeleted) {
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {
