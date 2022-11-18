@@ -70,6 +70,7 @@ export const deviceRepositories = {
             $and: [
                 {userId: {$eq: payload.userId}},
                 {deviceId: {$eq: payload.deviceId}},
+                {lastActiveDate: {$eq: payload.lastActiveDate}},
             ]
         }, {
             $set: {
