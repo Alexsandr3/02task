@@ -40,7 +40,7 @@ blogsRoute.get('/', pageValidations, async (req: RequestWithQeury<QueryParams_Ge
     res.send(blogs)
 })
 blogsRoute.post('/', blogsValidations, async (req: RequestWithBody<BodyParams_BlogInputModel>, res: Response<BlogsViewType>) => {
-    const newBlog = await blogsService.createBlog(req.body.name, req.body.youtubeUrl)
+    const newBlog = await blogsService.createBlog(req.body.name, req.body.description, req.body.websiteUrl)
     return res.status(HTTP_STATUSES.CREATED_201).send(newBlog)
 })
 blogsRoute.get('/:id', checkIdValidForMongodb, async (req: RequestWithParams<URIParams_BlogModel>, res: Response<BlogsViewType>) => {
@@ -84,8 +84,9 @@ blogsRoute.post('/:blogId/posts', prePostsValidationByBlogId, async (req: Reques
 blogsRoute.put('/:id', checkIdValidForMongodb, blogsValidations, async (req: RequestWithParamsAndBody<URIParams_BlogModel, BodyParams_BlogInputModel>, res: Response) => {
     const id = req.params.id
     let name = req.body.name
-    let youtubeUrl = req.body.youtubeUrl
-    const blog = await blogsService.updateBlogById(id, name, youtubeUrl)
+    let description = req.body.description
+    let websiteUrl = req.body.websiteUrl
+    const blog = await blogsService.updateBlogById(id, name, description, websiteUrl)
     if (!blog) {
         res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
         return;

@@ -4,7 +4,11 @@ export type BodyParams_BlogInputModel ={
      */
     name: string
     /**
-     * youtubeUrl: Blog youtube Url
+     * description
      */
-    youtubeUrl: string
+    description: string
+    /**
+     * websiteUrl: Blog website Url
+     */
+    websiteUrl: string
 }

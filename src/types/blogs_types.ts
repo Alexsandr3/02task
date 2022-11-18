@@ -4,14 +4,16 @@ import {ObjectId} from "mongodb";
 export type BlogsViewType = {
     id: string
     name: string
-    youtubeUrl: string
+    description: string
+    websiteUrl: string
     createdAt: string
 }
 
 export type BlogsDBType = {
     _id: ObjectId
     name: string
-    youtubeUrl: string
+    description: string
+    websiteUrl: string
     createdAt: string
 }
 

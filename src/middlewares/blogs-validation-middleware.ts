@@ -10,9 +10,17 @@ const nameValidation =
         .notEmpty()
         .trim()
         .isLength({min:1, max:15})
+const descriptionValidation =
+    body('description',
+        'description must be a string, must not be empty, length must be between 1 and 100 characters')
+        .isString()
+        .notEmpty()
+        .trim()
+        .isLength({min:1, max:500})
 
-const youtubeUrlValidation =
-    body('youtubeUrl',
+
+const websiteUrlValidation =
+    body('websiteUrl',
         'should be valid URL, length from 1 to 100 symbol')
         .isURL()
         .isLength({min: 1, max: 100})
@@ -52,7 +60,8 @@ const sortDirectionValidation =
 export const blogsValidations = [
     checkAutoritionMiddleware,
     nameValidation,
-    youtubeUrlValidation,
+    descriptionValidation,
+    websiteUrlValidation,
     inputValidetionsMiddleware
 ]
 export const pageValidations = [
