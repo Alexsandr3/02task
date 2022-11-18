@@ -6,7 +6,6 @@ import {deviceRepositories} from "../repositories/device-db-repositories";
 
 export const checkRefreshAndIdTokena = async (req: Request, res: Response, next: NextFunction) => {
     const refreshToken = req.cookies.refreshToken
-    req.params.id
     if (!refreshToken) return res.status(HTTP_STATUSES.UNAUTHORIZED_401).send("Did not come refreshToken")
     const payload = await jwtService.verifyToken(refreshToken)
 
