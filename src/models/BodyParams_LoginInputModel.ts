@@ -2,7 +2,7 @@ export type BodyParams_LoginInputModel ={
     /**
      * login: Login User
      */
-    login: string
+    loginOrEmail: string
     /**
      * password: password User
      */
