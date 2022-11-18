@@ -5,11 +5,13 @@ import {DeviceDBType} from "../types/device_types";
 
 
 export type PayloadType = {
-    userId: string//"6376111dfe0c28e48bc83560",
-    deviceId: string//"ef83c60c-347d-408c-80c0-bc430186b525",
+    userId: string
+    deviceId: string
     iat: number
     exp: number
 }
+
+
 
 
 export const deviceRepositories = {
@@ -25,7 +27,6 @@ export const deviceRepositories = {
             expiredDate: dateExpiredToken,
             deviceId: deviceId
         }
-        console.log('newDevice||||_____', newDevice)
         await deviceCollection.insertOne(newDevice)
         return newDevice
     },
@@ -45,9 +46,16 @@ export const deviceRepositories = {
             return result
         }
     },
-    async findDeviceByUserId(userId: string, deviceId: string): Promise<DeviceDBType | null> {
+    async findDeviceForValid(userId: string, deviceId: string, iat: number): Promise<DeviceDBType | null> {
+        const dateCreateToken = (new Date(iat * 1000)).toISOString();
         const result = await deviceCollection
-            .findOne({userId: userId, deviceId: deviceId})
+            .findOne({
+                $and: [
+                    {userId: userId},
+                    {deviceId: deviceId},
+                    {lastActiveDate: dateCreateToken},
+                ]
+            })
         if (!result) {
             return null
         } else {

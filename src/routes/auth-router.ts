@@ -15,7 +15,7 @@ import {
 import {BodyParams_UserInputModel} from "../models/BodyParams_UserInputModel";
 import {usersAccountValidations} from "../middlewares/users-validation-middleware";
 import {MeViewModel} from "../types/users_types";
-import {checkPayloadTokena} from "../middlewares/refreshtoken-middleware";
+import {checkPayloadTokena} from "../middlewares/check-Payload-Tokena";
 import {limiter} from "../middlewares/ip-client-middleware";
 
 

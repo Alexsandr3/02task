@@ -1,10 +1,10 @@
 import {Request, Response, Router} from "express";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
 import {deviceQueryRepositories} from "../repositories/device-query-repositories";
-import {checkPayloadTokena} from "../middlewares/refreshtoken-middleware";
+import {checkPayloadTokena} from "../middlewares/check-Payload-Tokena";
 import {DeviceViewModel} from "../types/device_types";
 import {deviceRepositories} from "../repositories/device-db-repositories";
-import {validationInputMiddleware} from "../middlewares/check-valid-devices-middleware";
+import {checkDeviceId} from "../middlewares/check-Device-Id";
 
 
 export const securityRoute = Router({})
@@ -27,7 +27,7 @@ securityRoute.delete('/devices', checkPayloadTokena, async (req: Request, res: R
       res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
    }
 })
-securityRoute.delete('/devices/:id', validationInputMiddleware, async (req: Request, res: Response<boolean>) => {
+securityRoute.delete('/devices/:id', checkDeviceId, checkPayloadTokena, async (req: Request, res: Response<boolean>) => {
    const isDeleted = await deviceRepositories.deleteDeviceByDeviceId(req.params.id)
    console.log('0000-/devices/:id ----',isDeleted)
    if (isDeleted) {
