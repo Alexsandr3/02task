@@ -34,8 +34,6 @@ export const emailManagers = {
        <p>To finish registration please follow the link below:
           <a href='${link}'>complete registration</a>
       </p>`
-        console.log('03 - link', link)
-        console.log('04 - message', message)
         return await emailAdapter.sendEmail(email, subject, message)
     }
 }

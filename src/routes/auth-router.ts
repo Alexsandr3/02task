@@ -39,7 +39,14 @@ authRoute.post('/password-recovery', limiter, emailValidations, async (req: Requ
    if (result) {
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {
-      res.status(HTTP_STATUSES.BAD_REQUEST_400).send('Email has invalid')
+      res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
+         "errorsMessages": [
+            {
+               "message": "Invalid recoveryCode or you are already registered",
+               "field": "recoveryCode"
+            }
+         ]
+      })
    }
 })
 authRoute.post('/new-password', limiter, passwordValidations, async (req: RequestWithBody<BodyParams_PasswordRecoveryInputModel>, res: Response) => {

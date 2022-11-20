@@ -43,9 +43,7 @@ export const usersService = {
                 }]
             }
         }
-        console.log('00 - user', user)
         const newUser = await usersRepositories.createUser(user)
-        console.log('01 - newUser', newUser)
         try {
             await emailManagers.sendEmailConfirmation(newUser.email, user.emailConfirmation.confirmationCode)
         } catch (error) {
