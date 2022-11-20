@@ -129,7 +129,7 @@ export const usersService = {
     },
     async recoveryEmail(email: string) {
         const user = await usersRepositories.findByLoginOrEmail(email)
-        if (!user) return false;
+        if (!user) return true;
         if (user.emailConfirmation.isConfirmation) return false;
         if (user.emailConfirmation.expirationDate < new Date()) return false;
         const code: any = {
