@@ -142,7 +142,7 @@ export const usersService = {
         }
         const newUser = await usersRepositories.updateCodeRecovery(user._id, code.emailRecovery.recoveryCode, code.emailRecovery.expirationDate)
         try {
-            await emailManagers.sendEmailRecoveryMessage(user.accountData.email, code.emailRecovery.recoveryCode)
+            await emailManagers.sendPasswordRecoveryMessage(user.accountData.email, code.emailRecovery.recoveryCode)
         } catch (error) {
             console.error(error)
             return null
