@@ -9,6 +9,4 @@ export const emailManagers = {
     async sendEmailConfirmation(email: string, confirmationCode: string){
         return await emailAdapter.sendEmail(email, confirmationCode)
     }
-
-
 }

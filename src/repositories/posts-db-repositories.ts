@@ -1,4 +1,4 @@
-import {commentsCollection, postsCollection} from "../routes/db";
+import {commentsCollection, postsCollection} from "./db";
 import {ObjectId} from "mongodb";
 import {blogsQueryRepositories} from "./blogs-query-repositories";
 import {PostsDBType, PostsViewType} from "../types/posts_types";

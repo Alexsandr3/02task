@@ -1,4 +1,4 @@
-import {blogsCollection, postsCollection} from "../routes/db";
+import {blogsCollection, postsCollection} from "./db";
 import {ObjectId} from "mongodb";
 import {postWithNewId} from "./posts-db-repositories";
 import {BlogsDBType, BlogsViewType, PaginatorPostsBlogType} from "../types/blogs_types";

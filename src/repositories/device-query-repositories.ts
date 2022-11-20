@@ -1,4 +1,4 @@
-import {deviceCollection} from "../routes/db";
+import {deviceCollection} from "./db";
 import {DeviceDBType, DeviceViewModel} from "../types/device_types";
 
 
@@ -13,7 +13,7 @@ const deviceForView = (object: DeviceDBType): DeviceViewModel => {
 
 
 export const deviceQueryRepositories = {
-    async findDevicesSessions(userId: string): Promise<DeviceViewModel[] | null> {
+    async findDevices(userId: string): Promise<DeviceViewModel[] | null> {
         const result = (await deviceCollection
             .find({userId: userId}).toArray()).map(foundDevice => deviceForView(foundDevice))
         if (!result) {

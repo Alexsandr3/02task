@@ -1,4 +1,4 @@
-import {usersCollection} from "../routes/db";
+import {usersCollection} from "./db";
 import {paginatorUsersType, MeViewModel, UsersViewType, UsersAcountDBType} from "../types/users_types";
 import {PaginatorType} from "../models/PaginatorType";
 import {ObjectId} from "mongodb";

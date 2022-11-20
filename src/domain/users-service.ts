@@ -31,6 +31,16 @@ export const usersService = {
                 sentEmails: [{
                     sentDate: new Date()
                 }]
+            },
+            emailRecovery: {
+                recoveryCode: randomUUID(),
+                expirationDate: add(new Date(), {
+                    hours: 1
+                }),
+                isConfirmation: false,
+                sentEmails: [{
+                    sentDate: new Date()
+                }]
             }
         }
         const newUser = await usersRepositories.createUser(user)
@@ -66,7 +76,7 @@ export const usersService = {
         return newTokens
     },
     async verifyTokenForDeleteDevice(payload: PayloadType) {
-        const device = await deviceRepositories.findDevice(payload)
+        const device = await deviceRepositories.findDeviceForDelete(payload)
         if (!device) return null
         const isDeleted = await deviceRepositories.deleteDevice(payload)
         if (!isDeleted) return null
@@ -86,6 +96,15 @@ export const usersService = {
         if (user.emailConfirmation.expirationDate < new Date()) return false;
         return await usersRepositories.updateConfirmation(user._id)
     },
+    async recoveryByCode(newPassword: string, code: string): Promise<boolean> {
+        const user = await usersRepositories.findUserByRecoveryCode(code)
+        if (!user) return false
+        if (user.emailRecovery.isConfirmation) return false;
+        if (user.emailRecovery.recoveryCode !== code) return false;
+        if (user.emailConfirmation.expirationDate < new Date()) return false;
+        const passwordHash = await this._generateHash(newPassword)
+        return await usersRepositories.updateRecovery(user._id, passwordHash)
+    },
     async resendingEmail(email: string) {
         const user = await usersRepositories.findByLoginOrEmail(email)
         if (!user) return false;
@@ -102,6 +121,28 @@ export const usersService = {
         const newUser = await usersRepositories.updateCodeConfirmation(user._id, code.emailConfirmation.confirmationCode, code.emailConfirmation.expirationDate)
         try {
             await emailManagers.sendEmailRecoveryMessage(user.accountData.email, code.emailConfirmation.confirmationCode)
+        } catch (error) {
+            console.error(error)
+            return null
+        }
+        return newUser
+    },
+    async recoveryEmail(email: string) {
+        const user = await usersRepositories.findByLoginOrEmail(email)
+        if (!user) return false;
+        if (user.emailConfirmation.isConfirmation) return false;
+        if (user.emailConfirmation.expirationDate < new Date()) return false;
+        const code: any = {
+            emailRecovery: {
+                recoveryCode: randomUUID(),
+                expirationDate: add(new Date(), {
+                    hours: 1
+                })
+            }
+        }
+        const newUser = await usersRepositories.updateCodeRecovery(user._id, code.emailRecovery.recoveryCode, code.emailRecovery.expirationDate)
+        try {
+            await emailManagers.sendEmailRecoveryMessage(user.accountData.email, code.emailRecovery.recoveryCode)
         } catch (error) {
             console.error(error)
             return null

@@ -4,7 +4,7 @@ import {HTTP_STATUSES} from "../../src/const/HTTP response status codes";
 import {
     dataForCreateUser_01,
 } from "./testing_data";
-import {client} from "../../src/routes/db";
+import {client} from "../../src/repositories/db";
 import {app} from "../../src/app-config";
 
 

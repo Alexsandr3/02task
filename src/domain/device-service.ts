@@ -1,15 +1,18 @@
-import {deviceRepositories} from "../repositories/device-db-repositories";
+import {deviceRepositories, PayloadType} from "../repositories/device-db-repositories";
 
 
 
 export const deviceService = {
-    async deleteByIdDevice(deviceIdForDelete: string, deviceId: string, userId: string) {
-        const isUserDevice = await deviceRepositories.findByIdDeviceAndUserId(userId, deviceId)
+    async deleteByDeviceId(deviceIdForDelete: string, deviceId: string, userId: string): Promise<boolean|null> {
+        const isUserDevice = await deviceRepositories.findByDeviceIdAndUserId(userId, deviceId)
         if (!isUserDevice) return null
-        const deviceForDelete = await deviceRepositories.findByIdDeviceAndUserId(userId, deviceIdForDelete)
+        const deviceForDelete = await deviceRepositories.findByDeviceIdAndUserId(userId, deviceIdForDelete)
         if (!deviceForDelete) return null
         const isDelete = await deviceRepositories.deleteDeviceByDeviceId(deviceIdForDelete)
         if (!isDelete) return null
         return true
+    },
+    async deleteDevices(payload: PayloadType){
+        return await deviceRepositories.deleteDevices(payload)
     }
 }

@@ -1,4 +1,4 @@
-import {commentsCollection} from "../routes/db";
+import {commentsCollection} from "./db";
 
 import {CommentsDBType, CommentsViewType} from "../types/comments_types";
 import {ObjectId} from "mongodb";

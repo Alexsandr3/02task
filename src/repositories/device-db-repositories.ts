@@ -1,4 +1,4 @@
-import {deviceCollection} from "../routes/db";
+import {deviceCollection} from "./db";
 import {ObjectId} from "mongodb";
 import {DeviceDBType} from "../types/device_types";
 
@@ -30,7 +30,7 @@ export const deviceRepositories = {
         await deviceCollection.insertOne(newDevice)
         return newDevice
     },
-    async findDevice(payload: PayloadType): Promise<DeviceDBType | null> {
+    async findDeviceForDelete(payload: PayloadType): Promise<DeviceDBType | null> {
         const dateCreatedToken = (new Date(payload.iat*1000)).toISOString();
         const result = await deviceCollection
             .findOne({
@@ -98,21 +98,20 @@ export const deviceRepositories = {
         })
         return result.deletedCount === 1
     },
-    async findByIdDeviceAndUserId(userId: string, deviceId: string){
+    async findByDeviceIdAndUserId(userId: string, deviceId: string){
         return  await deviceCollection.findOne({userId,deviceId},)
-
     },
     async deleteDevices(payload: PayloadType) {
-        return  await deviceCollection.deleteMany({userId: payload.userId, deviceId: {$ne: payload.deviceId}})
+        return await deviceCollection.deleteMany({userId: payload.userId, deviceId: {$ne: payload.deviceId}})
     },
     async deleteDeviceByDeviceId(deviceId: string) {
         return  await deviceCollection.deleteMany({deviceId: deviceId})
     },
     async deleteAll() {
         await deviceCollection.deleteMany({})
-    },
-    async test (fromDeviceId: string, deleteDeviceId: string, userId: string) {
+    }
+   /* async test (fromDeviceId: string, deleteDeviceId: string, userId: string) {
         const result = await deviceCollection.find({userId, deviceId: {$or: [{fromDeviceId},{ deleteDeviceId}]}}).toArray()
         return result.length === 2
-    }
+    }*/
 }

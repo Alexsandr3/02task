@@ -1,4 +1,4 @@
-import {runDb} from "./routes/db";
+import {runDb} from "./repositories/db";
 import {app} from "./app-config";
 /*import {config} from "dotenv";
 import path from "path";

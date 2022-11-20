@@ -1,6 +1,6 @@
 import {ObjectId} from "mongodb";
 import {IpClientDBType} from "../types/ip-client_types";
-import {ipCollection} from "../routes/db";
+import {ipCollection} from "./db";
 
 
 

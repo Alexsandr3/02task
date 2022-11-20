@@ -38,7 +38,7 @@ import {
 } from "./errorsMessages_data";
 import {PostsViewType} from "../../src/types/posts_types";
 import {UsersViewType} from "../../src/types/users_types";
-import {client} from "../../src/routes/db";
+import {client} from "../../src/repositories/db";
 import {app} from "../../src/app-config";
 import {response} from "express";
 

@@ -1,4 +1,4 @@
-import {blogsCollection} from "../routes/db";
+import {blogsCollection} from "./db";
 import {ObjectId} from "mongodb";
 import {BlogsDBType, BlogsViewType} from "../types/blogs_types";
 

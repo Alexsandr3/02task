@@ -23,7 +23,7 @@ import {postsQueryRepositories} from "../repositories/posts-query-repositories";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
 import {PaginatorType} from "../models/PaginatorType";
 import {preCommentsValidation} from "../middlewares/comments-validation-middleware";
-import {authMiddleware} from "../middlewares/auth-middleware";
+import {authMiddleware} from "../middlewares/auth-Headers-Validations-Middleware";
 import {pageNumberValidation, pageSizeValidation} from "../middlewares/users-validation-middleware";
 import {BodyParams_CommentInputModel} from "../models/BodyParams_CommentInputModel";
 

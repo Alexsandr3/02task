@@ -1,10 +1,10 @@
 import {Request, Response, Router} from "express";
 import {usersService} from "../domain/users-service";
-import {loginValidations} from "../middlewares/auth_login-validation-middleware";
+import {emailValidations, loginValidations, passwordValidations} from "../middlewares/auth_login-validation-middleware";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
 import {RequestWithBody} from "../types/Req_types";
 import {BodyParams_LoginInputModel} from "../models/BodyParams_LoginInputModel";
-import {authMiddleware} from "../middlewares/auth-middleware";
+import {authMiddleware} from "../middlewares/auth-Headers-Validations-Middleware";
 import {usersQueryRepositories} from "../repositories/users-query-repositories";
 import {
    BodyParams_RegistrationEmailResendingInputModel
@@ -17,6 +17,8 @@ import {usersAccountValidations} from "../middlewares/users-validation-middlewar
 import {MeViewModel} from "../types/users_types";
 import {checkRefreshTokena} from "../middlewares/check-refresh-tokena";
 import {limiter} from "../middlewares/limiter-middleware";
+import {BodyParams_RecoveryInputModel} from "../models/BodyParams_RecoveryInputModel";
+import {BodyParams_PasswordRecoveryInputModel} from "../models/BodyParams_PasswordRecoveryInputModel";
 
 
 export const authRoute = Router({})
@@ -25,7 +27,6 @@ authRoute.post('/login', limiter, loginValidations, async (req: RequestWithBody<
    const ipAddress = req.ip
    const deviceName = req.headers["user-agent"]
    const token = await usersService.login(req.body.loginOrEmail, req.body.password, ipAddress, deviceName!)
-   console.log('0001---token-----', token)
    if (token) {
       res.cookie('refreshToken', token.refreshToken, {httpOnly: true, secure: true});
       res.send({'accessToken': token.accessToken})
@@ -33,9 +34,24 @@ authRoute.post('/login', limiter, loginValidations, async (req: RequestWithBody<
       res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
    }
 })
+authRoute.post('/password-recovery', limiter, emailValidations, async (req: RequestWithBody<BodyParams_RecoveryInputModel>, res: Response) => {
+   const result = await usersService.recoveryEmail(req.body.email)
+   if (result) {
+      res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
+   } else {
+      res.status(HTTP_STATUSES.BAD_REQUEST_400).send('Email has invalid')
+   }
+})
+authRoute.post('/new-password', limiter, passwordValidations, async (req: RequestWithBody<BodyParams_PasswordRecoveryInputModel>, res: Response) => {
+   const result = await usersService.recoveryByCode(req.body.newPassword, req.body.recoveryCode)
+   if (result) {
+      res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
+   } else {
+      res.status(HTTP_STATUSES.BAD_REQUEST_400).send("Code is incorrect or expired")
+   }
+})
 authRoute.post('/refresh-token', checkRefreshTokena, async (req: Request, res: Response) => {
    const token = await usersService.refreshToken(req.payload)
-   console.log('0002---token-----', token)
    if (token) {
       res.cookie('refreshToken', token.refreshToken, {httpOnly: true, secure: true});
       res.send({'accessToken': token.accessToken})

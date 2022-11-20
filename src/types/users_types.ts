@@ -36,10 +36,17 @@ export type EmailConfirmationType = {
     isConfirmation: boolean
     sentEmails: SentEmailType[]
 }
+export type EmailRecoveryType = {
+    recoveryCode: string
+    expirationDate: Date
+    isConfirmation: boolean
+    sentEmails: SentEmailType[]
+}
 export type UsersAcountDBType = {
     _id: ObjectId
     accountData: AccountDataType
     emailConfirmation: EmailConfirmationType
+    emailRecovery: EmailRecoveryType
 }
 export type SentEmailType ={
     sentDate: Date

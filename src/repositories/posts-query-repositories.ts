@@ -1,4 +1,4 @@
-import {commentsCollection, postsCollection} from "../routes/db";
+import {commentsCollection, postsCollection} from "./db";
 import {ObjectId} from "mongodb";
 import {ForFindPostsType, PostsDBType, PostsViewType} from "../types/posts_types";
 import {PaginatorType} from "../models/PaginatorType";
