@@ -39,6 +39,14 @@ authRoute.post('/password-recovery', limiter, emailValidations, async (req: Requ
    if (result) {
       res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {
+      res.status(HTTP_STATUSES.BAD_REQUEST_400).send('Email has invalid')
+   }
+})
+authRoute.post('/new-password', limiter, passwordValidations, async (req: RequestWithBody<BodyParams_PasswordRecoveryInputModel>, res: Response) => {
+   const result = await usersService.recoveryByCode(req.body.newPassword, req.body.recoveryCode)
+   if (result) {
+      res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
+   } else {
       res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
          "errorsMessages": [
             {
@@ -47,14 +55,6 @@ authRoute.post('/password-recovery', limiter, emailValidations, async (req: Requ
             }
          ]
       })
-   }
-})
-authRoute.post('/new-password', limiter, passwordValidations, async (req: RequestWithBody<BodyParams_PasswordRecoveryInputModel>, res: Response) => {
-   const result = await usersService.recoveryByCode(req.body.newPassword, req.body.recoveryCode)
-   if (result) {
-      res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
-   } else {
-      res.status(HTTP_STATUSES.BAD_REQUEST_400).send("Code is incorrect or expired")
    }
 })
 authRoute.post('/refresh-token', checkRefreshTokena, async (req: Request, res: Response) => {
