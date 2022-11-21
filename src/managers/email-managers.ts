@@ -1,8 +1,7 @@
 import {emailAdapter} from "../adapters/email-adapter";
 
 
-
-export const emailManagers = {
+class EmailManagers {
     async sendEmailRecoveryMessage(email: string, confirmationCode: string) {
         const subject = "Finish password recovery"
         //const link = `${process.env.API_URL}/registration-confirmation?code=${confirmationCode}`
@@ -13,7 +12,7 @@ export const emailManagers = {
           <a href='${link}'>recovery password</a>
       </p>`
         return await emailAdapter.sendEmail(email, subject, message)
-    },
+    }
     async sendPasswordRecoveryMessage(email: string, confirmationCode: string) {
         const subject = "Password recovery"
         //const link = `${process.env.API_URL}/new-password?code=${confirmationCode}`
@@ -24,10 +23,10 @@ export const emailManagers = {
           <a href='${link}'>recovery password</a>
       </p>`
         return await emailAdapter.sendEmail(email, subject, message)
-    },
+    }
     async sendEmailConfirmation(email: string, confirmationCode: string) {
         const subject = "Finish registration"
-       // const link = `${process.env.API_URL}/registration-confirmation?code=${confirmationCode}`
+        // const link = `${process.env.API_URL}/registration-confirmation?code=${confirmationCode}`
         const link = `https://somesite.com/registration-confirmation?code=${confirmationCode}`
         const message = `
         <h1>Thank for your registration</h1>
@@ -37,3 +36,4 @@ export const emailManagers = {
         return await emailAdapter.sendEmail(email, subject, message)
     }
 }
+export const emailManagers = new EmailManagers()
