@@ -1,10 +1,8 @@
 
-export type RefreshTokenDBType = {
-   // status: boolean
-    refreshCode: string
+
+export class TokensType {
+    constructor(public accessToken: string,
+                public refreshToken: string) {
+    }
 }
 
-export type TokensType = {
-    accessToken: string
-    refreshToken: string
-}

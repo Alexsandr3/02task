@@ -3,18 +3,13 @@ import {IpClientDBType} from "../types/ip-client_types";
 import {ipCollection} from "./db";
 
 
-
-export const ipRepositories = {
+class IpRepositories {
     async createClient(ip: string, url: string, inputDate: Date) {
-        const client: IpClientDBType = {
-            _id: new ObjectId(),
-            ip,
-            url: url,
-            inputDate
-        }
+        const client = new IpClientDBType(new ObjectId(), ip, url, inputDate)
         return await ipCollection.insertOne(client)
-    },
-    async getCount(ip: string, url: string, inputDate:Date){
+    }
+
+    async getCount(ip: string, url: string, inputDate: Date) {
         return await ipCollection.countDocuments({
             $and: [
                 {ip: ip},
@@ -22,8 +17,8 @@ export const ipRepositories = {
                 {inputDate: {$gt: inputDate}}
             ]
         })
-    },
-    async deleteAll() {
-        await ipCollection.deleteMany({})
     }
+
 }
+
+export const ipRepositories = new IpRepositories()

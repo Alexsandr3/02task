@@ -3,29 +3,29 @@ import {ObjectId} from "mongodb";
 import {BlogsDBType, BlogsViewType} from "../types/blogs_types";
 
 
-const blogWithNewId = (object: BlogsDBType): BlogsViewType => {
-    return {
-        id: object._id?.toString(),
-        name: object.name,
-        description: object.description,
-        websiteUrl: object.websiteUrl,
-        createdAt: object.createdAt
+class BlogsRepositories {
+    private blogWithNewId(object: BlogsDBType): BlogsViewType {
+        return new BlogsViewType(
+            object._id?.toString(),
+            object.name,
+            object.description,
+            object.websiteUrl,
+            object.createdAt
+        )
     }
-}
-
-export const blogsRepositories = {
 
     async createBlog(name: string, description: string, websiteUrl: string): Promise<BlogsViewType> {
-        const newBlog: BlogsDBType = {
-            _id: new ObjectId(),
+        const newBlog = new BlogsDBType(
+            new ObjectId(),
             name,
             description,
             websiteUrl,
-            createdAt: new Date().toISOString()
-        }
+            new Date().toISOString()
+        )
         await blogsCollection.insertOne(newBlog)
-        return blogWithNewId(newBlog)
-    },
+        return this.blogWithNewId(newBlog)
+    }
+
     async updateBlogById(id: string, name: string, description: string, websiteUrl: string): Promise<boolean> {
         if (!ObjectId.isValid(id)) {
             return false
@@ -38,16 +38,15 @@ export const blogsRepositories = {
             }
         })
         return result.matchedCount === 1
-    },
+    }
+
     async deleteBlogById(id: string): Promise<boolean> {
         if (!ObjectId.isValid(id)) {
             return false
         }
         const result = await blogsCollection.deleteOne({_id: new ObjectId(id)})
         return result.deletedCount === 1
-    },
-    async deleteAll() {
-        await blogsCollection.deleteMany({})
-    },
-
+    }
 }
+
+export const blogsRepositories = new BlogsRepositories()

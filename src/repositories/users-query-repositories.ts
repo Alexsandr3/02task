@@ -3,7 +3,6 @@ import {paginatorUsersType, MeViewModel, UsersViewType, UsersAcountDBType} from 
 import {PaginatorType} from "../models/PaginatorType";
 import {ObjectId} from "mongodb";
 
-
 export const userWithNewId = (object: UsersAcountDBType): UsersViewType => {
     return {
         id: object._id?.toString(),
@@ -20,8 +19,7 @@ export const userForGet = (object: UsersAcountDBType): MeViewModel => {
     }
 }
 
-
-export const usersQueryRepositories = {
+class UsersQueryRepositories {
     async findUsers(data: paginatorUsersType): Promise<PaginatorType<UsersViewType[]>> {
         const foundsUsers = (await usersCollection
             .find({
@@ -49,7 +47,8 @@ export const usersQueryRepositories = {
             totalCount: totalCount,
             items: foundsUsers //exchange \\ items: foundsUsers ? foundsUsers : []
         }
-    },
+    }
+
     async findUserById(id: string): Promise<UsersViewType | null> {
         const result = await usersCollection.findOne({_id: new ObjectId(id)})
         if (!result) {
@@ -57,7 +56,8 @@ export const usersQueryRepositories = {
         } else {
             return userWithNewId(result)
         }
-    },
+    }
+
     async getUserById(id: string): Promise<MeViewModel | null> {
         const result = await usersCollection.findOne({_id: new ObjectId(id)})
         if (!result) {
@@ -67,3 +67,5 @@ export const usersQueryRepositories = {
         }
     }
 }
+
+export const usersQueryRepositories = new UsersQueryRepositories()

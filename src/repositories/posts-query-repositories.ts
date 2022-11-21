@@ -21,8 +21,7 @@ export const postWithNewId = (object: PostsDBType): PostsViewType => {
     }
 }
 
-
-export const postsQueryRepositories ={
+class PostsQueryRepositories {
     async findByIdPost (id: string): Promise<PostsViewType | null> {
         if(!ObjectId.isValid(id)) {
             return null
@@ -33,7 +32,7 @@ export const postsQueryRepositories ={
         } else {
             return postWithNewId(result)
         }
-    },
+    }
     async findPosts(data:ForFindPostsType, blogId?: string): Promise<PaginatorType<PostsViewType[]>> {
         const foundPosts = (await postsCollection
             .find({})
@@ -50,7 +49,7 @@ export const postsQueryRepositories ={
             totalCount: totalCount,
             items: foundPosts
         }
-    },
+    }
     async findCommentsByIdPost(postId: string, data: PaginatorPostsBlogType): Promise<PaginatorType<CommentsViewType[]> | null> {
         const post = await postsQueryRepositories.findByIdPost(postId)
         if (!post) return null
@@ -70,3 +69,4 @@ export const postsQueryRepositories ={
         }
     }
 }
+export const postsQueryRepositories = new PostsQueryRepositories()

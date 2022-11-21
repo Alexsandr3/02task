@@ -6,15 +6,10 @@ import {commentsRoute} from "./routes/comments-router";
 import {postsRoute} from "./routes/post-router";
 import {usersRoute} from "./routes/users-router";
 import {HTTP_STATUSES} from "./const/HTTP response status codes";
-import {blogsRepositories} from "./repositories/blogs-db-repositories";
-import {postsRepositories} from "./repositories/posts-db-repositories";
-import {usersRepositories} from "./repositories/users-db-repositories";
-import {commentsRepositories} from "./repositories/comments-db-repositories";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import {securityRoute} from "./routes/security-router";
-import {deviceRepositories} from "./repositories/device-db-repositories";
-import {ipRepositories} from "./repositories/ip-db-repositories";
+import {testsRepositories} from "./repositories/tests-repositories";
 
 export const app = express()
 
@@ -43,11 +38,6 @@ app.get('/', (req: Request, res: Response) => {
     })
 })
 app.delete('/testing/all-data', (req: Request, res: Response) => {
-    blogsRepositories.deleteAll();
-    postsRepositories.deleteAll();
-    usersRepositories.deleteAll();
-    commentsRepositories.deleteAll();
-    deviceRepositories.deleteAll();
-    ipRepositories.deleteAll();
+    testsRepositories.deleteAll();
     res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })

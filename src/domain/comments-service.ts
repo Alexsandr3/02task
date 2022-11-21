@@ -6,42 +6,43 @@ type UpdateCommentResult = {
     errorStatus?: number
 }
 
-export const commentsService = {
-    async updateCommentsById (id: string, content: string, userId: string): Promise<UpdateCommentResult> {
+class CommentsService {
+    async updateCommentsById(id: string, content: string, userId: string): Promise<UpdateCommentResult> {
         const comment = await commentsRepositories.findCommentsById(id)
-        if(!comment) {
-            return  {
+        if (!comment) {
+            return {
                 errorStatus: 404
             }
         }
-        if(comment.userId !== userId) {
+        if (comment.userId !== userId) {
             return {
                 errorStatus: 403
             }
         }
         const result = await commentsRepositories.updateCommentsById(id, content)
 
-        if(!result) {
+        if (!result) {
             return {
                 errorStatus: 400
             }
         }
-        return { }
-    },
-    async deleteCommentById (id: string, userId: string): Promise<UpdateCommentResult>{
+        return {}
+    }
+
+    async deleteCommentById(id: string, userId: string): Promise<UpdateCommentResult> {
         const comment = await commentsRepositories.findCommentsById(id)
-        if(!comment) {
-            return  {
+        if (!comment) {
+            return {
                 errorStatus: 404
             }
         }
-        if(comment.userId !== userId) {
+        if (comment.userId !== userId) {
             return {
                 errorStatus: 403
             }
         }
         const result = await commentsRepositories.deleteCommentsById(id)
-        if(!result) {
+        if (!result) {
             return {
                 errorStatus: 400
             }
@@ -49,3 +50,5 @@ export const commentsService = {
         return {}
     }
 }
+
+export const commentsService = new CommentsService()

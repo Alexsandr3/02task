@@ -2,31 +2,30 @@ import {blogsCollection, postsCollection} from "./db";
 import {ObjectId} from "mongodb";
 import {postWithNewId} from "./posts-db-repositories";
 import {BlogsDBType, BlogsViewType, PaginatorPostsBlogType} from "../types/blogs_types";
-import {paginatorBlogType} from "../types/blogs_types";
+import {PaginatorBlogType} from "../types/blogs_types";
 import {PostsViewType} from "../types/posts_types";
 import {PaginatorType} from "../models/PaginatorType";
 
 
-const blogWithNewId = (object: BlogsDBType): BlogsViewType => {
-    return {
-        id: object._id?.toString(),
-        name: object.name,
-        description: object.description,
-        websiteUrl: object.websiteUrl,
-        createdAt: object.createdAt
+
+class BlogsQueryRepositories {
+    private blogWithNewId(object: BlogsDBType): BlogsViewType {
+        return new BlogsViewType(
+            object._id?.toString(),
+            object.name,
+            object.description,
+            object.websiteUrl,
+            object.createdAt
+        )
     }
-}
-
-
-export const blogsQueryRepositories = {
-    async findBlogs(data: paginatorBlogType): Promise<PaginatorType<BlogsViewType[]>> {
+    async findBlogs(data: PaginatorBlogType): Promise<PaginatorType<BlogsViewType[]>> {
         const foundBlogs = (await blogsCollection
             .find(data.searchNameTerm ? {name: {$regex: data.searchNameTerm, $options: 'i'}} : {})
             .skip((data.pageNumber - 1) * data.pageSize)
             .limit(data.pageSize)
             .sort({[data.sortBy]: data.sortDirection})
             .toArray())
-            .map(foundBlog => blogWithNewId(foundBlog))
+            .map(foundBlog => this.blogWithNewId(foundBlog))
         const totalCount = await blogsCollection.countDocuments(data.searchNameTerm ? {
             name: {
                 $regex: data.searchNameTerm,
@@ -41,7 +40,7 @@ export const blogsQueryRepositories = {
             totalCount: totalCount,
             items: foundBlogs
         }
-    },
+    }
     async findBlogById(id: string): Promise<BlogsViewType | null> {
         if (!ObjectId.isValid(id)) {
             return null
@@ -50,9 +49,9 @@ export const blogsQueryRepositories = {
         if (!result) {
             return null
         } else {
-            return blogWithNewId(result)
+            return this.blogWithNewId(result)
         }
-    },
+    }
     async findPostsByIdBlog(blogId: string, data: PaginatorPostsBlogType): Promise<PaginatorType<PostsViewType[]> | null> {
         const blog = await blogsQueryRepositories.findBlogById(blogId)
         if (!blog) return null
@@ -71,6 +70,7 @@ export const blogsQueryRepositories = {
             totalCount: totalCountPosts,
             items: foundPosts
         }
-
-    },
+    }
 }
+
+export const blogsQueryRepositories = new BlogsQueryRepositories()
