@@ -6,13 +6,14 @@ import {UsersAcountDBType} from "../types/users_types";
 import {CommentsDBType} from "../types/comments_types";
 import {DeviceDBType} from "../types/device_types";
 import {IpClientDBType} from "../types/ip-client_types";
+import mongoose from "mongoose";
 
-
-
+//const mongoUri = process.env.MONGO_URI || "mongodb://0.0.0.0:27017";
 const mongoUri = process.env.MONGO_URI || "mongodb://0.0.0.0:27017";
 
 export const client = new MongoClient(mongoUri);
-const dbName = 'Homework'
+//const dbName = 'Homework'
+const dbName = 'HomeworkWithMongoose'
 const DB = client.db(dbName)
 
 export const blogsCollection = DB.collection<BlogsDBType>('blogs')
@@ -28,11 +29,15 @@ export async function runDb() {
         //connect the client to the server
         await client.connect();
         //Establish and verify connection
-        await DB.command({ping:1});
-        console.log("Connected successfully to MONGO server");
+        //await DB.command({ping:1});
+        //console.log("Connected successfully to MONGO server");
+        await mongoose.connect('mongodb://localhost:27017/HomeworkWithMongoose');
+        console.log("Connected successfully to MONGOOSE server");
     } catch {
         console.log("Can't connect to db");
         //Ensures that client will close when you finish/error
-        await client.close();
+      //  await client.close();
+        await mongoose.disconnect()
+
     }
 }

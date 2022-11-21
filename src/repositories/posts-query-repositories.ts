@@ -3,8 +3,7 @@ import {ObjectId} from "mongodb";
 import {ForFindPostsType, PostsDBType, PostsViewType} from "../types/posts_types";
 import {PaginatorType} from "../models/PaginatorType";
 import {PaginatorPostsBlogType} from "../types/blogs_types";
-import {CommentsViewType} from "../types/comments_types";
-import {commentWithNewId} from "./comments-query-repositories";
+import {CommentsDBType, CommentsViewType} from "../types/comments_types";
 
 
 
@@ -22,6 +21,14 @@ export const postWithNewId = (object: PostsDBType): PostsViewType => {
 }
 
 class PostsQueryRepositories {
+    private commentWithNewId(object: CommentsDBType): CommentsViewType {
+        return new CommentsViewType(
+            object._id?.toString(),
+            object.content,
+            object.userId,
+            object.userLogin,
+            object.createdAt)
+    }
     async findByIdPost (id: string): Promise<PostsViewType | null> {
         if(!ObjectId.isValid(id)) {
             return null
@@ -57,7 +64,7 @@ class PostsQueryRepositories {
             .skip((data.pageNumber - 1) * data.pageSize)
             .limit(data.pageSize)
             .sort({[data.sortBy]: data.sortDirection}).toArray())
-            .map(commentWithNewId)
+            .map(this.commentWithNewId)
         const totalCountComments = await commentsCollection.countDocuments(postId ? {postId} : {})
         const pagesCountRes = Math.ceil(totalCountComments / data.pageSize)
         return {

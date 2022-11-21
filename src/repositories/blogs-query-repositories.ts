@@ -1,10 +1,10 @@
 import {blogsCollection, postsCollection} from "./db";
 import {ObjectId} from "mongodb";
-import {postWithNewId} from "./posts-db-repositories";
 import {BlogsDBType, BlogsViewType, PaginatorPostsBlogType} from "../types/blogs_types";
 import {PaginatorBlogType} from "../types/blogs_types";
 import {PostsViewType} from "../types/posts_types";
 import {PaginatorType} from "../models/PaginatorType";
+import {postWithNewId} from "./posts-query-repositories";
 
 
 
