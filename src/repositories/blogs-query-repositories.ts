@@ -1,10 +1,10 @@
-import {blogsCollection, postsCollection} from "./db";
 import {ObjectId} from "mongodb";
 import {BlogsDBType, BlogsViewType, PaginatorPostsBlogType} from "../types/blogs_types";
 import {PaginatorBlogType} from "../types/blogs_types";
 import {PostsViewType} from "../types/posts_types";
 import {PaginatorType} from "../models/PaginatorType";
 import {postWithNewId} from "./posts-query-repositories";
+import {BlogModelClass, PostModelClass} from "./schemas";
 
 
 
@@ -19,14 +19,14 @@ class BlogsQueryRepositories {
         )
     }
     async findBlogs(data: PaginatorBlogType): Promise<PaginatorType<BlogsViewType[]>> {
-        const foundBlogs = (await blogsCollection
+        const foundBlogs = (await BlogModelClass
             .find(data.searchNameTerm ? {name: {$regex: data.searchNameTerm, $options: 'i'}} : {})
             .skip((data.pageNumber - 1) * data.pageSize)
             .limit(data.pageSize)
             .sort({[data.sortBy]: data.sortDirection})
-            .toArray())
+            .lean())
             .map(foundBlog => this.blogWithNewId(foundBlog))
-        const totalCount = await blogsCollection.countDocuments(data.searchNameTerm ? {
+        const totalCount = await BlogModelClass.countDocuments(data.searchNameTerm ? {
             name: {
                 $regex: data.searchNameTerm,
                 $options: 'i'
@@ -45,7 +45,8 @@ class BlogsQueryRepositories {
         if (!ObjectId.isValid(id)) {
             return null
         }
-        const result = await blogsCollection.findOne({_id: new ObjectId(id)})
+        const result = await BlogModelClass.findOne({_id: new ObjectId(id)})
+        //const result = await blogsCollection.findOne({_id: new ObjectId(id)})
         if (!result) {
             return null
         } else {
@@ -55,13 +56,13 @@ class BlogsQueryRepositories {
     async findPostsByIdBlog(blogId: string, data: PaginatorPostsBlogType): Promise<PaginatorType<PostsViewType[]> | null> {
         const blog = await blogsQueryRepositories.findBlogById(blogId)
         if (!blog) return null
-        const foundPosts = (await postsCollection
+        const foundPosts = (await PostModelClass
             .find({blogId})
             .skip((data.pageNumber - 1) * data.pageSize)
             .limit(data.pageSize)
-            .sort({[data.sortBy]: data.sortDirection}).toArray())
+            .sort({[data.sortBy]: data.sortDirection}).lean())
             .map(postWithNewId)
-        const totalCountPosts = await postsCollection.countDocuments(blogId ? {blogId} : {})
+        const totalCountPosts = await PostModelClass.countDocuments(blogId ? {blogId} : {})
         const pagesCountRes = Math.ceil(totalCountPosts / data.pageSize)
         return {
             pagesCount: pagesCountRes,

@@ -1,21 +1,21 @@
 import {
-    blogsCollection,
-    commentsCollection,
-    deviceCollection,
-    ipCollection,
-    postsCollection,
-    usersCollection
-} from "./db";
+    BlogModelClass,
+    CommentModelClass,
+    DeviceModelClass,
+    IpModelClass,
+    PostModelClass,
+    UserModelClass
+} from "./schemas";
 
 
 class TestsRepositories {
     async deleteAll() {
-        await blogsCollection.deleteMany({})
-        await commentsCollection.deleteMany({})
-        await deviceCollection.deleteMany({})
-        await ipCollection.deleteMany({})
-        await postsCollection.deleteMany({})
-        await usersCollection.deleteMany({})
+        await BlogModelClass.deleteMany({})
+        await CommentModelClass.deleteMany({})
+        await DeviceModelClass.deleteMany({})
+        await IpModelClass.deleteMany({})
+        await PostModelClass.deleteMany({})
+        await UserModelClass.deleteMany({})
     }
 }
 

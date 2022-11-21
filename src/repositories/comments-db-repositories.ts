@@ -1,4 +1,4 @@
-import {commentsCollection} from "./db";
+import {CommentModelClass} from "./schemas";
 import {ObjectId} from "mongodb";
 import {CommentsDBType, CommentsViewType} from "../types/comments_types";
 
@@ -13,15 +13,16 @@ class CommentsRepositories {
             object.createdAt)
     }
 
-    async createCommentByIdPost(_id: ObjectId, content: string, userId: string, userLogin: string): Promise<CommentsViewType> {
+    async createCommentByIdPost(post_id: ObjectId, content: string, userId: string, userLogin: string): Promise<CommentsViewType> {
         const newComment = new CommentsDBType(
             new ObjectId(),
-            _id.toString(),
+            post_id.toString(),
             content,
             userId,
             userLogin,
             new Date().toISOString())
-        await commentsCollection.insertOne(newComment)
+        await CommentModelClass.create(newComment)
+        //await commentsCollection.insertOne(newComment)
         return this.commentWithNewId(newComment)
     }
 
@@ -29,7 +30,8 @@ class CommentsRepositories {
         if (!ObjectId.isValid(id)) {
             return false
         }
-        const result = await commentsCollection.updateOne({_id: new ObjectId(id)}, {$set: {content: content}})
+        const result = await CommentModelClass.updateOne({_id: new ObjectId(id)}, {$set: {content: content}})
+        //const result = await commentsCollection.updateOne({_id: new ObjectId(id)}, {$set: {content: content}})
         return result.matchedCount === 1
     }
 
@@ -37,12 +39,14 @@ class CommentsRepositories {
         if (!ObjectId.isValid(id)) {
             return false
         }
-        const result = await commentsCollection.deleteOne({_id: new ObjectId(id)})
+        const result = await CommentModelClass.deleteOne({_id: new ObjectId(id)})
+        //const result = await commentsCollection.deleteOne({_id: new ObjectId(id)})
         return result.deletedCount === 1
     }
 
     async findCommentsById(id: string) {
-        return await commentsCollection.findOne({_id: new ObjectId(id)})
+        return CommentModelClass.findOne({_id: new ObjectId(id)})
+        //return await commentsCollection.findOne({_id: new ObjectId(id)})
     }
 
 }

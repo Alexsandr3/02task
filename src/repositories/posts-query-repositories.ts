@@ -1,9 +1,9 @@
-import {commentsCollection, postsCollection} from "./db";
 import {ObjectId} from "mongodb";
 import {ForFindPostsType, PostsDBType, PostsViewType} from "../types/posts_types";
 import {PaginatorType} from "../models/PaginatorType";
 import {PaginatorPostsBlogType} from "../types/blogs_types";
 import {CommentsDBType, CommentsViewType} from "../types/comments_types";
+import {CommentModelClass, PostModelClass} from "./schemas";
 
 
 
@@ -33,7 +33,8 @@ class PostsQueryRepositories {
         if(!ObjectId.isValid(id)) {
             return null
         }
-        const result = await postsCollection.findOne({_id:new ObjectId(id)})
+        const result = await PostModelClass.findOne({_id:new ObjectId(id)})
+        //const result = await postsCollection.findOne({_id:new ObjectId(id)})
         if (!result){
             return null
         } else {
@@ -41,13 +42,14 @@ class PostsQueryRepositories {
         }
     }
     async findPosts(data:ForFindPostsType, blogId?: string): Promise<PaginatorType<PostsViewType[]>> {
-        const foundPosts = (await postsCollection
+        const foundPosts = (await PostModelClass
             .find({})
             .skip( ( data.pageNumber - 1 ) * data.pageSize )
             .limit(data.pageSize)
             .sort({ [data.sortBy] : data.sortDirection })
-            .toArray()).map(foundPost => postWithNewId(foundPost))
-        const totalCount = await postsCollection.countDocuments(blogId ? {blogId} : {})
+            .lean()).map(foundPost => postWithNewId(foundPost))
+        const totalCount = await PostModelClass.countDocuments(blogId ? {blogId} : {})
+        //const totalCount = await postsCollection.countDocuments(blogId ? {blogId} : {})
         const pagesCountRes = Math.ceil(totalCount/data.pageSize)
         return {
             pagesCount: pagesCountRes,
@@ -60,12 +62,13 @@ class PostsQueryRepositories {
     async findCommentsByIdPost(postId: string, data: PaginatorPostsBlogType): Promise<PaginatorType<CommentsViewType[]> | null> {
         const post = await postsQueryRepositories.findByIdPost(postId)
         if (!post) return null
-        const Commets = (await commentsCollection.find({postId: postId})
+        const Commets = (await CommentModelClass.find({postId: postId})
             .skip((data.pageNumber - 1) * data.pageSize)
             .limit(data.pageSize)
-            .sort({[data.sortBy]: data.sortDirection}).toArray())
+            .sort({[data.sortBy]: data.sortDirection}).lean())
             .map(this.commentWithNewId)
-        const totalCountComments = await commentsCollection.countDocuments(postId ? {postId} : {})
+        const totalCountComments = await PostModelClass.countDocuments(postId ? {postId} : {})
+        //const totalCountComments = await commentsCollection.countDocuments(postId ? {postId} : {})
         const pagesCountRes = Math.ceil(totalCountComments / data.pageSize)
         return {
             pagesCount: pagesCountRes,

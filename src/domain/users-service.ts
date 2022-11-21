@@ -46,7 +46,7 @@ class UsersService {
             await emailManagers.sendEmailConfirmation(newUser.email, user.emailConfirmation.confirmationCode)
         } catch (error) {
             console.error(error)
-            await usersRepositories.deleteUser(user)
+            await usersRepositories.deleteUser(user._id)
             return null
         }
         return newUser

@@ -1,4 +1,4 @@
-import {deviceCollection} from "./db";
+import {DeviceModelClass} from "./schemas";
 import {ObjectId} from "mongodb";
 import {DeviceDBType} from "../types/device_types";
 
@@ -23,13 +23,14 @@ class DeviceRepositories {
             dateCreatedToken,
             dateExpiredToken,
             deviceId)
-        await deviceCollection.insertOne(newDevice)
+        await DeviceModelClass.create(newDevice)
+        //await deviceCollection.insertOne(newDevice)
         return newDevice
     }
 
     async findDeviceForDelete(payload: PayloadType): Promise<DeviceDBType | null> {
         const dateCreatedToken = (new Date(payload.iat * 1000)).toISOString();
-        const result = await deviceCollection
+        const result = await DeviceModelClass
             .findOne({
                 $and: [
                     {userId: {$eq: payload.userId}},
@@ -46,7 +47,7 @@ class DeviceRepositories {
 
     async findDeviceForValid(userId: string, deviceId: string, iat: number): Promise<DeviceDBType | null> {
         const dateCreateToken = (new Date(iat * 1000)).toISOString();
-        const result = await deviceCollection
+        const result = await DeviceModelClass
             .findOne({
                 $and: [
                     {userId: userId},
@@ -62,7 +63,7 @@ class DeviceRepositories {
     }
 
     async findDeviceByDeviceId(deviceId: string): Promise<DeviceDBType | null> {
-        const result = await deviceCollection
+        const result = await DeviceModelClass
             .findOne({deviceId: deviceId})
         if (!result) {
             return null
@@ -75,7 +76,7 @@ class DeviceRepositories {
         const dateCreatedOldToken = (new Date(oldIat * 1000)).toISOString();
         const dateCreateToken = (new Date(payload.iat * 1000)).toISOString();
         const dateExpiredToken = (new Date(payload.exp * 1000)).toISOString();
-        const result = await deviceCollection.updateOne({
+        const result = await DeviceModelClass.updateOne({
             $and: [
                 {userId: {$eq: payload.userId}},
                 {deviceId: {$eq: payload.deviceId}},
@@ -91,7 +92,7 @@ class DeviceRepositories {
     }
 
     async deleteDevice(payload: PayloadType): Promise<boolean> {
-        const result = await deviceCollection.deleteOne({
+        const result = await DeviceModelClass.deleteOne({
             $and: [
                 {userId: {$eq: payload.userId}},
                 {deviceId: {$eq: payload.deviceId}},
@@ -101,15 +102,15 @@ class DeviceRepositories {
     }
 
     async findByDeviceIdAndUserId(userId: string, deviceId: string) {
-        return await deviceCollection.findOne({userId, deviceId},)
+        return DeviceModelClass.findOne({userId, deviceId},)
     }
 
     async deleteDevices(payload: PayloadType) {
-        return await deviceCollection.deleteMany({userId: payload.userId, deviceId: {$ne: payload.deviceId}})
+        return DeviceModelClass.deleteMany({userId: payload.userId, deviceId: {$ne: payload.deviceId}})
     }
 
     async deleteDeviceByDeviceId(deviceId: string) {
-        return await deviceCollection.deleteMany({deviceId: deviceId})
+        return DeviceModelClass.deleteMany({deviceId: deviceId})
     }
 
     /* async test (fromDeviceId: string, deleteDeviceId: string, userId: string) {

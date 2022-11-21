@@ -1,7 +1,7 @@
-import {usersCollection} from "./db";
 import {paginatorUsersType, MeViewModel, UsersViewType, UsersAcountDBType} from "../types/users_types";
 import {PaginatorType} from "../models/PaginatorType";
 import {ObjectId} from "mongodb";
+import {UserModelClass} from "./schemas";
 
 export const userWithNewId = (object: UsersAcountDBType): UsersViewType => {
     return {
@@ -21,7 +21,7 @@ export const userForGet = (object: UsersAcountDBType): MeViewModel => {
 
 class UsersQueryRepositories {
     async findUsers(data: paginatorUsersType): Promise<PaginatorType<UsersViewType[]>> {
-        const foundsUsers = (await usersCollection
+        const foundsUsers = (await UserModelClass
             .find({
                 $or: [
                     {"accountData.email": {$regex: data.searchEmailTerm, $options: 'i'}},
@@ -31,14 +31,20 @@ class UsersQueryRepositories {
             .skip((data.pageNumber - 1) * data.pageSize)
             .limit(data.pageSize)
             .sort({[data.sortBy]: data.sortDirection})
-            .toArray())
+            .lean())
             .map(foundUser => userWithNewId(foundUser))
-        const totalCount = await usersCollection.countDocuments({
+        const totalCount = await UserModelClass.countDocuments({
             $or: [
                 {"accountData.email": {$regex: data.searchEmailTerm, $options: 'i'}},
                 {"accountData.login": {$regex: data.searchLoginTerm, $options: 'i'}}
             ]
         })
+        /*const totalCount = await usersCollection.countDocuments({
+            $or: [
+                {"accountData.email": {$regex: data.searchEmailTerm, $options: 'i'}},
+                {"accountData.login": {$regex: data.searchLoginTerm, $options: 'i'}}
+            ]
+        })*/
         const pagesCountRes = Math.ceil(totalCount / data.pageSize)
         return {
             pagesCount: pagesCountRes,
@@ -50,7 +56,8 @@ class UsersQueryRepositories {
     }
 
     async findUserById(id: string): Promise<UsersViewType | null> {
-        const result = await usersCollection.findOne({_id: new ObjectId(id)})
+        const result = await UserModelClass.findOne({_id: new ObjectId(id)})
+        //const result = await usersCollection.findOne({_id: new ObjectId(id)})
         if (!result) {
             return null
         } else {
@@ -59,7 +66,8 @@ class UsersQueryRepositories {
     }
 
     async getUserById(id: string): Promise<MeViewModel | null> {
-        const result = await usersCollection.findOne({_id: new ObjectId(id)})
+        const result = await UserModelClass.findOne({_id: new ObjectId(id)})
+        //const result = await usersCollection.findOne({_id: new ObjectId(id)})
         if (!result) {
             return null
         } else {

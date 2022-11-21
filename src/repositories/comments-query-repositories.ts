@@ -1,4 +1,4 @@
-import {commentsCollection} from "./db";
+import {CommentModelClass} from "./schemas";
 
 import {CommentsDBType, CommentsViewType} from "../types/comments_types";
 import {ObjectId} from "mongodb";
@@ -19,7 +19,8 @@ class CommentsQueryRepositories {
         if (!ObjectId.isValid(id)) {
             return null
         }
-        const result = await commentsCollection.findOne({_id: new ObjectId(id)})
+        const result = await CommentModelClass.findOne({_id: new ObjectId(id)})
+        //const result = await commentsCollection.findOne({_id: new ObjectId(id)})
         if (!result) {
             return null
         } else {

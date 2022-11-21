@@ -1,27 +1,26 @@
-import {MongoClient,} from "mongodb"
+import {MongoClient} from "mongodb"
 import 'dotenv/config'
-import {BlogsDBType} from "../types/blogs_types";
-import {PostsDBType} from "../types/posts_types";
-import {UsersAcountDBType} from "../types/users_types";
-import {CommentsDBType} from "../types/comments_types";
-import {DeviceDBType} from "../types/device_types";
-import {IpClientDBType} from "../types/ip-client_types";
 import mongoose from "mongoose";
 
 //const mongoUri = process.env.MONGO_URI || "mongodb://0.0.0.0:27017";
-const mongoUri = process.env.MONGO_URI || "mongodb://0.0.0.0:27017";
+const mongoUri = process.env.MONGO_URI || "HomeworkWithMongoose";
 
 export const client = new MongoClient(mongoUri);
 //const dbName = 'Homework'
-const dbName = 'HomeworkWithMongoose'
-const DB = client.db(dbName)
+//const dbName = 'HomeworkWithMongoose'
+//const DB = client.db(dbName)
 
-export const blogsCollection = DB.collection<BlogsDBType>('blogs')
-export const postsCollection = DB.collection<PostsDBType>('posts')
-export const usersCollection = DB.collection<UsersAcountDBType>('users')
-export const commentsCollection = DB.collection<CommentsDBType>('comments')
-export const ipCollection = DB.collection<IpClientDBType>('ip')
-export const deviceCollection = DB.collection<DeviceDBType>('device')
+
+//export const blogsCollection = DB.collection<BlogsDBType>('blogs')
+//export const postsCollection = DB.collection<PostsDBType>('posts')
+//export const usersCollection = DB.collection<UsersAcountDBType>('users')
+//export const commentsCollection = DB.collection<CommentsDBType>('comments')
+//export const ipCollection = DB.collection<IpClientDBType>('ip')
+//export const deviceCollection = DB.collection<DeviceDBType>('device')
+
+
+
+
 
 
 export async function runDb() {
