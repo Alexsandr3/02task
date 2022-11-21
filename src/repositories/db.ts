@@ -3,7 +3,7 @@ import 'dotenv/config'
 import mongoose from "mongoose";
 
 //const mongoUri = process.env.MONGO_URI || "mongodb://0.0.0.0:27017";
-const mongoUri = process.env.MONGO_URI || "HomeworkWithMongoose";
+const mongoUri = process.env.MONGO_URI || "mongodb://localhost:27017/HomeworkWithMongoose";
 
 export const client = new MongoClient(mongoUri);
 //const dbName = 'Homework'

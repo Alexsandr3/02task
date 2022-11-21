@@ -68,7 +68,7 @@ const deviceSchema = new mongoose.Schema<DeviceDBType>({
     deviceId: {type: String, required: true}
 });
 export const BlogModelClass = mongoose.model('blogs', blogSchema);
-export const PostModelClass = mongoose.model('blogs', postSchema);
+export const PostModelClass = mongoose.model('posts', postSchema);
 export const UserModelClass = mongoose.model('users', userSchema);
 export const CommentModelClass = mongoose.model('comments', commentSchema);
 export const IpModelClass = mongoose.model('ip', ipSchema);
