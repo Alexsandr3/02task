@@ -14,7 +14,7 @@ const passwordValidation =
         .isString()
         .notEmpty()
         .trim()
- const emailValidation =
+const emailValidation =
     body('email',
         'should be valid email')
         .isString()
@@ -28,7 +28,7 @@ const newPasswordValidation =
         .isString()
         .notEmpty()
         .trim()
-        .isLength({min:6, max:20})
+        .isLength({min: 6, max: 20})
 
 
 export const loginValidations = [

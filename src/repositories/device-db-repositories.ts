@@ -11,7 +11,7 @@ export class PayloadType {
 }
 
 
-class DeviceRepositories {
+export class DeviceRepositories {
     async createDevice(userId: string, ipAddress: string, deviceName: string, deviceId: string, exp: number, iat: number): Promise<DeviceDBType> {
         const dateCreatedToken = (new Date(iat * 1000)).toISOString();
         const dateExpiredToken = (new Date(exp * 1000)).toISOString();
@@ -24,7 +24,6 @@ class DeviceRepositories {
             dateExpiredToken,
             deviceId)
         await DeviceModelClass.create(newDevice)
-        //await deviceCollection.insertOne(newDevice)
         return newDevice
     }
 
@@ -118,5 +117,3 @@ class DeviceRepositories {
          return result.length === 2
      }*/
 }
-
-export const deviceRepositories = new DeviceRepositories()

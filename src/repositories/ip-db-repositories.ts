@@ -3,7 +3,7 @@ import {IpClientDBType} from "../types/ip-client_types";
 import {IpModelClass} from "./schemas";
 
 
-class IpRepositories {
+export class IpRepositories {
     async createClient(ip: string, url: string, inputDate: Date) {
         const client = new IpClientDBType(new ObjectId(), ip, url, inputDate)
         return await IpModelClass.create(client)
@@ -29,4 +29,4 @@ class IpRepositories {
 
 }
 
-export const ipRepositories = new IpRepositories()
+//export const ipRepositories = new IpRepositories()

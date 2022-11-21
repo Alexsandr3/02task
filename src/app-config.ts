@@ -1,7 +1,7 @@
 import express, {Request, Response} from "express";
 import bodyParser from "body-parser";
 import {authRoute} from "./routes/auth-router";
-import {blogsRoute} from "./routes/blogs-router";
+import {blogsRouter} from "./routes/blogs-router";
 import {commentsRoute} from "./routes/comments-router";
 import {postsRoute} from "./routes/post-router";
 import {usersRoute} from "./routes/users-router";
@@ -9,7 +9,8 @@ import {HTTP_STATUSES} from "./const/HTTP response status codes";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import {securityRoute} from "./routes/security-router";
-import {testsRepositories} from "./repositories/tests-repositories";
+import {testsRepositories} from "./composition-root";
+
 
 export const app = express()
 
@@ -23,7 +24,7 @@ app.set('trust proxy', true)
 
 
 app.use('/auth', authRoute)
-app.use('/blogs', blogsRoute)
+app.use('/blogs', blogsRouter)
 app.use('/comments', commentsRoute)
 app.use('/posts', postsRoute)
 app.use('/users', usersRoute)

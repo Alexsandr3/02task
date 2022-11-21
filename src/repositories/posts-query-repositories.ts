@@ -20,7 +20,7 @@ export const postWithNewId = (object: PostsDBType): PostsViewType => {
     }
 }
 
-class PostsQueryRepositories {
+export class PostsQueryRepositories {
     private commentWithNewId(object: CommentsDBType): CommentsViewType {
         return new CommentsViewType(
             object._id?.toString(),
@@ -34,7 +34,6 @@ class PostsQueryRepositories {
             return null
         }
         const result = await PostModelClass.findOne({_id:new ObjectId(id)})
-        //const result = await postsCollection.findOne({_id:new ObjectId(id)})
         if (!result){
             return null
         } else {
@@ -49,7 +48,6 @@ class PostsQueryRepositories {
             .sort({ [data.sortBy] : data.sortDirection })
             .lean()).map(foundPost => postWithNewId(foundPost))
         const totalCount = await PostModelClass.countDocuments(blogId ? {blogId} : {})
-        //const totalCount = await postsCollection.countDocuments(blogId ? {blogId} : {})
         const pagesCountRes = Math.ceil(totalCount/data.pageSize)
         return {
             pagesCount: pagesCountRes,
@@ -60,7 +58,7 @@ class PostsQueryRepositories {
         }
     }
     async findCommentsByIdPost(postId: string, data: PaginatorPostsBlogType): Promise<PaginatorType<CommentsViewType[]> | null> {
-        const post = await postsQueryRepositories.findByIdPost(postId)
+        const post = await this.findByIdPost(postId)
         if (!post) return null
         const Commets = (await CommentModelClass.find({postId: postId})
             .skip((data.pageNumber - 1) * data.pageSize)
@@ -68,7 +66,6 @@ class PostsQueryRepositories {
             .sort({[data.sortBy]: data.sortDirection}).lean())
             .map(this.commentWithNewId)
         const totalCountComments = await PostModelClass.countDocuments(postId ? {postId} : {})
-        //const totalCountComments = await commentsCollection.countDocuments(postId ? {postId} : {})
         const pagesCountRes = Math.ceil(totalCountComments / data.pageSize)
         return {
             pagesCount: pagesCountRes,
@@ -79,4 +76,4 @@ class PostsQueryRepositories {
         }
     }
 }
-export const postsQueryRepositories = new PostsQueryRepositories()
+//export const postsQueryRepositories = new PostsQueryRepositories()

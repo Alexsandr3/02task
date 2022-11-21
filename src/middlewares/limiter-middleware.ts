@@ -1,7 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
-import {ipRepositories} from "../repositories/ip-db-repositories";
-
+import {ipRepositories} from "../composition-root";
 
 
 export const limiter = async (req: Request, res: Response, next: NextFunction) => {
@@ -12,7 +11,7 @@ export const limiter = async (req: Request, res: Response, next: NextFunction) =
     if (!client) return res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
     const limitTime = new Date(+inputDate - 10000)
     const count = await ipRepositories.getCount(ip, url, limitTime)
-    if(count > 5) return res.sendStatus(HTTP_STATUSES.TOO_MUCH_REQUESTS_429)
+    if (count > 5) return res.sendStatus(HTTP_STATUSES.TOO_MUCH_REQUESTS_429)
     next()
 }
 

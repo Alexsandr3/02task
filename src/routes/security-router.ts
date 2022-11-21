@@ -1,10 +1,9 @@
 import {Request, Response, Router} from "express";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
-import {deviceQueryRepositories} from "../repositories/device-query-repositories";
 import {checkRefreshTokena} from "../middlewares/check-refresh-tokena";
 import {DeviceViewModel} from "../types/device_types";
 import {validDeviceId} from "../middlewares/valid-device-Id";
-import {deviceService} from "../domain/device-service";
+import {deviceQueryRepositories, deviceService} from "../composition-root";
 
 
 export const securityRoute = Router({})

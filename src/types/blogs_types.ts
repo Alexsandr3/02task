@@ -9,6 +9,7 @@ export class BlogsViewType {
                 public createdAt: string) {
     }
 }
+
 export class BlogsDBType {
     constructor(public _id: ObjectId,
                 public name: string,
@@ -17,6 +18,7 @@ export class BlogsDBType {
                 public createdAt: string
     ) {}
 }
+
 export enum SortDirectionType {
     Asc = 'asc',
     Desc = 'desc'
@@ -30,6 +32,7 @@ export enum SortDirectionType {
                 public sortDirection: SortDirectionType) {
     }
 }*/
+
 export interface PaginatorBlogType {
     searchNameTerm: string,
     pageNumber: number,
@@ -37,6 +40,7 @@ export interface PaginatorBlogType {
     sortBy: string,
     sortDirection: SortDirectionType
 }
+
 export type PaginatorPostsBlogType = Omit<PaginatorBlogType, "searchNameTerm">
 
 

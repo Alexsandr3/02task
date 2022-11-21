@@ -1,13 +1,12 @@
 import {Response, Router} from "express";
 import {RequestWithParams, RequestWithParamsAndBody} from "../types/Req_types";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
-import {commentsQueryRepositories} from "../repositories/comments-query-repositories";
 import {authMiddleware} from "../middlewares/auth-Headers-Validations-Middleware";
-import {commentsService} from "../domain/comments-service";
 import {preCommentsValidation} from "../middlewares/comments-validation-middleware";
 import {checkCommentIdValidForMongodb} from "../middlewares/check-valid-id-from-db";
 import {BodyParams_CommentInputModel} from "../models/BodyParams_CommentInputModel";
 import {CommentsViewType} from "../types/comments_types";
+import {commentsQueryRepositories, commentsService} from "../composition-root";
 
 
 export const commentsRoute = Router({})

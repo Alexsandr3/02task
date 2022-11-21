@@ -19,7 +19,7 @@ export const userForGet = (object: UsersAcountDBType): MeViewModel => {
     }
 }
 
-class UsersQueryRepositories {
+export class UsersQueryRepositories {
     async findUsers(data: paginatorUsersType): Promise<PaginatorType<UsersViewType[]>> {
         const foundsUsers = (await UserModelClass
             .find({
@@ -76,4 +76,3 @@ class UsersQueryRepositories {
     }
 }
 
-export const usersQueryRepositories = new UsersQueryRepositories()

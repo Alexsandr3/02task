@@ -3,7 +3,7 @@ import {ObjectId} from "mongodb";
 import {BlogsDBType, BlogsViewType} from "../types/blogs_types";
 
 
-class BlogsRepositories {
+export class BlogsRepositories {
     private blogWithNewId(object: BlogsDBType): BlogsViewType {
         return new BlogsViewType(
             object._id?.toString(),
@@ -22,7 +22,6 @@ class BlogsRepositories {
             websiteUrl,
             new Date().toISOString()
         )
-        //await blogsCollection.insertOne(newBlog)
         await BlogModelClass.create(newBlog)
         return this.blogWithNewId(newBlog)
     }
@@ -38,13 +37,6 @@ class BlogsRepositories {
                 websiteUrl: websiteUrl
             }
         })
-      /*  const result = await blogsCollection.updateOne({_id: new ObjectId(id)}, {
-            $set: {
-                name: name,
-                description: description,
-                websiteUrl: websiteUrl
-            }
-        })*/
         return result.matchedCount === 1
     }
 
@@ -53,9 +45,7 @@ class BlogsRepositories {
             return false
         }
         const result = await BlogModelClass.deleteOne({_id: new ObjectId(id)})
-        //const result = await blogsCollection.deleteOne({_id: new ObjectId(id)})
         return result.deletedCount === 1
     }
 }
 
-export const blogsRepositories = new BlogsRepositories()

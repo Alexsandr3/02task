@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
-import {deviceRepositories} from "../repositories/device-db-repositories";
+import {deviceRepositories} from "../composition-root";
 
 
 export const validDeviceId = async (req: Request, res: Response, next: NextFunction) => {

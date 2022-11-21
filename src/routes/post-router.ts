@@ -2,7 +2,6 @@ import {Response, Router} from "express";
 import {checkAutoritionMiddleware} from "../middlewares/check-autorition-middleware";
 import {prePostsValidation} from "../middlewares/posts-validation-middleware";
 import {SortDirectionType} from "../types/blogs_types";
-import {postsService} from "../domain/posts-service";
 import {pageValidations} from "../middlewares/blogs-validation-middleware";
 import {
     checkIdValidForMongodb,
@@ -19,13 +18,13 @@ import {QeuryParams_GetPostsModel} from "../models/QeuryParams_GetPostsModel";
 import {BodyParams_PostInputModel} from "../models/BodyParams_PostInputModel";
 import {PostsViewType} from "../types/posts_types";
 import {URIParams_PostModel} from "../models/URIParams_PostModel";
-import {postsQueryRepositories} from "../repositories/posts-query-repositories";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
 import {PaginatorType} from "../models/PaginatorType";
 import {preCommentsValidation} from "../middlewares/comments-validation-middleware";
 import {authMiddleware} from "../middlewares/auth-Headers-Validations-Middleware";
 import {pageNumberValidation, pageSizeValidation} from "../middlewares/users-validation-middleware";
 import {BodyParams_CommentInputModel} from "../models/BodyParams_CommentInputModel";
+import {postsQueryRepositories, postsService} from "../composition-root";
 
 
 export const postsRoute = Router({})

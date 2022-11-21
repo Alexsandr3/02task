@@ -1,22 +1,25 @@
-import {blogsRepositories} from "../repositories/blogs-db-repositories";
-import {postsRepositories} from "../repositories/posts-db-repositories";
+import {BlogsRepositories} from "../repositories/blogs-db-repositories";
 import {BlogsViewType} from "../types/blogs_types";
 import {PostsViewType} from "../types/posts_types";
+import {PostsRepositories} from "../repositories/posts-db-repositories";
 
 
-class BlogsService {
-    async createBlog (name: string, description: string, websiteUrl: string): Promise<BlogsViewType>{
-        return await blogsRepositories.createBlog(name,description, websiteUrl)
+export class BlogsService {
+    constructor(protected blogsRepositories: BlogsRepositories, protected postsRepositories: PostsRepositories) {}
+
+    async createBlog(name: string, description: string, websiteUrl: string): Promise<BlogsViewType> {
+        return await this.blogsRepositories.createBlog(name, description, websiteUrl)
     }
-    async updateBlogById (id : string, name:string, description: string, websiteUrl: string): Promise<boolean>{
-        return await blogsRepositories.updateBlogById(id, name, description, websiteUrl)
+
+    async updateBlogById(id: string, name: string, description: string, websiteUrl: string): Promise<boolean> {
+        return await this.blogsRepositories.updateBlogById(id, name, description, websiteUrl)
     }
-    async createPostsByIdBlog (blogId: string, title:string, shortDescription: string, content: string): Promise<PostsViewType | null>{
-        return await postsRepositories.createPost(title, shortDescription, content, blogId)
+
+    async createPostsByIdBlog(blogId: string, title: string, shortDescription: string, content: string): Promise<PostsViewType | null> {
+        return await this.postsRepositories.createPost(title, shortDescription, content, blogId)
     }
-    async deleteBlogById (id: string): Promise<boolean> {
-        return blogsRepositories.deleteBlogById(id)
+
+    async deleteBlogById(id: string): Promise<boolean> {
+        return this.blogsRepositories.deleteBlogById(id)
     }
 }
-
-export const blogsService = new BlogsService()

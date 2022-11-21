@@ -1,11 +1,9 @@
 import {Request, Response, Router} from "express";
-import {usersService} from "../domain/users-service";
 import {emailValidations, loginValidations, passwordValidations} from "../middlewares/auth_login-validation-middleware";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
 import {RequestWithBody} from "../types/Req_types";
 import {BodyParams_LoginInputModel} from "../models/BodyParams_LoginInputModel";
 import {authMiddleware} from "../middlewares/auth-Headers-Validations-Middleware";
-import {usersQueryRepositories} from "../repositories/users-query-repositories";
 import {
    BodyParams_RegistrationEmailResendingInputModel
 } from "../models/BodyParams_RegistrationConfirmationCodeInputModel";
@@ -19,6 +17,7 @@ import {checkRefreshTokena} from "../middlewares/check-refresh-tokena";
 import {limiter} from "../middlewares/limiter-middleware";
 import {BodyParams_RecoveryInputModel} from "../models/BodyParams_RecoveryInputModel";
 import {BodyParams_PasswordRecoveryInputModel} from "../models/BodyParams_PasswordRecoveryInputModel";
+import {usersQueryRepositories, usersService} from "../composition-root";
 
 
 export const authRoute = Router({})

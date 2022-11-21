@@ -9,14 +9,14 @@ const nameValidation =
         .isString()
         .notEmpty()
         .trim()
-        .isLength({min:1, max:15})
+        .isLength({min: 1, max: 15})
 const descriptionValidation =
     body('description',
         'description must be a string, must not be empty, length must be between 1 and 100 characters')
         .isString()
         .notEmpty()
         .trim()
-        .isLength({min:1, max:500})
+        .isLength({min: 1, max: 500})
 
 
 const websiteUrlValidation =
@@ -24,9 +24,7 @@ const websiteUrlValidation =
         'should be valid URL, length from 1 to 100 symbol')
         .isURL()
         .isLength({min: 1, max: 100})
-        //.matches(/^https://([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/)
-
-
+//.matches(/^https://([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/)
 
 
 const pageNumberValidation =

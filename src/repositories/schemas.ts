@@ -9,16 +9,16 @@ import {DeviceDBType} from "../types/device_types";
 
 const blogSchema = new mongoose.Schema<BlogsDBType>({
     _id: ObjectId,
-    name: {type: String, required: true},
-    description: {type: String, required: true},
-    websiteUrl: {type: String, required: true},
+    name: {type: String, required: true, maxlength: 15, trim: true},
+    description: {type: String, required: true, maxlength: 500},
+    websiteUrl: {type: String, required: true, maxlength: 100, trim: true},
     createdAt: {type: String, required: true}
 });
 const postSchema = new mongoose.Schema<PostsDBType>({
     _id: ObjectId,
-    title: {type: String, required: true},
-    shortDescription: {type: String, required: true},
-    content: {type: String, required: true},
+    title: {type: String, required: true, maxlength: 30, trim: true},
+    shortDescription: {type: String, required: true, maxlength: 100},
+    content: {type: String, required: true, maxlength: 1000},
     blogId: {type: String, required: true},
     blogName: {type: String, required: true},
     createdAt: {type: String, required: true}
@@ -26,7 +26,7 @@ const postSchema = new mongoose.Schema<PostsDBType>({
 const userSchema = new mongoose.Schema<UsersAcountDBType>({
     _id: ObjectId,
     accountData: {
-        login: {type: String, required: true},
+        login: {type: String, required: true, minlength: 3, maxlength: 10},
         email: {type: String, required: true},
         passwordHash: {type: String, required: true},
         createdAt: {type: String, required: true}
@@ -34,20 +34,20 @@ const userSchema = new mongoose.Schema<UsersAcountDBType>({
     emailConfirmation: {
         confirmationCode: {type: String, required: true},
         expirationDate: Date,
-        isConfirmation: Boolean,
+        isConfirmation: {type: Boolean, default: false},
         sentEmails: [{sentDate: Date}]
     },
     emailRecovery: {
         recoveryCode: {type: String, required: true},
         expirationDate: Date,
-        isConfirmation: Boolean,
+        isConfirmation: {type: Boolean, default: false},
         sentEmails: [{sentDate: Date}]
     }
 });
 const commentSchema = new mongoose.Schema<CommentsDBType>({
     _id: ObjectId,
     postId: {type: String, required: true},
-    content: {type: String, required: true},
+    content: {type: String, required: true, minlength: 20, maxlength: 300},
     userId: {type: String, required: true},
     userLogin: {type: String, required: true},
     createdAt: {type: String, required: true}

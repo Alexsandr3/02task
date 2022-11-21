@@ -1,14 +1,16 @@
-import {commentsRepositories} from "../repositories/comments-db-repositories";
-
+import {CommentsRepositories} from "../repositories/comments-db-repositories";
 
 
 type UpdateCommentResult = {
     errorStatus?: number
 }
 
-class CommentsService {
+export class CommentsService {
+
+    constructor(protected commentsRepositories: CommentsRepositories) {}
+
     async updateCommentsById(id: string, content: string, userId: string): Promise<UpdateCommentResult> {
-        const comment = await commentsRepositories.findCommentsById(id)
+        const comment = await this.commentsRepositories.findCommentsById(id)
         if (!comment) {
             return {
                 errorStatus: 404
@@ -19,7 +21,7 @@ class CommentsService {
                 errorStatus: 403
             }
         }
-        const result = await commentsRepositories.updateCommentsById(id, content)
+        const result = await this.commentsRepositories.updateCommentsById(id, content)
 
         if (!result) {
             return {
@@ -30,7 +32,7 @@ class CommentsService {
     }
 
     async deleteCommentById(id: string, userId: string): Promise<UpdateCommentResult> {
-        const comment = await commentsRepositories.findCommentsById(id)
+        const comment = await this.commentsRepositories.findCommentsById(id)
         if (!comment) {
             return {
                 errorStatus: 404
@@ -41,7 +43,7 @@ class CommentsService {
                 errorStatus: 403
             }
         }
-        const result = await commentsRepositories.deleteCommentsById(id)
+        const result = await this.commentsRepositories.deleteCommentsById(id)
         if (!result) {
             return {
                 errorStatus: 400
@@ -51,4 +53,3 @@ class CommentsService {
     }
 }
 
-export const commentsService = new CommentsService()

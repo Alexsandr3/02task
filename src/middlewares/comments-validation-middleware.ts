@@ -7,7 +7,7 @@ const contentValidation =
         .isString()
         .notEmpty()
         .trim()
-        .isLength({min:20, max:300})
+        .isLength({min: 20, max: 300})
 
 
 export const preCommentsValidation = [

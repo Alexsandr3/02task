@@ -5,11 +5,11 @@ const credentials = {
     login: 'admin',
     password: 'qwerty'
 }
-export const checkAutoritionMiddleware = (req:Request, res:Response, next: NextFunction) => {
+export const checkAutoritionMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const authHeander = req.headers.authorization
     const encoderAut = Buffer.from(`${credentials.login}:${credentials.password}`).toString('base64')
     const validHeander = `Basic ${encoderAut}`
-    if (validHeander !== authHeander){
+    if (validHeander !== authHeander) {
         res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
         return
     }

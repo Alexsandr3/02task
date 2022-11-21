@@ -11,7 +11,7 @@ const deviceForView = (object: DeviceDBType): DeviceViewModel => {
     }
 }
 
-class DeviceQueryRepositories {
+export class DeviceQueryRepositories {
     async findDevices(userId: string): Promise<DeviceViewModel[] | null> {
         const result = (await DeviceModelClass
             .find({userId: userId}).lean()).map(foundDevice => deviceForView(foundDevice))
@@ -22,4 +22,4 @@ class DeviceQueryRepositories {
         }
     }
 }
-export const deviceQueryRepositories = new DeviceQueryRepositories()
+//export const deviceQueryRepositories = new DeviceQueryRepositories()

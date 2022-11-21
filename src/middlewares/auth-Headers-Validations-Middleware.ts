@@ -1,8 +1,7 @@
 import {NextFunction, Request, Response} from "express";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
 import {jwtService} from "../application/jwt-servise";
-import {usersQueryRepositories} from "../repositories/users-query-repositories";
-
+import {usersQueryRepositories} from "../composition-root";
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     if (!req.headers.authorization) {

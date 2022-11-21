@@ -1,6 +1,5 @@
 import {Response, Router} from "express";
 import {SortDirectionType} from "../types/blogs_types";
-import {usersService} from "../domain/users-service";
 import {
     preGetUsersValidations,
     usersValidations
@@ -10,10 +9,10 @@ import {RequestWithBody, RequestWithParams, RequestWithQeury} from "../types/Req
 import {QueryParams_GetUsersModel} from "../models/QueryParams_GetUsersModel";
 import {UsersViewType} from "../types/users_types";
 import {URIParams_UserModel} from "../models/URIParams_UserModel";
-import {usersQueryRepositories} from "../repositories/users-query-repositories";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
 import {PaginatorType} from "../models/PaginatorType";
 import {BodyParams_UserInputModel} from "../models/BodyParams_UserInputModel";
+import {usersQueryRepositories, usersService} from "../composition-root";
 
 
 export const usersRoute = Router({})

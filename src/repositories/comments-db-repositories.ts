@@ -3,7 +3,7 @@ import {ObjectId} from "mongodb";
 import {CommentsDBType, CommentsViewType} from "../types/comments_types";
 
 
-class CommentsRepositories {
+export class CommentsRepositories {
     private commentWithNewId(object: CommentsDBType): CommentsViewType {
         return new CommentsViewType(
             object._id?.toString(),
@@ -22,7 +22,6 @@ class CommentsRepositories {
             userLogin,
             new Date().toISOString())
         await CommentModelClass.create(newComment)
-        //await commentsCollection.insertOne(newComment)
         return this.commentWithNewId(newComment)
     }
 
@@ -31,7 +30,6 @@ class CommentsRepositories {
             return false
         }
         const result = await CommentModelClass.updateOne({_id: new ObjectId(id)}, {$set: {content: content}})
-        //const result = await commentsCollection.updateOne({_id: new ObjectId(id)}, {$set: {content: content}})
         return result.matchedCount === 1
     }
 
@@ -40,15 +38,11 @@ class CommentsRepositories {
             return false
         }
         const result = await CommentModelClass.deleteOne({_id: new ObjectId(id)})
-        //const result = await commentsCollection.deleteOne({_id: new ObjectId(id)})
         return result.deletedCount === 1
     }
 
     async findCommentsById(id: string) {
         return CommentModelClass.findOne({_id: new ObjectId(id)})
-        //return await commentsCollection.findOne({_id: new ObjectId(id)})
     }
 
 }
-
-export const commentsRepositories = new CommentsRepositories()

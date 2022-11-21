@@ -8,7 +8,7 @@ import {BlogModelClass, PostModelClass} from "./schemas";
 
 
 
-class BlogsQueryRepositories {
+export class BlogsQueryRepositories {
     private blogWithNewId(object: BlogsDBType): BlogsViewType {
         return new BlogsViewType(
             object._id?.toString(),
@@ -46,7 +46,6 @@ class BlogsQueryRepositories {
             return null
         }
         const result = await BlogModelClass.findOne({_id: new ObjectId(id)})
-        //const result = await blogsCollection.findOne({_id: new ObjectId(id)})
         if (!result) {
             return null
         } else {
@@ -54,7 +53,7 @@ class BlogsQueryRepositories {
         }
     }
     async findPostsByIdBlog(blogId: string, data: PaginatorPostsBlogType): Promise<PaginatorType<PostsViewType[]> | null> {
-        const blog = await blogsQueryRepositories.findBlogById(blogId)
+        const blog = await this.findBlogById(blogId)
         if (!blog) return null
         const foundPosts = (await PostModelClass
             .find({blogId})
@@ -73,5 +72,3 @@ class BlogsQueryRepositories {
         }
     }
 }
-
-export const blogsQueryRepositories = new BlogsQueryRepositories()

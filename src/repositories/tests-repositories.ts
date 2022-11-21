@@ -8,7 +8,7 @@ import {
 } from "./schemas";
 
 
-class TestsRepositories {
+export class TestsRepositories {
     async deleteAll() {
         await BlogModelClass.deleteMany({})
         await CommentModelClass.deleteMany({})
@@ -19,4 +19,4 @@ class TestsRepositories {
     }
 }
 
-export const testsRepositories = new TestsRepositories()
+//export const testsRepositories = new TestsRepositories()

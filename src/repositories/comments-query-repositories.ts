@@ -4,7 +4,7 @@ import {CommentsDBType, CommentsViewType} from "../types/comments_types";
 import {ObjectId} from "mongodb";
 
 
-class CommentsQueryRepositories {
+export class CommentsQueryRepositories {
 
     private commentWithNewId(object: CommentsDBType): CommentsViewType {
         return new CommentsViewType(
@@ -29,4 +29,3 @@ class CommentsQueryRepositories {
     }
 }
 
-export const commentsQueryRepositories = new CommentsQueryRepositories()

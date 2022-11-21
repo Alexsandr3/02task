@@ -1,9 +1,7 @@
 import {body, query} from "express-validator";
 import {checkAutoritionMiddleware} from "./check-autorition-middleware";
 import {inputValidetionsMiddleware} from "./Input-validetions-middleware";
-import {usersRepositories} from "../repositories/users-db-repositories";
-
-
+import {usersRepositories} from "../composition-root";
 
 
 const loginValidation =
@@ -12,7 +10,7 @@ const loginValidation =
         .isString()
         .notEmpty()
         .trim()
-        .isLength({min:3, max:10})
+        .isLength({min: 3, max: 10})
         .custom(async (login) => {
             const isValidUser = await usersRepositories.findByLoginOrEmail(login)
             if (isValidUser) throw new Error('Login already in use, do you need choose new login')
@@ -25,7 +23,7 @@ const passwordValidation =
         .isString()
         .notEmpty()
         .trim()
-        .isLength({min:6, max:20})
+        .isLength({min: 6, max: 20})
 
 export const emailValidation =
     body('email',
@@ -35,10 +33,10 @@ export const emailValidation =
         .trim()
         .isEmail()
         .custom(async (email) => {
-        const isValidUser = await usersRepositories.findByLoginOrEmail(email)
-        if (isValidUser) throw new Error('Email already in use, do you need choose new email')
-        return true
-    })
+            const isValidUser = await usersRepositories.findByLoginOrEmail(email)
+            if (isValidUser) throw new Error('Email already in use, do you need choose new email')
+            return true
+        })
 
 export const pageNumberValidation =
     query('pageNumber',
@@ -71,11 +69,7 @@ const sortDirectionValidation =
         .default('desc')   //// ???????
 
 
-
-
-
-
-export const preGetUsersValidations =[
+export const preGetUsersValidations = [
     sortByValidation,
     sortDirectionValidation,
     pageNumberValidation,

@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from "express";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
 import {jwtService} from "../application/jwt-servise";
-import {deviceRepositories} from "../repositories/device-db-repositories";
+import {deviceRepositories} from "../composition-root";
 
 
 export const checkRefreshTokena = async (req: Request, res: Response, next: NextFunction) => {
@@ -13,7 +13,7 @@ export const checkRefreshTokena = async (req: Request, res: Response, next: Next
     if (dateExp < new Date()) return res.status(HTTP_STATUSES.UNAUTHORIZED_401).send('Expired date')
 
     const deviceUser = await deviceRepositories.findDeviceForValid(payload.userId, payload.deviceId, payload.iat)
-    if(!deviceUser) return res.status(HTTP_STATUSES.UNAUTHORIZED_401).send('Incorrect userId or deviceId or issuedAt')
+    if (!deviceUser) return res.status(HTTP_STATUSES.UNAUTHORIZED_401).send('Incorrect userId or deviceId or issuedAt')
     req.payload = payload
     next()
 }

@@ -1,4 +1,4 @@
-import {NextFunction,Request, Response} from "express";
+import {NextFunction, Request, Response} from "express";
 import {ObjectId} from "mongodb";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
 

@@ -4,7 +4,7 @@ import {UsersAcountDBType, UsersViewType} from "../types/users_types";
 import {userWithNewId} from "./users-query-repositories";
 
 
-class UsersRepositories {
+export class UsersRepositories {
     async createUser(newUser: UsersAcountDBType): Promise<UsersViewType> {
         await UserModelClass.create(newUser)
         //await usersCollection.insertOne(newUser)
@@ -76,5 +76,3 @@ class UsersRepositories {
         return result.modifiedCount === 1
     }
 }
-
-export const usersRepositories = new UsersRepositories()
