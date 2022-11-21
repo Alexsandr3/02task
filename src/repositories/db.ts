@@ -1,11 +1,10 @@
-import {MongoClient} from "mongodb"
 import 'dotenv/config'
 import mongoose from "mongoose";
 
 //const mongoUri = process.env.MONGO_URI || "mongodb://0.0.0.0:27017";
 const mongoUri = process.env.MONGO_URI || "mongodb://0.0.0.0:27017";
 
-export const client = new MongoClient(mongoUri);
+//export const client = new MongoClient(mongoUri);
 //const dbName = 'Homework'
 //const dbName = 'HomeworkWithMongoose'
 //const DB = client.db(dbName)
@@ -21,11 +20,11 @@ export const client = new MongoClient(mongoUri);
 export async function runDb() {
     try {
         //connect the client to the server
-        await client.connect();
+       // await client.connect();
         //Establish and verify connection
         //await DB.command({ping:1});
         //console.log("Connected successfully to MONGO server");
-        await mongoose.connect('mongodb://0.0.0.0:27017/HomeworkWithMongoose');
+        await mongoose.connect(mongoUri, {dbName: 'HomeworkWithMongoose'});
         console.log("Connected successfully to MONGOOSE server");
     } catch {
         console.log("Can't connect to db");
