@@ -18,11 +18,6 @@ export const client = new MongoClient(mongoUri);
 //export const ipCollection = DB.collection<IpClientDBType>('ip')
 //export const deviceCollection = DB.collection<DeviceDBType>('device')
 
-
-
-
-
-
 export async function runDb() {
     try {
         //connect the client to the server
@@ -30,7 +25,7 @@ export async function runDb() {
         //Establish and verify connection
         //await DB.command({ping:1});
         //console.log("Connected successfully to MONGO server");
-        await mongoose.connect('mongodb://localhost:27017/HomeworkWithMongoose');
+        await mongoose.connect('mongodb://0.0.0.0:27017/HomeworkWithMongoose');
         console.log("Connected successfully to MONGOOSE server");
     } catch {
         console.log("Can't connect to db");
