@@ -9,7 +9,9 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
         return
     }
     const token = req.headers.authorization.split(' ')[1]
+    console.log('1-=-=token-=-=-', token)
     const userId = await jwtService.getUserIdByToken(token)
+    console.log('3-=-=userId-=-=-', userId)
     if (!userId) {
         res.status(HTTP_STATUSES.UNAUTHORIZED_401).send("Did not come userId")
         return

@@ -13,7 +13,7 @@ export class CommentsService {
     async updateLikeStatus(id: string, likeStatus: LikeStatusType): Promise<boolean> {
         const comment = await this.commentsRepositories.findCommentsById(id)
         if (!comment) return false
-        const saveStatus = await this.commentsRepositories.createStatusCommentById(id, comment.userId, likeStatus)
+        const saveStatus = await this.commentsRepositories.updateStatusCommentById(id, comment.userId, likeStatus)
         if (!saveStatus) return false
         return true
     }

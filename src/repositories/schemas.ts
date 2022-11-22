@@ -50,13 +50,7 @@ const commentSchema = new mongoose.Schema<CommentsDBType>({
     content: {type: String, required: true, minlength: 20, maxlength: 300},
     userId: {type: String, required: true},
     userLogin: {type: String, required: true},
-    createdAt: {type: String, required: true},
-    likesInfo: [{
-        _id: ObjectId,
-        userId: {type: String, required: true},
-        parentId: {type: String, required: true},
-        likeStatus: {type: String, default: "none"}
-    }]
+    createdAt: {type: String, required: true}
 });
 const ipSchema = new mongoose.Schema<IpClientDBType>({
     _id: ObjectId,

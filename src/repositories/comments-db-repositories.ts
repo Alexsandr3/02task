@@ -11,7 +11,7 @@ import {
 
 export class CommentsRepositories {
 
-    async createStatusCommentById(id: string, userId: string, likeStatus: LikeStatusType): Promise<LikeDBType | boolean> {
+    async updateStatusCommentById(id: string, userId: string, likeStatus: LikeStatusType): Promise<LikeDBType | boolean> {
         const newStatus = new LikeDBType(
             new ObjectId(),
             userId,
@@ -30,18 +30,24 @@ export class CommentsRepositories {
             content,
             userId,
             userLogin,
-            new Date().toISOString(),
-            [])
+            new Date().toISOString())
         const createComment = await CommentModelClass.create(newComment)
         if (!createComment) return null
-        const totalCountLike = await LikeModelClass.countDocuments({_id: createComment._id, likesInfo: "like"})
-        const totalCountDislike = await LikeModelClass.countDocuments({commentId: createComment._id, likesInfo: "dislike"})
-        const findStatusComment = await LikeModelClass.findOne({userId: userId})
-        if (!findStatusComment) return null
+        const likeStatus = new LikeDBType(
+            new ObjectId(),
+            userId,
+            createComment._id.toString(),
+            LikeStatusType.None
+        )
+        await LikeModelClass.create(likeStatus)
+        const totalCountLike = await LikeModelClass.countDocuments({parentId: createComment._id, likeStatus: {$eq: "like"}})
+        const totalCountDislike = await LikeModelClass.countDocuments({parentId: createComment._id, likeStatus: {$eq: "dislike"}})
+        const myStatus = await LikeModelClass.findOne({userId: userId, parentId: createComment._id})
+        if (!myStatus) return null
         const likesInfo = new LikesInfoViewModel(
             totalCountLike,
             totalCountDislike,
-            findStatusComment.likeStatus)
+            myStatus.likeStatus)
         return new CommentsViewType(
             newComment._id?.toString(),
             newComment.content,

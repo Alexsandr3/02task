@@ -6,8 +6,6 @@ import {CommentsDBType, CommentsViewType, LikesInfoViewModel} from "../types/com
 import {CommentModelClass, LikeModelClass, PostModelClass} from "./schemas";
 
 
-
-
 export const postWithNewId = (object: PostsDBType): PostsViewType => {
     return {
         id: object._id?.toString(),
@@ -38,26 +36,28 @@ export class PostsQueryRepositories {
             object.createdAt,
             likesInfo)
     }
-    async findByIdPost (id: string): Promise<PostsViewType | null> {
-        if(!ObjectId.isValid(id)) {
+
+    async findByIdPost(id: string): Promise<PostsViewType | null> {
+        if (!ObjectId.isValid(id)) {
             return null
         }
-        const result = await PostModelClass.findOne({_id:new ObjectId(id)})
-        if (!result){
+        const result = await PostModelClass.findOne({_id: new ObjectId(id)})
+        if (!result) {
             return null
         } else {
             return postWithNewId(result)
         }
     }
-    async findPosts(data:ForFindPostsType, blogId?: string): Promise<PaginatorType<PostsViewType[]>> {
+
+    async findPosts(data: ForFindPostsType, blogId?: string): Promise<PaginatorType<PostsViewType[]>> {
         const foundPosts = (await PostModelClass
             .find({})
-            .skip( ( data.pageNumber - 1 ) * data.pageSize )
+            .skip((data.pageNumber - 1) * data.pageSize)
             .limit(data.pageSize)
-            .sort({ [data.sortBy] : data.sortDirection })
+            .sort({[data.sortBy]: data.sortDirection})
             .lean()).map(foundPost => postWithNewId(foundPost))
         const totalCount = await PostModelClass.countDocuments(blogId ? {blogId} : {})
-        const pagesCountRes = Math.ceil(totalCount/data.pageSize)
+        const pagesCountRes = Math.ceil(totalCount / data.pageSize)
         return {
             pagesCount: pagesCountRes,
             page: data.pageNumber,
@@ -66,23 +66,25 @@ export class PostsQueryRepositories {
             items: foundPosts
         }
     }
+
     async findCommentsByIdPost(postId: string, data: PaginatorPostsBlogType) {
         const post = await this.findByIdPost(postId)
         if (!post) return null
-        const comments = (await CommentModelClass.find({postId: postId})
+        const comments = await CommentModelClass.find({postId: postId})
             .skip((data.pageNumber - 1) * data.pageSize)
             .limit(data.pageSize)
-            .sort({[data.sortBy]: data.sortDirection}).lean())
-            .map(this.commentWithNewId)
+            .sort({[data.sortBy]: data.sortDirection}).lean()
+        const mappedComments = comments.map(await this.commentWithNewId)
+        const itemsComments = await Promise.all(mappedComments)
         if (!comments) return null
         const totalCountComments = await PostModelClass.countDocuments(postId ? {postId} : {})
         const pagesCountRes = Math.ceil(totalCountComments / data.pageSize)
-        return new PaginatorType (
+        return new PaginatorType(
             pagesCountRes,
             data.pageNumber,
             data.pageSize,
             totalCountComments,
-            comments
+            itemsComments
         )
     }
 }

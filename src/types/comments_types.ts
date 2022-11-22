@@ -7,8 +7,7 @@ export class CommentsDBType {
                 public content: string,
                 public userId: string,
                 public userLogin: string,
-                public createdAt: string,
-                public likesInfo: LikeDBType[]) {
+                public createdAt: string) {
     }
 }
 

@@ -4,7 +4,7 @@ import {TokensType} from "../types/token_types";
 
 class JwtService {
     async createJwt(userId: string, deviceId: string) {
-        const accessToken = jwt.sign({userId: userId}, settings.ACCESS_TOKEN_SECRET, {expiresIn: '7m'})
+        const accessToken = jwt.sign({userId: userId}, settings.ACCESS_TOKEN_SECRET, {expiresIn: '10m'})
         const refreshToken = jwt.sign({
             userId: userId,
             deviceId: deviceId,
@@ -15,6 +15,7 @@ class JwtService {
     async getUserIdByToken(token: string) {
         try {
             const result: any = jwt.verify(token, settings.ACCESS_TOKEN_SECRET)
+            console.log('2-=-=result-=-=-', result)
             return result.userId
         } catch (error) {
             return null
