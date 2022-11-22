@@ -8,6 +8,7 @@ import {BodyParams_CommentInputModel} from "../models/BodyParams_CommentInputMod
 import {CommentsViewType} from "../types/comments_types";
 import {commentsQueryRepositories, commentsService} from "../composition-root";
 import {BodyParams_LikeInputModel} from "../models/BodyParams_LikeInputModel";
+import {getUserIdFromRefreshTokena} from "../middlewares/get-UserId-from-refresh-tokena";
 
 
 export const commentsRoute = Router({})
@@ -20,8 +21,8 @@ commentsRoute.put('/:id/like-status', authMiddleware, prelikeStatusValidation, a
     }
     return res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })
-commentsRoute.get('/:id', checkCommentIdValidForMongodb, async (req: RequestWithParams<{id: string}>, res: Response<CommentsViewType>) => {
-    const comments = await commentsQueryRepositories.findComments(req.params.id)
+commentsRoute.get('/:id', getUserIdFromRefreshTokena, checkCommentIdValidForMongodb, async (req: RequestWithParams<{ id: string }>, res: Response<CommentsViewType>) => {
+    const comments = await commentsQueryRepositories.findComments(req.params.id, req.userId)
     if (!comments) {
         return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
     }
