@@ -44,13 +44,13 @@ app.get('/', (req: Request, res: Response) => {
         message: "Don't panic, eat draniks"
     })
 })
-app.delete('/testing/all-data', (req: Request, res: Response) => {
-    BlogModelClass.deleteMany({})
-    CommentModelClass.deleteMany({})
-    DeviceModelClass.deleteMany({})
-    IpModelClass.deleteMany({})
-    LikeModelClass.deleteMany({})
-    PostModelClass.deleteMany({})
-    UserModelClass.deleteMany({})
+app.delete('/testing/all-data', async (req: Request, res: Response) => {
+    await BlogModelClass.deleteMany({})
+    await CommentModelClass.deleteMany({})
+    await DeviceModelClass.deleteMany({})
+    await IpModelClass.deleteMany({})
+    await LikeModelClass.deleteMany({})
+    await PostModelClass.deleteMany({})
+    await UserModelClass.deleteMany({})
     res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })
