@@ -2,7 +2,7 @@ import {
     BlogModelClass,
     CommentModelClass,
     DeviceModelClass,
-    IpModelClass,
+    IpModelClass, LikeModelClass,
     PostModelClass,
     UserModelClass
 } from "./schemas";
@@ -16,6 +16,7 @@ export class TestsRepositories {
         await IpModelClass.deleteMany({})
         await PostModelClass.deleteMany({})
         await UserModelClass.deleteMany({})
+        await LikeModelClass.deleteMany({})
     }
 }
 
