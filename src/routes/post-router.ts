@@ -26,6 +26,7 @@ import {pageNumberValidation, pageSizeValidation} from "../middlewares/users-val
 import {BodyParams_CommentInputModel} from "../models/BodyParams_CommentInputModel";
 import {postsQueryRepositories, postsService} from "../composition-root";
 import {CommentsViewType} from "../types/comments_types";
+import {getUserIdFromRefreshTokena} from "../middlewares/get-UserId-from-refresh-tokena";
 
 
 export const postsRoute = Router({})
@@ -95,10 +96,11 @@ postsRoute.post('/:postId/comments', authMiddleware, checkPostIdValidForMongodb,
     return res.status(HTTP_STATUSES.CREATED_201).send(createdCommetn)
 })
 
-postsRoute.get('/:postId/comments', checkPostIdValidForMongodb, pageNumberValidation, pageSizeValidation, async (req: RequestWithParamsAndQeury<{ postId: string }, QeuryParams_GetPostsModel>,
-                                                                                                                 res: Response) => {
+postsRoute.get('/:postId/comments', getUserIdFromRefreshTokena, checkPostIdValidForMongodb, pageNumberValidation, pageSizeValidation, async (req: RequestWithParamsAndQeury<{ postId: string }, QeuryParams_GetPostsModel>,
+                                                                                                                                             res: Response) => {
 
     let data = req.query
+    let userId = req.userId
     let postId = req.params.postId
     let dataForReposit = {
         pageNumber: 1,
@@ -107,7 +109,7 @@ postsRoute.get('/:postId/comments', checkPostIdValidForMongodb, pageNumberValida
         sortDirection: SortDirectionType.Desc,
         ...data,
     }
-    const comments = await postsQueryRepositories.findCommentsByIdPost(postId, dataForReposit)
+    const comments = await postsQueryRepositories.findCommentsByIdPost(postId, dataForReposit, userId)
     if (!comments) {
         res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
         return;

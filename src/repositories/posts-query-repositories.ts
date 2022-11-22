@@ -2,7 +2,7 @@ import {ObjectId} from "mongodb";
 import {ForFindPostsType, PostsDBType, PostsViewType} from "../types/posts_types";
 import {PaginatorType} from "../types/PaginatorType";
 import {PaginatorPostsBlogType} from "../types/blogs_types";
-import {CommentsDBType, CommentsViewType, LikesInfoViewModel} from "../types/comments_types";
+import {CommentsDBType, CommentsViewType, LikesInfoViewModel, LikeStatusType} from "../types/comments_types";
 import {CommentModelClass, LikeModelClass, PostModelClass} from "./schemas";
 
 
@@ -19,21 +19,26 @@ export const postWithNewId = (object: PostsDBType): PostsViewType => {
 }
 
 export class PostsQueryRepositories {
-    private async commentWithNewId(object: CommentsDBType): Promise<CommentsViewType | null> {
-        const totalCountLike = await LikeModelClass.countDocuments({_id: object._id, likeStatus: "like"})
-        const totalCountDislike = await LikeModelClass.countDocuments({commentId: object._id, likeStatus: "dislike"})
-        const findComment = await LikeModelClass.findOne({userId: object.userId})
-        if (!findComment) return null
+    private async commentWithNewId(comment: CommentsDBType, userId: string | null): Promise<CommentsViewType | null> {
+        let myStatus: string = LikeStatusType.None
+        if (userId) {
+            const res = await LikeModelClass.findOne({userId: userId, parentId: comment._id})
+            if (res){
+                myStatus = res.likeStatus
+            }
+        }
+        const totalCountLike = await LikeModelClass.countDocuments({parentId: comment._id, likeStatus: "Like"})
+        const totalCountDislike = await LikeModelClass.countDocuments({parentId: comment._id, likeStatus: "Dislike"})
         const likesInfo = new LikesInfoViewModel(
             totalCountLike,
             totalCountDislike,
-            findComment.likeStatus)
+            myStatus)
         return new CommentsViewType(
-            object._id?.toString(),
-            object.content,
-            object.userId,
-            object.userLogin,
-            object.createdAt,
+            comment._id?.toString(),
+            comment.content,
+            comment.userId,
+            comment.userLogin,
+            comment.createdAt,
             likesInfo)
     }
 
@@ -67,15 +72,17 @@ export class PostsQueryRepositories {
         }
     }
 
-    async findCommentsByIdPost(postId: string, data: PaginatorPostsBlogType) {
+    async findCommentsByIdPost(postId: string, data: PaginatorPostsBlogType, userId: string | null) {
         const post = await this.findByIdPost(postId)
         if (!post) return null
         const comments = await CommentModelClass.find({postId: postId})
             .skip((data.pageNumber - 1) * data.pageSize)
             .limit(data.pageSize)
             .sort({[data.sortBy]: data.sortDirection}).lean()
-        const mappedComments = comments.map(await this.commentWithNewId)
+        const mappedComments = comments.map(async comment => await this.commentWithNewId(comment, userId))
         const itemsComments = await Promise.all(mappedComments)
+        console.log(mappedComments)
+        console.log(itemsComments)
         if (!comments) return null
         const totalCountComments = await PostModelClass.countDocuments(postId ? {postId} : {})
         const pagesCountRes = Math.ceil(totalCountComments / data.pageSize)

@@ -14,7 +14,7 @@ export const commentsRoute = Router({})
 
 
 commentsRoute.put('/:id/like-status', authMiddleware, prelikeStatusValidation, async (req: RequestWithParamsAndBody<{ id: string }, BodyParams_LikeInputModel>, res: Response) => {
-    const result = await commentsService.updateLikeStatus(req.params.id, req.body.likeStatus)
+    const result = await commentsService.updateLikeStatus(req.params.id, req.body.likeStatus, req.user.id)
     if (!result) {
         return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
     }

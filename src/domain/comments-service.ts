@@ -10,12 +10,10 @@ export class CommentsService {
 
     constructor(protected commentsRepositories: CommentsRepositories) {}
 
-    async updateLikeStatus(id: string, likeStatus: LikeStatusType): Promise<boolean> {
+    async updateLikeStatus(id: string, likeStatus: LikeStatusType, userId: string): Promise<boolean> {
         const comment = await this.commentsRepositories.findCommentsById(id)
         if (!comment) return false
-        const saveStatus = await this.commentsRepositories.updateStatusCommentById(id, comment.userId, likeStatus)
-        if (!saveStatus) return false
-        return true
+        return this.commentsRepositories.updateStatusCommentById(id, userId, likeStatus)
     }
 
     async updateCommentsById(id: string, content: string, userId: string): Promise<UpdateCommentResult> {
