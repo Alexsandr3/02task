@@ -7,13 +7,11 @@ import {userWithNewId} from "./users-query-repositories";
 export class UsersRepositories {
     async createUser(newUser: UsersAcountDBType): Promise<UsersViewType> {
         await UserModelClass.create(newUser)
-        //await usersCollection.insertOne(newUser)
         return userWithNewId(newUser)
     }
 
     async deleteUser(_id: ObjectId) {
         return UserModelClass.deleteOne({_id: _id})
-        //return await usersCollection.deleteOne(user)
     }
 
     async deleteUserById(id: string): Promise<boolean> {
@@ -21,28 +19,23 @@ export class UsersRepositories {
             return false
         }
         const result = await UserModelClass.deleteOne({_id: new ObjectId(id)})
-        //const result = await usersCollection.deleteOne({_id: new ObjectId(id)})
         return result.deletedCount === 1
     }
 
     async findByLoginOrEmail(loginOrEmail: string): Promise<UsersAcountDBType | null> {
         return UserModelClass.findOne({$or: [{"accountData.email": loginOrEmail}, {"accountData.login": loginOrEmail}]});
-        //return await usersCollection.findOne({$or: [{"accountData.email": loginOrEmail}, {"accountData.login": loginOrEmail}]})
     }
 
     async findUserByConfirmationCode(confirmationCode: string): Promise<UsersAcountDBType | null> {
         return UserModelClass.findOne({'emailConfirmation.confirmationCode': confirmationCode})
-        //return await usersCollection.findOne({'emailConfirmation.confirmationCode': confirmationCode})
     }
 
     async findUserByRecoveryCode(recoveryCode: string): Promise<UsersAcountDBType | null> {
         return UserModelClass.findOne({'emailRecovery.recoveryCode': recoveryCode})
-        //return await usersCollection.findOne({'emailRecovery.recoveryCode': recoveryCode})
     }
 
     async updateConfirmation(_id: ObjectId): Promise<boolean> {
         const result = await UserModelClass.updateOne({_id: _id}, {$set: {'emailConfirmation.isConfirmation': true}})
-        //const result = await usersCollection.updateOne({_id: _id}, {$set: {'emailConfirmation.isConfirmation': true}})
         return result.modifiedCount === 1
     }
 

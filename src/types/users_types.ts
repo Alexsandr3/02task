@@ -22,11 +22,15 @@ export class UsersViewType {
     }
 }
 
-export type MeViewModel = {
-    email: string
-    login: string
-    userId: string
+export class MeViewModel {
+    constructor(
+        public email: string,
+        public login: string,
+        public userId: string
+    ) {
+    }
 }
+
 export type paginatorUsersType = {
     searchLoginTerm: string,
     searchEmailTerm: string,

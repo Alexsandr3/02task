@@ -1,31 +1,35 @@
-import {CommentModelClass} from "./schemas";
-
-import {CommentsDBType, CommentsViewType} from "../types/comments_types";
+import {CommentModelClass, LikeModelClass} from "./schemas";
+import {CommentsViewType, LikesInfoViewModel} from "../types/comments_types";
 import {ObjectId} from "mongodb";
 
 
 export class CommentsQueryRepositories {
 
-    private commentWithNewId(object: CommentsDBType): CommentsViewType {
-        return new CommentsViewType(
-            object._id?.toString(),
-            object.content,
-            object.userId,
-            object.userLogin,
-            object.createdAt)
-    }
-
     async findComments(id: string): Promise<CommentsViewType | null> {
         if (!ObjectId.isValid(id)) {
             return null
         }
+        const totalCountLike = await LikeModelClass.countDocuments({commentId: id, likeStatus: "like"})
+        const totalCountDislike = await LikeModelClass.countDocuments({commentId: id, likeStatus: "dislike"})
+        const myStatus = await LikeModelClass.findOne({commentId: id})
+        if (!myStatus) return null
+        const likesInfo = new LikesInfoViewModel(
+            totalCountLike,
+            totalCountDislike,
+            myStatus.likeStatus)
         const result = await CommentModelClass.findOne({_id: new ObjectId(id)})
-        //const result = await commentsCollection.findOne({_id: new ObjectId(id)})
         if (!result) {
             return null
         } else {
-            return this.commentWithNewId(result)
+            return new CommentsViewType(
+                result._id?.toString(),
+                result.content,
+                result.userId,
+                result.userLogin,
+                result.createdAt,
+                likesInfo)
         }
     }
 }
+
 

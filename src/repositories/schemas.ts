@@ -3,7 +3,7 @@ import {BlogsDBType} from "../types/blogs_types";
 import {ObjectId} from "mongodb";
 import {PostsDBType} from "../types/posts_types";
 import {UsersAcountDBType} from "../types/users_types";
-import {CommentsDBType} from "../types/comments_types";
+import {CommentsDBType, LikeDBType} from "../types/comments_types";
 import {IpClientDBType} from "../types/ip-client_types";
 import {DeviceDBType} from "../types/device_types";
 
@@ -50,7 +50,13 @@ const commentSchema = new mongoose.Schema<CommentsDBType>({
     content: {type: String, required: true, minlength: 20, maxlength: 300},
     userId: {type: String, required: true},
     userLogin: {type: String, required: true},
-    createdAt: {type: String, required: true}
+    createdAt: {type: String, required: true},
+    likesInfo: [{
+        _id: ObjectId,
+        userId: {type: String, required: true},
+        parentId: {type: String, required: true},
+        likeStatus: {type: String, default: "none"}
+    }]
 });
 const ipSchema = new mongoose.Schema<IpClientDBType>({
     _id: ObjectId,
@@ -67,9 +73,16 @@ const deviceSchema = new mongoose.Schema<DeviceDBType>({
     expiredDate: {type: String, required: true},
     deviceId: {type: String, required: true}
 });
+const likeStatusSchema = new mongoose.Schema<LikeDBType>({
+    _id: ObjectId,
+    userId: {type: String, required: true},
+    parentId: {type: String, required: true},
+    likeStatus: {type: String, default: 'none'}
+});
 export const BlogModelClass = mongoose.model('blogs', blogSchema);
 export const PostModelClass = mongoose.model('posts', postSchema);
 export const UserModelClass = mongoose.model('users', userSchema);
 export const CommentModelClass = mongoose.model('comments', commentSchema);
 export const IpModelClass = mongoose.model('ip', ipSchema);
 export const DeviceModelClass = mongoose.model('device', deviceSchema);
+export const LikeModelClass = mongoose.model('likes', likeStatusSchema);

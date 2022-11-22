@@ -4,11 +4,11 @@ import {TokensType} from "../types/token_types";
 
 class JwtService {
     async createJwt(userId: string, deviceId: string) {
-        const accessToken = jwt.sign({userId: userId}, settings.ACCESS_TOKEN_SECRET, {expiresIn: '10s'})
+        const accessToken = jwt.sign({userId: userId}, settings.ACCESS_TOKEN_SECRET, {expiresIn: '7m'})
         const refreshToken = jwt.sign({
             userId: userId,
             deviceId: deviceId,
-        }, settings.REFRESH_TOKEN_SECRET, {expiresIn: '20s'})
+        }, settings.REFRESH_TOKEN_SECRET, {expiresIn: '24h'})
         return new TokensType(accessToken, refreshToken)
     }
 

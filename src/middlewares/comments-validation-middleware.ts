@@ -8,9 +8,19 @@ const contentValidation =
         .notEmpty()
         .trim()
         .isLength({min: 20, max: 300})
-
+const likeStatus =
+    body('likeStatus',
+        'likeStatus must be a string(like or dislike or none), must not be empty')
+        .isString()
+        .trim()
+        .default('none')
 
 export const preCommentsValidation = [
     contentValidation,
+    inputValidetionsMiddleware
+]
+
+export const prelikeStatusValidation =[
+    likeStatus,
     inputValidetionsMiddleware
 ]

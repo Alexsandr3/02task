@@ -2,7 +2,7 @@ import {ObjectId} from "mongodb";
 import {BlogsDBType, BlogsViewType, PaginatorPostsBlogType} from "../types/blogs_types";
 import {PaginatorBlogType} from "../types/blogs_types";
 import {PostsViewType} from "../types/posts_types";
-import {PaginatorType} from "../models/PaginatorType";
+import {PaginatorType} from "../types/PaginatorType";
 import {postWithNewId} from "./posts-query-repositories";
 import {BlogModelClass, PostModelClass} from "./schemas";
 

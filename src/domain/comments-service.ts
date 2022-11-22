@@ -1,4 +1,5 @@
 import {CommentsRepositories} from "../repositories/comments-db-repositories";
+import {LikeStatusType} from "../types/comments_types";
 
 
 type UpdateCommentResult = {
@@ -8,6 +9,14 @@ type UpdateCommentResult = {
 export class CommentsService {
 
     constructor(protected commentsRepositories: CommentsRepositories) {}
+
+    async updateLikeStatus(id: string, likeStatus: LikeStatusType): Promise<boolean> {
+        const comment = await this.commentsRepositories.findCommentsById(id)
+        if (!comment) return false
+        const saveStatus = await this.commentsRepositories.createStatusCommentById(id, comment.userId, likeStatus)
+        if (!saveStatus) return false
+        return true
+    }
 
     async updateCommentsById(id: string, content: string, userId: string): Promise<UpdateCommentResult> {
         const comment = await this.commentsRepositories.findCommentsById(id)

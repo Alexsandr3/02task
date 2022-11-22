@@ -18,7 +18,7 @@ import {BodyParams_BlogPostInputModel} from "../models/BodyParams_BlogPostInputM
 import {QeuryParams_GetPostsModel} from "../models/QeuryParams_GetPostsModel";
 import {URIParams_BlogModel} from "../models/URIParams_BlogModel";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
-import {PaginatorType} from "../models/PaginatorType";
+import {PaginatorType} from "../types/PaginatorType";
 import {blogsQueryRepositories, blogsService} from "../composition-root";
 
 

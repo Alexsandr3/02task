@@ -10,7 +10,7 @@ import {QueryParams_GetUsersModel} from "../models/QueryParams_GetUsersModel";
 import {UsersViewType} from "../types/users_types";
 import {URIParams_UserModel} from "../models/URIParams_UserModel";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
-import {PaginatorType} from "../models/PaginatorType";
+import {PaginatorType} from "../types/PaginatorType";
 import {BodyParams_UserInputModel} from "../models/BodyParams_UserInputModel";
 import {usersQueryRepositories, usersService} from "../composition-root";
 

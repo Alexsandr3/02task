@@ -19,12 +19,13 @@ import {BodyParams_PostInputModel} from "../models/BodyParams_PostInputModel";
 import {PostsViewType} from "../types/posts_types";
 import {URIParams_PostModel} from "../models/URIParams_PostModel";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
-import {PaginatorType} from "../models/PaginatorType";
+import {PaginatorType} from "../types/PaginatorType";
 import {preCommentsValidation} from "../middlewares/comments-validation-middleware";
 import {authMiddleware} from "../middlewares/auth-Headers-Validations-Middleware";
 import {pageNumberValidation, pageSizeValidation} from "../middlewares/users-validation-middleware";
 import {BodyParams_CommentInputModel} from "../models/BodyParams_CommentInputModel";
 import {postsQueryRepositories, postsService} from "../composition-root";
+import {CommentsViewType} from "../types/comments_types";
 
 
 export const postsRoute = Router({})
@@ -76,7 +77,7 @@ postsRoute.delete('/:id', checkIdValidForMongodb, checkAutoritionMiddleware, asy
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
 })
-postsRoute.post('/:postId/comments', authMiddleware, checkPostIdValidForMongodb, preCommentsValidation, async (req: RequestWithParamsAndBody<{postId: string}, BodyParams_CommentInputModel>, res: Response) => {
+postsRoute.post('/:postId/comments', authMiddleware, checkPostIdValidForMongodb, preCommentsValidation, async (req: RequestWithParamsAndBody<{postId: string}, BodyParams_CommentInputModel>, res: Response<CommentsViewType | null>) => {
     const postId = req.params.postId
     const content = req.body.content
     if (!req.user) {
