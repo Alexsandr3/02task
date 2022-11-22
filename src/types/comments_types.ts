@@ -35,9 +35,9 @@ export class LikesInfoViewModel {
     }
 }
 export enum LikeStatusType {
-    None = 'none',
-    Like = 'like',
-    Dislike = 'dislike'
+    None = 'None',
+    Like = 'Like',
+    Dislike = 'Dislike'
 }
 
 
