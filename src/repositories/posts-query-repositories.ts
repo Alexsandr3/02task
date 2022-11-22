@@ -81,8 +81,6 @@ export class PostsQueryRepositories {
             .sort({[data.sortBy]: data.sortDirection}).lean()
         const mappedComments = comments.map(async comment => await this.commentWithNewId(comment, userId))
         const itemsComments = await Promise.all(mappedComments)
-        console.log(mappedComments)
-        console.log(itemsComments)
         if (!comments) return null
         const totalCountComments = await PostModelClass.countDocuments(postId ? {postId} : {})
         const pagesCountRes = Math.ceil(totalCountComments / data.pageSize)

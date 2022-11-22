@@ -21,7 +21,6 @@ export class CommentsRepositories {
             return false
         }
     }
-
     async createCommentByIdPost(post_id: ObjectId, content: string, userId: string, userLogin: string): Promise<CommentsViewType | null> {
         const newComment = new CommentsDBType(
             new ObjectId(),

@@ -5,25 +5,25 @@ import {ObjectId} from "mongodb";
 
 export class CommentsQueryRepositories {
 
-    async findComments(id: string, userId: string): Promise<CommentsViewType | null> {
-        if (!ObjectId.isValid(id)) {
+    async findComments(commentId: string, userId: string): Promise<CommentsViewType | null> {
+        if (!ObjectId.isValid(commentId)) {
             return null
         }
         let myStatus: string = LikeStatusType.None
         if (userId) {
-            const res = await LikeModelClass.findOne({userId: userId, parentId: id})
+            const res = await LikeModelClass.findOne({userId: userId, parentId: commentId})
             if (res){
                 myStatus = res.likeStatus
             }
         }
-        const totalCountLike = await LikeModelClass.countDocuments({parentId: id, likeStatus: "like"})
-        const totalCountDislike = await LikeModelClass.countDocuments({parentId: id, likeStatus: "dislike"})
+        const totalCountLike = await LikeModelClass.countDocuments({parentId: commentId, likeStatus: "Like"})
+        const totalCountDislike = await LikeModelClass.countDocuments({parentId: commentId, likeStatus: "Dislike"})
         if (!myStatus) return null
         const likesInfo = new LikesInfoViewModel(
             totalCountLike,
             totalCountDislike,
             myStatus)
-        const result = await CommentModelClass.findOne({_id: new ObjectId(id)})
+        const result = await CommentModelClass.findOne({_id: new ObjectId(commentId)})
         if (!result) {
             return null
         } else {
