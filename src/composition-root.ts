@@ -7,7 +7,6 @@ import {BlogsQueryRepositories} from "./repositories/blogs-query-repositories";
 import {PostsQueryRepositories} from "./repositories/posts-query-repositories";
 import {CommentsQueryRepositories} from "./repositories/comments-query-repositories";
 import {UsersQueryRepositories} from "./repositories/users-query-repositories";
-import {TestsRepositories} from "./repositories/tests-repositories";
 import {DeviceQueryRepositories} from "./repositories/device-query-repositories";
 import {IpRepositories} from "./repositories/ip-db-repositories";
 import {BlogsService} from "./domain/blogs-service";
@@ -25,7 +24,6 @@ export const deviceRepositories = new DeviceRepositories()
 export const deviceQueryRepositories = new DeviceQueryRepositories()
 export const usersRepositories = new UsersRepositories()
 export const usersQueryRepositories = new UsersQueryRepositories()
-export const testsRepositories = new TestsRepositories()
 export const ipRepositories = new IpRepositories()
 const commentsRepositories = new CommentsRepositories()
 export const commentsQueryRepositories = new CommentsQueryRepositories()

@@ -9,7 +9,13 @@ import {HTTP_STATUSES} from "./const/HTTP response status codes";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import {securityRoute} from "./routes/security-router";
-import {testsRepositories} from "./composition-root";
+import {
+    BlogModelClass,
+    CommentModelClass,
+    DeviceModelClass,
+    IpModelClass,
+    LikeModelClass, PostModelClass, UserModelClass
+} from "./repositories/schemas";
 
 
 export const app = express()
@@ -39,6 +45,12 @@ app.get('/', (req: Request, res: Response) => {
     })
 })
 app.delete('/testing/all-data', (req: Request, res: Response) => {
-    testsRepositories.deleteAll();
+    BlogModelClass.deleteMany({})
+    CommentModelClass.deleteMany({})
+    DeviceModelClass.deleteMany({})
+    IpModelClass.deleteMany({})
+    LikeModelClass.deleteMany({})
+    PostModelClass.deleteMany({})
+    UserModelClass.deleteMany({})
     res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })
