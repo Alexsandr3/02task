@@ -9,8 +9,8 @@ export class CommentsQueryRepositories {
         if (!ObjectId.isValid(id)) {
             return null
         }
-        const totalCountLike = await LikeModelClass.countDocuments({commentId: id, likeStatus: "like"})
-        const totalCountDislike = await LikeModelClass.countDocuments({commentId: id, likeStatus: "dislike"})
+        const totalCountLike = await LikeModelClass.countDocuments({parentId: id, likeStatus: "like"})
+        const totalCountDislike = await LikeModelClass.countDocuments({parentId: id, likeStatus: "dislike"})
         const myStatus = await LikeModelClass.findOne({commentId: id})
         if (!myStatus) return null
         const likesInfo = new LikesInfoViewModel(
