@@ -14,10 +14,9 @@ export class TestsRepositories {
         await CommentModelClass.deleteMany({})
         await DeviceModelClass.deleteMany({})
         await IpModelClass.deleteMany({})
+        await LikeModelClass.deleteMany({})
         await PostModelClass.deleteMany({})
         await UserModelClass.deleteMany({})
-        await LikeModelClass.deleteMany({})
     }
 }
 
-//export const testsRepositories = new TestsRepositories()
