@@ -12,25 +12,25 @@ export const securityRoute = Router({})
 securityRoute.get('/devices', checkRefreshTokena, async (req: Request, res: Response<DeviceViewModel[] | null>) => {
    const devices = await deviceQueryRepositories.findDevices(req.payload.userId)
    if (devices) {
-      res.send(devices).status(HTTP_STATUSES.OK_200) 
+      return res.send(devices).status(HTTP_STATUSES.OK_200)
    } else {
-      res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
+      return res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
    }
 })
 securityRoute.delete('/devices', checkRefreshTokena, async (req: Request, res: Response<boolean>) => {
    const isDeleted = await deviceService.deleteDevices(req.payload)
    if (isDeleted) {
-      res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
+      return res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {
-      res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
+      return res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
    }
 })
 securityRoute.delete('/devices/:id', validDeviceId, checkRefreshTokena, async (req: Request, res: Response<boolean>) => {
    const {deviceId, userId } = req.payload
    const isDeleted = await deviceService.deleteByDeviceId(req.params.id, deviceId, userId)
    if (isDeleted) {
-      res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
+      return res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
    } else {
-      res.sendStatus(HTTP_STATUSES.FORBIDDEN_403)
+      return res.sendStatus(HTTP_STATUSES.FORBIDDEN_403)
    }
 })

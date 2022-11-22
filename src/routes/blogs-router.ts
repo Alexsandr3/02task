@@ -37,7 +37,7 @@ blogsRouter.get('/', pageValidations, async (req: RequestWithQeury<QueryParams_G
         ...data,
     }
     const blogs = await blogsQueryRepositories.findBlogs(dataForReposit)
-    res.send(blogs)
+    return res.send(blogs)
 })
 blogsRouter.post('/', blogsValidations, async (req: RequestWithBody<BodyParams_BlogInputModel>, res: Response<BlogsViewType>) => {
     const newBlog = await blogsService.createBlog(req.body.name, req.body.description, req.body.websiteUrl)
@@ -97,8 +97,8 @@ blogsRouter.delete('/:id', checkAutoritionMiddleware, checkIdValidForMongodb, as
     const id = req.params.id
     const isDelete = await blogsService.deleteBlogById(id)
     if (!isDelete) {
-        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
+        return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
     } else {
-        res.send(HTTP_STATUSES.NO_CONTENT_204)
+        return res.send(HTTP_STATUSES.NO_CONTENT_204)
     }
 })

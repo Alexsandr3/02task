@@ -41,7 +41,7 @@ postsRoute.get('/', pageValidations, async (req: RequestWithQeury<QeuryParams_Ge
         ...data,
     }
     const posts = await postsQueryRepositories.findPosts(dataForRepos);
-    res.send(posts)
+    return res.send(posts)
 })
 postsRoute.post('/', prePostsValidation, async (req: RequestWithBody<BodyParams_PostInputModel>, res: Response<PostsViewType | null>) => {
     const title = req.body.title
@@ -72,9 +72,9 @@ postsRoute.put('/:id', checkIdValidForMongodb, prePostsValidation, async (req: R
 postsRoute.delete('/:id', checkIdValidForMongodb, checkAutoritionMiddleware, async (req: RequestWithParams<URIParams_PostModel>, res: Response) => {
     const isDelete = await postsService.deletePostById(req.params.id)
     if (!isDelete) {
-        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
+        return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
     } else {
-        res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
+        return res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
 })
 postsRoute.post('/:postId/comments', authMiddleware, checkPostIdValidForMongodb, preCommentsValidation, async (req: RequestWithParamsAndBody<{postId: string}, BodyParams_CommentInputModel>, res: Response<CommentsViewType | null>) => {

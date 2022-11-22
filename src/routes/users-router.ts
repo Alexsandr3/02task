@@ -30,7 +30,7 @@ usersRoute.get('/', preGetUsersValidations, async (req: RequestWithQeury<QueryPa
         ...data,
     }
     const users = await usersQueryRepositories.findUsers(dataForReposit)
-    res.send(users)
+    return res.send(users)
 })
 usersRoute.post('/', usersValidations, async (req: RequestWithBody<BodyParams_UserInputModel>, res: Response<UsersViewType | null>) => {
     const newUser = await usersService.createUser(req.body.login, req.body.email, req.body.password)
@@ -40,8 +40,8 @@ usersRoute.delete('/:id', checkAutoritionMiddleware, async (req: RequestWithPara
     const id = req.params.id
     const isDelete = await usersService.deleteUserById(id)
     if (!isDelete) {
-        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
+        return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
     } else {
-        res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
+        return res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
 })

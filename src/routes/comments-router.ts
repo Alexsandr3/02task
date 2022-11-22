@@ -32,12 +32,12 @@ commentsRoute.put('/:id', authMiddleware, preCommentsValidation, async (req: Req
     if (result.errorStatus) {
         return res.sendStatus(result.errorStatus)
     }
-    res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
+    return res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })
 commentsRoute.delete('/:id', authMiddleware, async (req: RequestWithParams<{id: string}>, res: Response) => {
     const isDelete = await commentsService.deleteCommentById(req.params.id, req.user.id)
     if (isDelete.errorStatus) {
         return res.sendStatus(isDelete.errorStatus)
     }
-    res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
+    return res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })
