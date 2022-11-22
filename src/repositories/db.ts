@@ -24,7 +24,7 @@ export async function runDb() {
         //Establish and verify connection
         //await DB.command({ping:1});
         //console.log("Connected successfully to MONGO server");
-        await mongoose.connect(mongoUri, {dbName: 'HomeworkWithMongoose'});
+        await mongoose.connect(mongoUri, {dbName: 'Mongoose'});
         console.log("Connected successfully to MONGOOSE server");
     } catch {
         console.log("Can't connect to db");
