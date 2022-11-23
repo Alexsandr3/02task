@@ -13,7 +13,8 @@ const likeStatus =
         'likeStatus must be a string(like or dislike or none), must not be empty')
         .isString()
         .trim()
-        .default('none')
+        .notEmpty()
+        .default('None')
 
 export const preCommentsValidation = [
     contentValidation,
