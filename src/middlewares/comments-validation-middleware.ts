@@ -1,7 +1,5 @@
 import {body} from "express-validator";
 import {inputValidetionsMiddleware} from "./Input-validetions-middleware";
-import {HTTP_STATUSES} from "../const/HTTP response status codes";
-import {NextFunction, Request, Response} from "express";
 
 const contentValidation =
     body('content',
@@ -10,18 +8,26 @@ const contentValidation =
         .notEmpty()
         .trim()
         .isLength({min: 20, max: 300})
-/*const likeStatus =
+const likeStatus =
     body('likeStatus',
-        'likeStatus must be a string(like or dislike or none), must not be empty')
+        'likeStatus must be a string(Like or Dislike or None), must not be empty')
         .isString()
         .trim()
         .notEmpty()
-        .default('None')*/
+        .default('None')
+        .isIn(['None', 'Like', 'Dislike'])
+
 
 export const preCommentsValidation = [
     contentValidation,
     inputValidetionsMiddleware
 ]
+
+export const validationLikeStatusMiddleware = [
+    likeStatus,
+    inputValidetionsMiddleware
+]
+/*
 
 export const validationLikeStatusMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const likeStatus = ['None', 'Like', 'Dislike']
@@ -38,6 +44,7 @@ export const validationLikeStatusMiddleware = (req: Request, res: Response, next
     }
     next()
 }
+*/
 
 
 
