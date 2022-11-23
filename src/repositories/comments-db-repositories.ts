@@ -17,7 +17,7 @@ export class CommentsRepositories {
                 {$set: {likeStatus}},
                 {upsert: true})
             return true
-        } catch (e) {
+        } catch (error) {
             return false
         }
     }

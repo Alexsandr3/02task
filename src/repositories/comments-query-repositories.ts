@@ -1,19 +1,21 @@
 import {CommentModelClass, LikeModelClass} from "./schemas";
-import {CommentsViewType, LikesInfoViewModel, LikeStatusType} from "../types/comments_types";
+import {CommentsViewType, LikeDBType, LikesInfoViewModel, LikeStatusType} from "../types/comments_types";
 import {ObjectId} from "mongodb";
 
 
 export class CommentsQueryRepositories {
 
-    async findComments(commentId: string, userId: string): Promise<CommentsViewType | null> {
+    async findComments(commentId: string, userId: string | null): Promise<CommentsViewType | null> {
         if (!ObjectId.isValid(commentId)) {
             return null
         }
         let myStatus: string = LikeStatusType.None
         if (userId) {
-            const res = await LikeModelClass.findOne({userId: userId, parentId: commentId})
-            if (res){
-                myStatus = res.likeStatus
+            const result: LikeDBType | null = await LikeModelClass.findOne({userId: userId, parentId: commentId})
+            console.log('--result---', result)
+
+            if (result){
+                myStatus = result.likeStatus
             }
         }
         const totalCountLike = await LikeModelClass.countDocuments({parentId: commentId, likeStatus: "Like"})
@@ -23,6 +25,7 @@ export class CommentsQueryRepositories {
             totalCountLike,
             totalCountDislike,
             myStatus)
+        console.log('--likesInfo---', likesInfo)
         const result = await CommentModelClass.findOne({_id: new ObjectId(commentId)})
         if (!result) {
             return null

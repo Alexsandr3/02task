@@ -22,9 +22,9 @@ export class PostsQueryRepositories {
     private async commentWithNewId(comment: CommentsDBType, userId: string | null): Promise<CommentsViewType | null> {
         let myStatus: string = LikeStatusType.None
         if (userId) {
-            const res = await LikeModelClass.findOne({userId: userId, parentId: comment._id})
-            if (res){
-                myStatus = res.likeStatus
+            const result = await LikeModelClass.findOne({userId: userId, parentId: comment._id})
+            if (result){
+                myStatus = result.likeStatus
             }
         }
         const totalCountLike = await LikeModelClass.countDocuments({parentId: comment._id, likeStatus: "Like"})
