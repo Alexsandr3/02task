@@ -12,8 +12,6 @@ export class CommentsQueryRepositories {
         let myStatus: string = LikeStatusType.None
         if (userId) {
             const result: LikeDBType | null = await LikeModelClass.findOne({userId: userId, parentId: commentId})
-            console.log('--result---', result)
-
             if (result){
                 myStatus = result.likeStatus
             }
@@ -25,7 +23,6 @@ export class CommentsQueryRepositories {
             totalCountLike,
             totalCountDislike,
             myStatus)
-        console.log('--likesInfo---', likesInfo)
         const result = await CommentModelClass.findOne({_id: new ObjectId(commentId)})
         if (!result) {
             return null
