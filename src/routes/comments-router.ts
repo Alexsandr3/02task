@@ -2,7 +2,10 @@ import {Response, Router} from "express";
 import {RequestWithParams, RequestWithParamsAndBody} from "../types/Req_types";
 import {HTTP_STATUSES} from "../const/HTTP response status codes";
 import {authMiddleware} from "../middlewares/auth-Headers-Validations-Middleware";
-import {preCommentsValidation, prelikeStatusValidation} from "../middlewares/comments-validation-middleware";
+import {
+    preCommentsValidation,
+    validationLikeStatusMiddleware
+} from "../middlewares/comments-validation-middleware";
 import {checkCommentIdValidForMongodb} from "../middlewares/check-valid-id-from-db";
 import {BodyParams_CommentInputModel} from "../models/BodyParams_CommentInputModel";
 import {CommentsViewType} from "../types/comments_types";
@@ -14,7 +17,7 @@ import {getUserIdFromRefreshTokena} from "../middlewares/get-UserId-from-refresh
 export const commentsRoute = Router({})
 
 
-commentsRoute.put('/:id/like-status', authMiddleware, prelikeStatusValidation, async (req: RequestWithParamsAndBody<{ id: string }, BodyParams_LikeInputModel>, res: Response) => {
+commentsRoute.put('/:id/like-status', authMiddleware, validationLikeStatusMiddleware, async (req: RequestWithParamsAndBody<{ id: string }, BodyParams_LikeInputModel>, res: Response) => {
     const result = await commentsService.updateLikeStatus(req.params.id, req.body.likeStatus, req.user.id)
     if (!result) {
         return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
