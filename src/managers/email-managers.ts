@@ -27,7 +27,7 @@ class EmailManagers {
     async sendEmailConfirmation(email: string, confirmationCode: string) {
         const subject = "Finish registration"
         // const link = `${process.env.API_URL}/registration-confirmation?code=${confirmationCode}`
-        const link = `https://somesite.com/registration-confirmation?code=${confirmationCode}`
+        const link = `https://somesite.com/registration-confirmationa${confirmationCode}`
         const message = `
         <h1>Thank for your registration</h1>
        <p>To finish registration please follow the link below:
